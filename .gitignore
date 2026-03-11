@@ -1,0 +1,53 @@
+﻿# .gitignore – Files and folders excluded from version control
+
+# ── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# ── Node / React ─────────────────────────────────────────────────────────────
+node_modules/
+dist/
+build/
+.next/
+*.local
+
+# ── Environment / Secrets ────────────────────────────────────────────────────
+.env
+.env.development
+.env.production
+.env.staging
+*.pem
+*.key
+*.crt
+
+# ── ML Models (large binary files — use DVC or S3) ───────────────────────────
+services/*/app/ml/models/trained/*.pkl
+services/*/app/ml/models/trained/*.joblib
+services/*/app/ml/models/trained/*.onnx
+*.h5
+
+# ── IDE ──────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Docker ───────────────────────────────────────────────────────────────────
+*.log
