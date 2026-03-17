@@ -1,0 +1,84 @@
+/* Common Header and layout styles (can be abstracted later if needed) */
+.gs-header-blue {
+  background-color: var(--primary-blue);
+  color: #FFFFFF;
+  padding: 24px 20px 40px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  text-align: center;
+}
+
+.gs-header-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.gs-header-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.gs-risk-badge {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  padding: 6px 12px !important;
+  font-size: 13px !important;
+}
+
+.gs-last-updated {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 12px;
+}
+
+.gs-content-padded {
+  padding: 0 20px 24px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gs-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+.gs-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.gs-ai-reco-header {
+  margin-bottom: 8px;
+}
+
+.gs-ai-reco-badge {
+  background-color: var(--primary-blue);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gs-ai-reco-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-main);
+}

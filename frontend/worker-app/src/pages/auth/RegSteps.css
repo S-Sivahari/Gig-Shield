@@ -1,0 +1,50 @@
+/* Additional utilities for Registration forms */
+.gs-mb-4 {
+  margin-bottom: 16px;
+}
+
+.gs-ai-note {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.gs-live-preview {
+  background-color: var(--success-fill);
+  border: 1px solid #BBF7D0;
+  border-radius: var(--radius-card);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.gs-preview-label {
+  font-size: 13px;
+  color: var(--success-green);
+  font-weight: 500;
+}
+
+.gs-preview-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #166534; /* Darker green */
+}
+
+.gs-preview-subtext {
+  font-size: 12px;
+  color: #15803D;
+  margin-top: 4px;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

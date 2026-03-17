@@ -1,0 +1,98 @@
+.gs-reg-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+}
+
+.gs-reg-header {
+  background-color: var(--primary-blue);
+  color: #FFFFFF;
+  padding: 24px 20px 20px;
+  position: relative;
+}
+
+.gs-back-button {
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.gs-reg-title-block {
+  margin-bottom: 20px;
+}
+
+.gs-reg-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.gs-reg-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.gs-reg-progress {
+  display: flex;
+  gap: 4px;
+}
+
+.gs-reg-progress-segment {
+  flex: 1;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.gs-reg-progress-segment--done {
+  background-color: #FFFFFF;
+}
+
+.gs-reg-content {
+  flex: 1;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.gs-step-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+}
+
+.gs-step-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gs-step-footer {
+  margin-top: 24px;
+  padding-bottom: 24px;
+}
+
+/* Common Step Utility Styles */
+.gs-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.gs-form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}

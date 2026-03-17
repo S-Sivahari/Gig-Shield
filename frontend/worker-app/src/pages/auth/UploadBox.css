@@ -1,0 +1,44 @@
+.gs-upload-box {
+  border: 1.5px dashed var(--border-color);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  background-color: var(--bg-primary);
+  transition: all 0.2s ease;
+}
+
+.gs-upload-box:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--text-hint);
+}
+
+.gs-upload-box--blue {
+  border-color: var(--primary-blue);
+  background-color: var(--light-blue-fill);
+}
+
+.gs-upload-box--blue:hover {
+  background-color: #E0EFFF;
+}
+
+.gs-upload-icon {
+  color: var(--primary-blue);
+  margin-bottom: 12px;
+}
+
+.gs-upload-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.gs-upload-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+}

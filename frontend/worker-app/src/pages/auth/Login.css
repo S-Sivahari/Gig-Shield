@@ -1,0 +1,132 @@
+.gs-login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.gs-login-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.gs-login-header {
+  margin-bottom: 40px;
+}
+
+.gs-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.gs-logo-icon {
+  color: var(--primary-blue);
+}
+
+.gs-logo-text {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--primary-blue);
+  letter-spacing: -0.5px;
+}
+
+.gs-tagline {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.gs-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Custom Phone Input */
+.gs-phone-input-group {
+  display: flex;
+  height: 44px;
+  border-radius: var(--radius-input);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-primary);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.gs-phone-input-group:focus-within {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px var(--light-blue-fill);
+}
+
+.gs-phone-prefix {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.gs-phone-input {
+  flex: 1;
+  border: none;
+  padding: 0 16px;
+  font-size: 15px;
+  outline: none;
+  background: transparent;
+}
+
+.gs-phone-input::placeholder {
+  color: var(--text-hint);
+}
+
+/* Divider */
+.gs-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 8px 0;
+}
+
+.gs-divider::before,
+.gs-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.gs-divider-text {
+  padding: 0 12px;
+  color: var(--text-hint);
+  font-size: 14px;
+}
+
+/* Register Link */
+.gs-register-link {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+}
+
+.gs-link-button {
+  background: none;
+  border: none;
+  color: var(--primary-blue);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+}
+
+.gs-link-button:hover {
+  text-decoration: underline;
+}

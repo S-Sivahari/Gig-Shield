@@ -1,0 +1,73 @@
+.gs-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.gs-button:active {
+  transform: scale(0.98);
+}
+
+.gs-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.gs-button--full-width {
+  width: 100%;
+}
+
+/* Primary Variant */
+.gs-button--primary {
+  background-color: var(--primary-blue);
+  color: #FFFFFF;
+  height: 48px;
+  border-radius: var(--radius-button);
+  font-size: 14px;
+}
+
+.gs-button--primary:hover:not(:disabled) {
+  background-color: var(--dark-blue);
+}
+
+/* Outline Variant */
+.gs-button--outline {
+  background-color: #FFFFFF;
+  color: var(--primary-blue);
+  border: 1px solid var(--primary-blue);
+  height: 48px;
+  border-radius: var(--radius-button);
+  font-size: 14px;
+}
+
+.gs-button--outline:hover:not(:disabled) {
+  background-color: var(--light-blue-fill);
+}
+
+/* Pill Selectors */
+.gs-button--pill {
+  background-color: #FFFFFF;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: var(--radius-badge);
+  font-size: 14px;
+}
+
+.gs-button--pill:hover {
+  border-color: var(--text-hint);
+}
+
+.gs-button--selected, .gs-button--pill.gs-button--selected {
+  background-color: var(--light-blue-fill);
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  font-weight: 600;
+}

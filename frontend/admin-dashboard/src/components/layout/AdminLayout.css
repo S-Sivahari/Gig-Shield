@@ -1,0 +1,18 @@
+.gs-admin-app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-secondary);
+}
+
+.gs-admin-main-wrapper {
+  flex: 1;
+  margin-left: 256px; /* Width of sidebar */
+  display: flex;
+  flex-direction: column;
+}
+
+.gs-admin-content-area {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+}

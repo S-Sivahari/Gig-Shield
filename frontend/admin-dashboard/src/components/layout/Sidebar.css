@@ -1,0 +1,77 @@
+.gs-admin-sidebar {
+  width: 256px;
+  height: 100vh;
+  background-color: var(--navy-admin);
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+}
+
+.gs-admin-brand {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  gap: 12px;
+}
+
+.gs-brand-icon {
+  color: var(--primary-blue);
+}
+
+.gs-brand-name {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.gs-admin-nav {
+  flex: 1;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gs-admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.gs-admin-nav-item:hover {
+  color: #FFFFFF;
+  background-color: rgba(255,255,255,0.05);
+}
+
+.gs-admin-nav-item.active {
+  color: #FFFFFF;
+  background-color: var(--primary-blue);
+}
+
+.gs-admin-sidebar-footer {
+  padding: 24px 16px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.gs-logout-btn:hover {
+  color: #FCA5A5; /* Light red */
+  background-color: rgba(220, 38, 38, 0.1);
+}

@@ -1,0 +1,134 @@
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.border-b {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pb-3 { padding-bottom: 12px; }
+.pb-0 { padding-bottom: 0 !important; }
+.no-border { border-bottom: none !important; }
+
+.gs-grid-2x3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 16px;
+  column-gap: 12px;
+}
+
+.gs-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gs-detail-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.gs-detail-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.gs-title-blue {
+  color: var(--primary-blue) !important;
+  border-bottom-color: var(--light-blue-border) !important;
+}
+
+.gs-breakdown-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gs-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+.gs-total-row {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.text-lg {
+  font-size: 18px;
+}
+
+.gs-text-red {
+  color: var(--error-red);
+}
+
+.my-2 {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+/* Plan Selector */
+.gs-plan-selector {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  /* Hide scrollbar for clean look */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.gs-plan-selector::-webkit-scrollbar {
+  display: none;
+}
+
+.gs-plan-card {
+  flex: 1;
+  min-width: 100px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-card);
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gs-plan-card--selected {
+  background-color: var(--light-blue-fill);
+  border: 1.5px solid var(--primary-blue);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+}
+
+.gs-plan-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.gs-plan-card--selected .gs-plan-name {
+  color: var(--primary-blue);
+  font-weight: 600;
+}
+
+.gs-plan-price {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.gs-plan-price span {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-hint);
+}
+
+.gs-plan-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+}

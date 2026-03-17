@@ -1,0 +1,152 @@
+.gs-admin-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.gs-admin-page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--navy-admin);
+  margin-bottom: 4px;
+}
+
+.gs-admin-page-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.gs-admin-date-picker {
+  background-color: #FFFFFF;
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.gs-admin-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.gs-admin-stat-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.gs-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gs-stat-info {
+  flex: 1;
+}
+
+.gs-stat-label {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.gs-stat-value {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--navy-admin);
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.gs-stat-trend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.gs-admin-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.gs-admin-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.gs-admin-card-header {
+  margin-bottom: 20px;
+}
+
+.gs-admin-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--navy-admin);
+}
+
+.gs-span-2 {
+  /* Used when we want it to span across columns if grid layout changes later */
+}
+
+.gs-admin-chart-container {
+  flex: 1;
+  min-height: 300px;
+  margin-left: -16px; /* Offset for Recharts default padding */
+}
+
+/* Risk List Styles */
+.gs-risk-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.gs-risk-item {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.gs-no-border {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.text-sm { font-size: 14px; }
+.text-gray-500 { color: var(--text-muted); }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.items-center { display: flex; align-items: center; }
+.mr-2 { margin-right: 8px; }
+.mb-1 { margin-bottom: 4px; }
+.mb-4 { margin-bottom: 16px; }
+.mb-6 { margin-bottom: 24px; }
+.mt-2 { margin-top: 8px; }
+
+.gs-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}

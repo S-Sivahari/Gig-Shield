@@ -1,0 +1,33 @@
+.gs-score-ring {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: var(--light-blue-fill);
+  border: 6px solid var(--primary-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.15);
+}
+
+.gs-score-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gs-score-value {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--primary-blue);
+  line-height: 1;
+}
+
+.gs-score-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-top: 2px;
+}

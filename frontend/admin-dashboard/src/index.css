@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Colors */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F3F4F6; /* Lighter background for admin */
+  
+  --primary-blue: #2563EB;
+  --dark-blue: #1D4ED8;
+  --navy-admin: #1E3A5F;
+  
+  --light-blue-fill: #EFF6FF;
+  --light-blue-border: #DBEAFE;
+  
+  --success-green: #16A34A;
+  --success-fill: #DCFCE7;
+  
+  --warning-amber: #F59E0B;
+  --warning-fill: #FFFBEB;
+  
+  --error-red: #DC2626;
+  --error-fill: #FEE2E2;
+  
+  --border-color: #E5E7EB;
+  --text-main: #111827;
+  --text-muted: #6B7280;
+  --text-hint: #9CA3AF;
+  
+  /* Radii */
+  --radius-card: 12px;
+  --radius-btn: 8px;
+  --radius-input: 8px;
+  --radius-badge: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--bg-secondary);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Common text utilities */
+.gs-text-blue { color: var(--primary-blue); }
+.gs-text-green { color: var(--success-green); }
+.gs-text-amber { color: var(--warning-amber); }
+.gs-text-red { color: var(--error-red); }
+.gs-text-muted { color: var(--text-muted); }
+
+.gs-bg-blue-light { background-color: var(--light-blue-fill); }
+
+/* Basic Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}

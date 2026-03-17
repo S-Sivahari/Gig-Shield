@@ -1,0 +1,42 @@
+.gs-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-badge);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.gs-badge-icon {
+  display: flex;
+  align-items: center;
+}
+
+/* Variants */
+.gs-badge--success {
+  background-color: var(--success-fill);
+  color: var(--success-green);
+}
+
+.gs-badge--warning {
+  background-color: var(--warning-fill);
+  color: var(--warning-amber);
+}
+
+.gs-badge--error {
+  background-color: var(--error-fill);
+  color: var(--error-red);
+}
+
+.gs-badge--blue {
+  background-color: var(--light-blue-fill);
+  color: var(--primary-blue);
+}
+
+.gs-badge--neutral {
+  background-color: var(--bg-secondary);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}

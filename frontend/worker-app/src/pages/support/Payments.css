@@ -1,0 +1,39 @@
+.gs-autopay-details {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  background-color: var(--bg-secondary);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.inline { display: inline-block; vertical-align: middle; margin-top: -2px; }
+
+.gs-payment-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gs-payment-row {
+  padding: 16px;
+}
+
+.gs-payment-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.gs-payment-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.gs-payment-status {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
