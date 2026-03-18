@@ -1,5 +1,5 @@
 """
-notification_service.py — Route notifications to the right channel(s).
+notification_service.py â€” Route notifications to the right channel(s).
 Decides whether to send SMS, WhatsApp, push or email based on:
   - notification type (otp ? SMS only; claim_approved ? WA + push + SMS)
   - worker preferences

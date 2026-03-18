@@ -1,5 +1,5 @@
 """
-claim_trigger_service.py — Auto-triggers claims when a disruption is detected.
+claim_trigger_service.py â€” Auto-triggers claims when a disruption is detected.
 Listens to DisruptionDetected events from intelligence-service via RabbitMQ.
 For each affected zone: find active workers, check eligibility, create claim records.
 """

@@ -1,5 +1,5 @@
 """
-config.py — identity-service specific settings.
+config.py â€” identity-service specific settings.
 Extends the shared Settings with service-local overrides.
 """
 from services.shared.config.settings import Settings
@@ -12,7 +12,7 @@ class IdentitySettings(Settings):
     OTP_LENGTH: int = 6
     OTP_TTL_SECONDS: int = 300   # 5 minutes
 
-    # S3 — KYC document storage
+    # S3 â€” KYC document storage
     S3_BUCKET_KYC: str = "gigshield-kyc-docs"
     S3_REGION: str = "ap-south-1"
 

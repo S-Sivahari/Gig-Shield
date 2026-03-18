@@ -1,5 +1,5 @@
 """
-repository.py — Generic async CRUD repository.
+repository.py â€” Generic async CRUD repository.
 Each service extends this with domain-specific query methods.
 
 Example:

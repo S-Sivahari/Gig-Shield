@@ -1,5 +1,5 @@
 """
-claim.py — Claim SQLAlchemy model.
+claim.py â€” Claim SQLAlchemy model.
 Claims can be auto-triggered (parametric) or manually filed by the worker.
 Every claim goes through a multi-step validation pipeline before payout.
 """
@@ -23,6 +23,6 @@ class Claim(Base, BaseModel):
     trigger_type:   Mapped[str]       = mapped_column(String(20), default="auto")          # auto | manual
     status:         Mapped[str]       = mapped_column(String(25), default="triggered")
     payout_amount:  Mapped[float]     = mapped_column(Numeric(10, 2), nullable=True)       # set after validation
-    fraud_score:    Mapped[float]     = mapped_column(Numeric(5, 4), nullable=True)        # 0.0 – 1.0
+    fraud_score:    Mapped[float]     = mapped_column(Numeric(5, 4), nullable=True)        # 0.0 â€“ 1.0
     is_flagged:     Mapped[bool]      = mapped_column(Boolean, default=False)
     rejection_reason: Mapped[str]     = mapped_column(Text, nullable=True)

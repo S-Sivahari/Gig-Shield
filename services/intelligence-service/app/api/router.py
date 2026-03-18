@@ -1,13 +1,24 @@
 """
-router.py — Aggregates fraud, risk, and disruption module routers.
+router.py â€” Aggregates fraud, risk, and disruption module routers.
 Routes: /api/v1/fraud/..., /api/v1/risk/..., /api/v1/disruptions/...
 """
+from importlib import import_module
+
 from fastapi import APIRouter
-from app.modules.fraud.api.router      import router as fraud_router
-from app.modules.risk.api.router       import router as risk_router
-from app.modules.disruption.api.router import router as disruption_router
 
 api_router = APIRouter()
-api_router.include_router(fraud_router,      prefix="/v1")
-api_router.include_router(risk_router,       prefix="/v1")
-api_router.include_router(disruption_router, prefix="/v1")
+
+
+def include_optional_router(module_path: str) -> None:
+	try:
+		module = import_module(module_path)
+		router = getattr(module, "router", None)
+		if router is not None:
+			api_router.include_router(router, prefix="/v1")
+	except Exception:
+		pass
+
+
+include_optional_router("app.modules.fraud.api.router")
+include_optional_router("app.modules.risk.api.router")
+include_optional_router("app.modules.disruption.api.router")

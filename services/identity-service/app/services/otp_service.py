@@ -1,5 +1,5 @@
 """
-otp_service.py — Generate, store, send, and verify OTPs.
+otp_service.py â€” Generate, store, send, and verify OTPs.
 OTPs are stored in Redis with a TTL so they auto-expire.
 """
 import random

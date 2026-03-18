@@ -1,5 +1,5 @@
 """
-pagination.py — Query params for paginated list endpoints.
+pagination.py â€” Query params for paginated list endpoints.
 Usage:
     @router.get("/workers")
     async def list_workers(params: PaginationParams = Depends()):

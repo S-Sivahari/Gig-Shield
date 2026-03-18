@@ -1,5 +1,5 @@
 """
-policy.py — Policy SQLAlchemy model.
+policy.py â€” Policy SQLAlchemy model.
 One active policy per worker at a time. Tracks plan, status, and coverage period.
 """
 from datetime import date

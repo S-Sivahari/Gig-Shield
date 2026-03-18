@@ -1,5 +1,5 @@
 """
-dashboard_service.py — Real-time KPI aggregation for the admin dashboard.
+dashboard_service.py â€” Real-time KPI aggregation for the admin dashboard.
 Queries are read-only and cached in Redis with a 5-minute TTL to reduce DB load.
 """
 import json

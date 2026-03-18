@@ -1,36 +1,29 @@
 # GigShield — Complete Project Task Tracker
-
 > AI-Powered Parametric Income Insurance for India's Gig Economy  
 > Guidewire Hackathon 2025
-
 ---
-
 ## Legend
-
 | Symbol | Status |
 |--------|--------|
 | ⬜ | Not Started |
 | 🔄 | In Progress |
 | ✅ | Completed |
-
 ---
 
 ## Phase 0 — Environment & Foundation Setup
 
 ### 0.1 Local Development Environment
-- ⬜ Install Docker Desktop & Docker Compose
+- ⬜ Install PostgreSQL 14+, Redis 7+, RabbitMQ 3.12+ locally
 - ⬜ Install Python 3.11+ & create virtual environments per microservice
 - ⬜ Install Node.js 18+ & pnpm/yarn
-- ⬜ Install PostgreSQL 14+ locally (or use Docker)
-- ⬜ Install Redis 7+ locally (or use Docker)
-- ⬜ Set up IDE (VS Code) with recommended extensions (Python, ESLint, Prettier, Docker, Tailwind CSS IntelliSense)
+- ⬜ Set up IDE (VS Code) with recommended extensions (Python, ESLint, Prettier, Tailwind CSS IntelliSense)
 
 ### 0.2 Repository Setup
 - ⬜ Initialize Git repository with `.gitignore`
 - ⬜ Configure branch protection rules (main, develop, feature/*)
 - ⬜ Set up pre-commit hooks (black, isort, flake8 for Python; eslint, prettier for React)
 - ⬜ Configure `.env.development` and `.env.production` with real/mock values
-- ⬜ Verify Docker Compose brings up all infrastructure (Postgres, Redis, RabbitMQ)
+- ⬜ Verify local infrastructure services are reachable (Postgres, Redis, RabbitMQ)
 
 ### 0.3 Database Bootstrap
 - ⬜ Run `schema/run_all.sql` against PostgreSQL to create full schema
@@ -686,19 +679,19 @@
 
 ---
 
-## Phase 15 — Infrastructure & DevOps
+## Phase 15 — Local Runtime & DevOps
 
-### 15.1 Docker
-- ⬜ Write Dockerfiles for all 10 microservices
-- ⬜ Write Dockerfiles for both frontends (multi-stage with Nginx)
-- ⬜ Finalize `docker-compose.yml` with all services, volumes, networks
-- ⬜ Create `docker-compose.dev.yml` with hot-reload mounts
-- ⬜ Create `docker-compose.prod.yml` with optimized settings
+### 15.1 Local Runtime
+- ⬜ Finalize local startup scripts for all services
+- ⬜ Add health-check script for local dependencies (Postgres/Redis/RabbitMQ)
+- ⬜ Ensure hot-reload works for all backend and frontend services
+- ⬜ Document local environment variables per service
+- ⬜ Add one-command local start and smoke-check workflow
 
 ### 15.2 CI/CD (GitHub Actions)
 - ⬜ Lint workflow — black, isort, flake8, eslint
 - ⬜ Test workflow — pytest for all services, vitest for frontends
-- ⬜ Build workflow — Docker image builds
+- ⬜ Build workflow — backend packages and frontend production bundles
 - ⬜ CD staging — auto-deploy on merge to develop
 - ⬜ CD production — deploy on tag/release
 
@@ -788,7 +781,7 @@
 - ⬜ Key talking points per feature
 
 ### 18.3 Final Polish
-- ⬜ Verify all Docker services start cleanly
+- ⬜ Verify all local services start cleanly
 - ⬜ Test complete happy-path flow end-to-end
 - ⬜ Verify admin dashboard shows live data
 - ⬜ Verify worker app PWA installs correctly

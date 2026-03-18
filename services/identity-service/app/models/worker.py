@@ -1,5 +1,5 @@
 """
-worker.py — Worker SQLAlchemy model.
+worker.py â€” Worker SQLAlchemy model.
 Represents a gig worker registered on the GigShield platform.
 """
 from sqlalchemy import String, Boolean, Enum as SAEnum

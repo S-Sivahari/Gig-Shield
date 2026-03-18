@@ -1,5 +1,5 @@
 """
-topics.py — RabbitMQ exchange/queue name constants.
+topics.py â€” RabbitMQ exchange/queue name constants.
 Centralised here so renaming a topic updates all services at once.
 """
 

@@ -1,5 +1,5 @@
 """
-base.py — Custom exception hierarchy for GigShield services.
+base.py â€” Custom exception hierarchy for GigShield services.
 The global error handler converts these into consistent JSON responses.
 """
 from fastapi import HTTPException, status

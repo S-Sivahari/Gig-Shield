@@ -1,48 +1,48 @@
-﻿# Makefile – Common development commands for GigShield
+﻿# Makefile - Common development commands for GigShield (local only)
 # Usage: make <target>   e.g.  make up   make test   make lint
 
 .PHONY: up down build restart logs migrate seed test lint fmt clean
 
-## Start all services (build if needed)
+## Start all services in local dev mode (Windows launcher)
 up:
-docker compose up --build
+start_all.bat
 
-## Start in detached mode
+## Alias for local startup
 up-d:
-docker compose up --build -d
+start_all.bat dev
 
-## Stop all services
+## Local mode stop instruction
 down:
-docker compose down
+@echo "Stop services from each opened terminal window with Ctrl+C."
 
-## Rebuild all Docker images
+## Local mode has no image build step
 build:
-docker compose build --no-cache
+@echo "No container build step in local-only mode."
 
-## Restart a specific service  e.g.  make restart s=auth-service
+## Restart hint for local mode
 restart:
-docker compose restart $(s)
+@echo "Restart the service manually in its terminal window."
 
-## Tail logs of all services
+## Logs are printed in each service terminal window
 logs:
-docker compose logs -f
+@echo "Use the individual terminal windows opened by start_all.bat."
 
-## Run DB migrations for all services
+## Run DB migrations for all services (local python env per service)
 migrate:
-@for svc in auth-service policy-service claims-service payout-service fraud-service risk-engine disruption-monitor notification-service analytics-service; do \
+@for svc in identity-service insurance-core intelligence-service platform-service api-gateway; do \
 echo "Running migrations for $$svc"; \
-docker compose exec $$svc alembic upgrade head; \
+(cd services/$$svc && python -m alembic upgrade head) || exit 1; \
 done
 
-## Seed the database with reference data
+## Seed the database with reference data (requires local psql)
 seed:
-docker compose exec postgres psql -U gigshield -d gigshield -f /seeds/reference_data.sql
+psql -U gigshield -d gigshield -f schema/run_all.sql
 
-## Run all tests
+## Run tests for each local service
 test:
-@for svc in auth-service policy-service claims-service payout-service fraud-service risk-engine disruption-monitor notification-service analytics-service; do \
+@for svc in identity-service insurance-core intelligence-service platform-service api-gateway; do \
 echo "Testing $$svc"; \
-docker compose exec $$svc pytest tests/ -v --tb=short; \
+(cd services/$$svc && python -m pytest tests/ -v --tb=short) || exit 1; \
 done
 
 ## Lint Python code (black + isort + flake8)
@@ -58,5 +58,4 @@ isort services/
 
 ## Remove stopped containers and dangling images
 clean:
-docker compose down --remove-orphans
-docker image prune -f
+@echo "No container cleanup required in local-only mode."

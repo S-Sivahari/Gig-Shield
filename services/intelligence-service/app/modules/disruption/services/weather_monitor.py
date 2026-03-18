@@ -1,5 +1,5 @@
 """
-weather_monitor.py — Polls OpenWeatherMap every 15 min for configured cities.
+weather_monitor.py â€” Polls OpenWeatherMap every 15 min for configured cities.
 Creates a DisruptionEvent when rainfall/wind/temperature exceeds thresholds.
 Publishes DisruptionDetected event to RabbitMQ (consumed by insurance-core).
 """
@@ -28,7 +28,7 @@ class WeatherMonitor:
         rainfall_mm = weather.get("rain", {}).get("1h", 0.0)
 
         if rainfall_mm < RAINFALL_THRESHOLD_MM:
-            return None   # no disruption — do nothing
+            return None   # no disruption â€” do nothing
 
         # Create and persist the disruption event
         event = DisruptionEvent(

@@ -1,5 +1,5 @@
 """
-settings.py — Centralised application configuration.
+settings.py â€” Centralised application configuration.
 Reads all values from environment variables using Pydantic BaseSettings.
 Import `settings` wherever config values are needed.
 """
@@ -35,7 +35,7 @@ class Settings(BaseSettings):
         env_file = ".env"
         case_sensitive = True
 
-@lru_cache()          # singleton — parsed once per process
+@lru_cache()          # singleton â€” parsed once per process
 def get_settings() -> Settings:
     return Settings()
 

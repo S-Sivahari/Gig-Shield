@@ -1,5 +1,5 @@
 """
-base_model.py — Mixin that auto-adds id, created_at, updated_at to every table.
+base_model.py â€” Mixin that auto-adds id, created_at, updated_at to every table.
 """
 import uuid
 from datetime import datetime, timezone
@@ -23,5 +23,5 @@ class UUIDMixin:
     )
 
 class BaseModel(UUIDMixin, TimestampMixin):
-    """Combine both mixins — use on all domain models."""
+    """Combine both mixins â€” use on all domain models."""
     pass

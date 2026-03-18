@@ -1,5 +1,5 @@
 """
-publisher.py — Async RabbitMQ event publisher with retry on transient failures.
+publisher.py â€” Async RabbitMQ event publisher with retry on transient failures.
 Usage:
     await publisher.publish(Topics.CLAIM_TRIGGERED, ClaimTriggered(...))
 """

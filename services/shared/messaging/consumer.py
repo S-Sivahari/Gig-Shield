@@ -1,5 +1,5 @@
 """
-consumer.py — RabbitMQ event consumer with dead-letter queue support.
+consumer.py â€” RabbitMQ event consumer with dead-letter queue support.
 Usage:
     consumer = EventConsumer("claims-service", Topics.DISRUPTION_DETECTED)
     await consumer.consume(handle_disruption)

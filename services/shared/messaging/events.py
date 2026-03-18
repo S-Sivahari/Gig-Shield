@@ -1,5 +1,5 @@
 """
-events.py — Pydantic schemas for all domain events published over RabbitMQ.
+events.py â€” Pydantic schemas for all domain events published over RabbitMQ.
 Every service imports these to ensure a consistent event contract.
 """
 from pydantic import BaseModel

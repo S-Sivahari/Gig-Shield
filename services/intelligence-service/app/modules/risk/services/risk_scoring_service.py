@@ -1,5 +1,5 @@
 """
-risk_scoring_service.py — Computes a worker risk score used to personalise premiums.
+risk_scoring_service.py â€” Computes a worker risk score used to personalise premiums.
 Risk factors: location zone history, claim frequency, platform, weather exposure.
 Score range: 1 (very low risk) ? 5 (very high risk).
 """
@@ -18,7 +18,7 @@ class RiskScoringService:
         """
         Build feature vector for the worker and run the risk model.
         Saves the result back to risk_profiles table.
-        Returns risk score 1.0–5.0.
+        Returns risk score 1.0â€“5.0.
         """
         profile  = await self.repo.get_by_worker(worker_id)
         features = {

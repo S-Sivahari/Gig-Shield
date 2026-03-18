@@ -1,5 +1,5 @@
 """
-health_check.py — Liveness and readiness endpoints reused by every service.
+health_check.py â€” Liveness and readiness endpoints reused by every service.
 Mount these under /health in each FastAPI app.
 """
 from fastapi import APIRouter, Depends
@@ -12,13 +12,13 @@ router = APIRouter(prefix="/health", tags=["Health"])
 
 @router.get("/live")
 async def liveness():
-    """Liveness probe — Kubernetes restarts the pod if this fails."""
+    """Liveness probe â€” Kubernetes restarts the pod if this fails."""
     return {"status": "alive"}
 
 @router.get("/ready")
 async def readiness(db: AsyncSession = Depends(get_db), redis: aioredis.Redis = Depends(get_redis)):
     """
-    Readiness probe — checks DB and Redis reachability.
+    Readiness probe â€” checks DB and Redis reachability.
     Kubernetes removes the pod from the load balancer if this fails.
     """
     checks = {}

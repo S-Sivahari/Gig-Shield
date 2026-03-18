@@ -1,11 +1,11 @@
 """
-isolation_forest.py — Isolation Forest wrapper for fraud scoring.
-Isolation Forest is unsupervised — it detects anomalies without labelled fraud data,
+isolation_forest.py â€” Isolation Forest wrapper for fraud scoring.
+Isolation Forest is unsupervised â€” it detects anomalies without labelled fraud data,
 making it ideal for the early-stage GigShield launch with limited historical data.
 
 Score interpretation:
     > 0.7  ? high fraud risk (flag for manual review)
-    0.4–0.7 ? moderate (proceed with extra checks)
+    0.4â€“0.7 ? moderate (proceed with extra checks)
     < 0.4  ? low risk (auto-approve)
 """
 import numpy as np
@@ -23,7 +23,7 @@ class FraudIsolationForest:
 
     def score(self, features: dict) -> float:
         """
-        Compute a fraud probability score 0.0–1.0 from a feature dict.
+        Compute a fraud probability score 0.0â€“1.0 from a feature dict.
         Higher = more likely fraudulent.
         Features: claim_frequency_7d, gps_accuracy, activity_drop_pct, claim_hour, etc.
         """

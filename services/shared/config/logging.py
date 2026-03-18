@@ -1,5 +1,5 @@
 """
-logging.py — Structured JSON logging configuration.
+logging.py â€” Structured JSON logging configuration.
 Uses structlog for machine-readable logs (friendly with Loki + Grafana).
 """
 import logging

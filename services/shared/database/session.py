@@ -1,5 +1,5 @@
 """
-session.py — Async SQLAlchemy engine and session factory.
+session.py â€” Async SQLAlchemy engine and session factory.
 Each microservice imports `AsyncSessionLocal` for DB access
 and `get_db` as a FastAPI dependency.
 """
@@ -26,7 +26,7 @@ class Base(DeclarativeBase):
     pass
 
 async def get_db():
-    """FastAPI dependency — yields a DB session, always closes it after."""
+    """FastAPI dependency â€” yields a DB session, always closes it after."""
     async with AsyncSessionLocal() as session:
         try:
             yield session

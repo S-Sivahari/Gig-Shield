@@ -1,15 +1,15 @@
 """
-redis_client.py — Async Redis connection with connection pooling.
+redis_client.py â€” Async Redis connection with connection pooling.
 Used for: OTP storage, rate-limit counters, caching, session tokens.
 """
 import redis.asyncio as aioredis
 from ..config.settings import settings
 
-# Module-level pool — shared across all requests in the process
+# Module-level pool â€” shared across all requests in the process
 _redis_pool: aioredis.Redis | None = None
 
 async def get_redis() -> aioredis.Redis:
-    """FastAPI dependency — returns the shared Redis client."""
+    """FastAPI dependency â€” returns the shared Redis client."""
     global _redis_pool
     if _redis_pool is None:
         _redis_pool = aioredis.from_url(

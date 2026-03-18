@@ -1,5 +1,5 @@
 """
-dependencies.py — FastAPI dependencies for authentication and role enforcement.
+dependencies.py â€” FastAPI dependencies for authentication and role enforcement.
 Usage:
     @router.get("/admin")
     async def admin_only(user = Depends(require_admin)):

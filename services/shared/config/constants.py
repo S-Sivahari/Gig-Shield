@@ -1,5 +1,5 @@
 """
-constants.py — App-wide constant values shared across all microservices.
+constants.py â€” App-wide constant values shared across all microservices.
 Use these instead of hard-coding strings in business logic.
 """
 

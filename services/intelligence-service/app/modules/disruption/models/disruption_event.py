@@ -1,5 +1,5 @@
 """
-disruption_event.py — Disruption event model.
+disruption_event.py â€” Disruption event model.
 Created when weather/AQI/civic API data crosses a configured threshold.
 Publishing this event to RabbitMQ starts the parametric claims pipeline.
 """

@@ -1,5 +1,5 @@
 """
-payout.py — Payout SQLAlchemy model.
+payout.py â€” Payout SQLAlchemy model.
 One payout record per approved claim. Processed via Razorpay Payout API.
 """
 from sqlalchemy import String, Numeric, ForeignKey

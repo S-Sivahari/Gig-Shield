@@ -1,5 +1,5 @@
 """
-consumers.py — RabbitMQ event consumers for insurance-core.
+consumers.py â€” RabbitMQ event consumers for insurance-core.
 Listens for events from other services and triggers appropriate business logic.
 """
 import json

@@ -1,5 +1,5 @@
 """
-registration.py — HTTP routes for worker registration and OTP flow.
+registration.py â€” HTTP routes for worker registration and OTP flow.
 All routes are unauthenticated (pre-login).
 """
 from fastapi import APIRouter, Depends

@@ -1,5 +1,5 @@
 """
-api-gateway — main.py
+api-gateway ï¿½ main.py
 Single entry-point for all external traffic.
 Responsibilities:
   - Route requests to the correct downstream service
@@ -8,24 +8,25 @@ Responsibilities:
   - Attach X-Request-ID for distributed tracing
   - Log all requests with timing
 
-Downstream services (internal Docker network):
-  identity-service    ? http://identity-service:8001
-  insurance-core      ? http://insurance-core:8002
-  intelligence-service? http://intelligence-service:8003
-  platform-service    ? http://platform-service:8004
+Downstream services (local network by default):
+    identity-service    ? http://localhost:8001
+    insurance-core      ? http://localhost:8002
+    intelligence-service? http://localhost:8003
+    platform-service    ? http://localhost:8004
 """
+import os
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import httpx, uuid, time
 
 app = FastAPI(
-    title="GigShield — API Gateway",
+    title="GigShield ï¿½ API Gateway",
     description="Unified entry point with JWT auth, rate limiting, and request routing.",
     version="1.0.0",
     docs_url=None,      # disable Swagger on the gateway in production
 )
 
-# -- CORS — allow the React PWA and admin dashboard --
+# -- CORS ï¿½ allow the React PWA and admin dashboard --
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "http://localhost:5173"],
@@ -34,25 +35,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# -- Service registry — where to forward each path prefix --
+# -- Service registry ï¿½ where to forward each path prefix --
+IDENTITY_SERVICE_URL = os.getenv("IDENTITY_SERVICE_URL", "http://localhost:8001")
+INSURANCE_CORE_URL = os.getenv("INSURANCE_CORE_URL", "http://localhost:8002")
+INTELLIGENCE_SERVICE_URL = os.getenv("INTELLIGENCE_SERVICE_URL", "http://localhost:8003")
+PLATFORM_SERVICE_URL = os.getenv("PLATFORM_SERVICE_URL", "http://localhost:8004")
+
 SERVICE_MAP = {
-    "/api/v1/auth":          "http://identity-service:8001",
-    "/api/v1/kyc":           "http://identity-service:8001",
-    "/api/v1/plans":         "http://insurance-core:8002",
-    "/api/v1/policies":      "http://insurance-core:8002",
-    "/api/v1/claims":        "http://insurance-core:8002",
-    "/api/v1/payouts":       "http://insurance-core:8002",
-    "/api/v1/fraud":         "http://intelligence-service:8003",
-    "/api/v1/risk":          "http://intelligence-service:8003",
-    "/api/v1/disruptions":   "http://intelligence-service:8003",
-    "/api/v1/notifications": "http://platform-service:8004",
-    "/api/v1/analytics":     "http://platform-service:8004",
+    "/api/v1/auth":          IDENTITY_SERVICE_URL,
+    "/api/v1/kyc":           IDENTITY_SERVICE_URL,
+    "/api/v1/plans":         INSURANCE_CORE_URL,
+    "/api/v1/policies":      INSURANCE_CORE_URL,
+    "/api/v1/claims":        INSURANCE_CORE_URL,
+    "/api/v1/payouts":       INSURANCE_CORE_URL,
+    "/api/v1/fraud":         INTELLIGENCE_SERVICE_URL,
+    "/api/v1/risk":          INTELLIGENCE_SERVICE_URL,
+    "/api/v1/disruptions":   INTELLIGENCE_SERVICE_URL,
+    "/api/v1/notifications": PLATFORM_SERVICE_URL,
+    "/api/v1/analytics":     PLATFORM_SERVICE_URL,
 }
 
 @app.middleware("http")
 async def request_router(request: Request, call_next):
     """
-    Core gateway middleware — attaches request-id, measures latency, proxies request.
+    Core gateway middleware ï¿½ attaches request-id, measures latency, proxies request.
     Routes are matched by longest path prefix in SERVICE_MAP.
     """
     request_id = str(uuid.uuid4())
@@ -63,8 +69,8 @@ async def request_router(request: Request, call_next):
     target  = next((v for k, v in SERVICE_MAP.items() if path.startswith(k)), None)
 
     if not target:
-        from fastapi.responses import JSONResponse
-        return JSONResponse({"detail": "Route not found"}, status_code=404)
+        # Let FastAPI handle local routes (e.g., /health) and 404s.
+        return await call_next(request)
 
     # Forward the request
     url = f"{target}{path}"

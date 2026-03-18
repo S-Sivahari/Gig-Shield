@@ -1,5 +1,5 @@
 """
-jwt_handler.py — JWT creation and verification for worker and admin tokens.
+jwt_handler.py â€” JWT creation and verification for worker and admin tokens.
 All services use the same secret key so tokens work across the gateway.
 """
 from datetime import datetime, timedelta, timezone

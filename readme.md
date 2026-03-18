@@ -902,7 +902,6 @@ gigshield/
 │   ├── architecture/            # Architecture diagrams
 │   └── demo-guide.md            # Hackathon demo walkthrough
 │
-├── docker-compose.yml
 ├── .env.example
 └── README.md
 ```
@@ -916,28 +915,28 @@ gigshield/
 - Python >= 3.10
 - PostgreSQL >= 14
 - Redis >= 7
-- Docker & Docker Compose (recommended)
+- RabbitMQ >= 3.12
 
-### Quick Start (Docker)
+### Quick Start (Local, Windows)
 
 ```bash
 # Clone the repository
 git clone https://github.com/your-team/gigshield.git
 cd gigshield
 
-# Copy and configure environment variables
-cp .env.example .env
-# Edit .env with your API keys (see Environment Variables section)
+# Start local dependencies first (manual):
+# - PostgreSQL on localhost:5432
+# - Redis on localhost:6379
+# - RabbitMQ on localhost:5672
 
-# Start all services
-docker-compose up --build
+# Start all GigShield services locally
+start_all.bat
 
 # Services will be available at:
 # Worker App:       http://localhost:3000
 # Admin Dashboard:  http://localhost:3001
-# API Gateway:      http://localhost:4000
-# AI Engine:        http://localhost:8000
-# API Docs:         http://localhost:4000/api-docs
+# API Gateway:      http://localhost:8000
+# Service Docs:     http://localhost:8001/docs ... http://localhost:8004/docs
 ```
 
 ### Manual Setup

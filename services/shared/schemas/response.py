@@ -1,5 +1,5 @@
 """
-response.py — Standardised JSON response envelope used by all API endpoints.
+response.py â€” Standardised JSON response envelope used by all API endpoints.
 Ensures consistent shape: { success, data, message, meta }
 """
 from typing import Generic, TypeVar, Any
