@@ -8,6 +8,23 @@ import './Dashboard.css';
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const metricRefs = useRef<(HTMLDivElement | null)[]>([]);
+  
+  // Get user data from localStorage
+  const getUserData = () => {
+    const userData = localStorage.getItem('gigshield_user_data');
+    if (userData) {
+      try {
+        return JSON.parse(userData);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  };
+
+  const user = getUserData();
+  const userName = user?.fullName || 'User';
+  const userInitials = userName.split(' ').map((n: string) => n[0]).join('').toUpperCase().substring(0, 2);
 
   useEffect(() => {
     // Check if Intersection Observer is supported
@@ -63,7 +80,7 @@ export const Dashboard: React.FC = () => {
         <div className="gs-dash-greeting-row">
           <div>
             <h1 className="gs-dash-greeting">Good morning,</h1>
-            <p className="gs-dash-name">Ramesh Kumar</p>
+            <p className="gs-dash-name">{userName}</p>
           </div>
           <div 
             className="gs-avatar gs-avatar--clickable" 
@@ -73,7 +90,7 @@ export const Dashboard: React.FC = () => {
             tabIndex={0}
             aria-label="Go to profile"
           >
-            RK
+            {userInitials}
           </div>
         </div>
 

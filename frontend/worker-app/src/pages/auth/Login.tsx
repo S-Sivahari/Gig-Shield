@@ -11,10 +11,36 @@ export const Login: React.FC = () => {
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSendOTP = (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (phone.length === 10) {
-      navigate('/otp'); // Mock routing to OTP page
+    
+    // Check if user has registered data in localStorage
+    const userData = localStorage.getItem('gigshield_user_data');
+    
+    if (userData) {
+      // User has registered, go directly to dashboard
+      navigate('/dashboard');
+    } else {
+      // New user, go to OTP verification
+      if (phone.length === 10) {
+        // Save phone number for demo purposes
+        const demoUserData = {
+          phone: phone,
+          fullName: 'Demo User',
+          loginMethod: 'phone'
+        };
+        localStorage.setItem('gigshield_user_data', JSON.stringify(demoUserData));
+        navigate('/otp');
+      } else if (loginId && password) {
+        // Save login credentials for demo purposes
+        const demoUserData = {
+          loginId: loginId,
+          fullName: loginId.charAt(0).toUpperCase() + loginId.slice(1),
+          loginMethod: 'credentials'
+        };
+        localStorage.setItem('gigshield_user_data', JSON.stringify(demoUserData));
+        navigate('/dashboard');
+      }
     }
   };
 
@@ -29,7 +55,7 @@ export const Login: React.FC = () => {
           <p className="gs-tagline">Income protection for delivery partners</p>
         </div>
 
-        <form onSubmit={handleSendOTP} className="gs-login-form animate-stagger-item" style={{ animationDelay: '100ms' }}>
+        <form onSubmit={handleLogin} className="gs-login-form animate-stagger-item" style={{ animationDelay: '100ms' }}>
           
           <div className="gs-phone-input-group">
             <div className="gs-phone-prefix">+91</div>
@@ -40,7 +66,6 @@ export const Login: React.FC = () => {
               value={phone}
               onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').substring(0, 10))}
               maxLength={10}
-              required
             />
           </div>
 
@@ -63,7 +88,7 @@ export const Login: React.FC = () => {
           />
 
           <Button type="submit" variant="primary" style={{ marginTop: '8px' }}>
-            Send OTP
+            Login
           </Button>
 
           <div className="gs-register-link">

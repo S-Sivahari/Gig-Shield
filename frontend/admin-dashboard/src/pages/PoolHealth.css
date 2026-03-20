@@ -1,0 +1,248 @@
+.gs-pool-hero-card {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.gs-pool-hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gs-pool-hero-label {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  margin: 0;
+}
+
+.gs-pool-hero-value {
+  font-size: 48px;
+  color: #FFFFFF;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+.gs-pool-hero-badges {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.gs-pool-hero-badge {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #FFFFFF;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.gs-pool-hero-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+.gs-pool-hero-updated {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  margin: 0;
+}
+
+.gs-allocation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.gs-allocation-card {
+  border-radius: 12px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.gs-allocation-blue {
+  background-color: #EFF6FF;
+}
+
+.gs-allocation-amber {
+  background-color: #FFFBEB;
+}
+
+.gs-allocation-green {
+  background-color: #DCFCE7;
+}
+
+.gs-allocation-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.gs-allocation-blue .gs-allocation-icon {
+  background-color: #DBEAFE;
+  color: var(--primary-blue);
+}
+
+.gs-allocation-amber .gs-allocation-icon {
+  background-color: #FEF3C7;
+  color: var(--warning-amber);
+}
+
+.gs-allocation-green .gs-allocation-icon {
+  background-color: #BBF7D0;
+  color: var(--success-green);
+}
+
+.gs-allocation-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy-admin);
+  margin: 0;
+}
+
+.gs-allocation-amount {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--navy-admin);
+  margin: 0;
+  line-height: 1;
+}
+
+.gs-allocation-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.gs-allocation-progress {
+  margin-top: 8px;
+}
+
+.gs-allocation-progress-bar {
+  height: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.gs-allocation-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.gs-allocation-fill-blue {
+  background-color: var(--primary-blue);
+}
+
+.gs-allocation-fill-amber {
+  background-color: var(--warning-amber);
+}
+
+.gs-allocation-fill-green {
+  background-color: var(--success-green);
+}
+
+.gs-pool-chart-container {
+  height: 350px;
+  margin-left: -16px;
+}
+
+.gs-solvency-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gs-solvency-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+.gs-solvency-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gs-solvency-label {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.gs-solvency-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.gs-solvency-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gs-solvency-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.gs-solvency-healthy {
+  background-color: var(--success-fill);
+  color: var(--success-green);
+}
+
+.gs-solvency-watch {
+  background-color: var(--warning-fill);
+  color: #B45309;
+}
+
+.gs-solvency-target {
+  font-size: 12px;
+  color: var(--text-hint);
+}
+
+.gs-reinsurance-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.gs-reinsurance-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gs-reinsurance-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.gs-reinsurance-value {
+  font-size: 15px;
+  color: var(--text-main);
+  font-weight: 600;
+}

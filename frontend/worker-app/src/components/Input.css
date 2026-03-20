@@ -10,6 +10,9 @@
   font-size: 12px;
   font-weight: 400;
   color: var(--text-muted);
+  position: relative;
+  z-index: 2;
+  background-color: transparent;
 }
 
 .gs-input-wrapper {
@@ -29,10 +32,17 @@
   background-color: var(--bg-primary);
   transition: border-color var(--transition-normal), box-shadow var(--transition-normal), background-color var(--transition-normal);
   outline: none;
+  position: relative;
+  z-index: 1;
 }
 
 .gs-input::placeholder {
   color: var(--text-hint);
+  opacity: 1;
+}
+
+.gs-input:focus::placeholder {
+  opacity: 0.5;
 }
 
 .gs-input:focus {
@@ -58,6 +68,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .gs-input--error {

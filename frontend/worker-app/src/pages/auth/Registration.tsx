@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Step1Personal } from './Step1Personal';
 import { Step2Identity } from './Step2Identity';
@@ -14,18 +14,40 @@ export const Registration: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
 
-  // Registration Data State
-  const [formData, setFormData] = useState({
-    fullName: '', age: '', gender: '', email: '',
-    aadhaarNumber: '', dlNumber: '',
-    platform: '', avgHours: '', primaryZone: '', experienceMonths: '',
-    weeklyIncome: '', workingDays: '6', coveragePercent: '70%',
-    upiId: '', accountNo: '', ifscCode: '',
-    loginId: '', password: '', confirmPassword: ''
+  // Registration Data State - Load from localStorage if exists
+  const [formData, setFormData] = useState(() => {
+    const saved = localStorage.getItem('gigshield_user_data');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return {
+          fullName: '', age: '', gender: '', email: '',
+          aadhaarNumber: '', dlNumber: '', aadhaarFile: null, dlFile: null,
+          platform: '', avgHours: '', primaryZone: '', experienceMonths: '',
+          weeklyIncome: '', workingDays: '6', coveragePercent: '70%',
+          upiId: '', accountNo: '', ifscCode: '',
+          loginId: '', password: '', confirmPassword: ''
+        };
+      }
+    }
+    return {
+      fullName: '', age: '', gender: '', email: '',
+      aadhaarNumber: '', dlNumber: '', aadhaarFile: null, dlFile: null,
+      platform: '', avgHours: '', primaryZone: '', experienceMonths: '',
+      weeklyIncome: '', workingDays: '6', coveragePercent: '70%',
+      upiId: '', accountNo: '', ifscCode: '',
+      loginId: '', password: '', confirmPassword: ''
+    };
   });
 
   const updateFormData = (newData: Partial<typeof formData>) => {
-    setFormData(prev => ({ ...prev, ...newData }));
+    setFormData(prev => {
+      const updated = { ...prev, ...newData };
+      // Save to localStorage whenever data updates
+      localStorage.setItem('gigshield_user_data', JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const nextStep = () => {

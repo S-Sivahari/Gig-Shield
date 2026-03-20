@@ -1,0 +1,275 @@
+.gs-disruption-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.gs-disruption-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+.gs-disruption-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 12px 0 0 12px;
+}
+
+.gs-disruption-extreme::before {
+  background-color: var(--error-red);
+}
+
+.gs-disruption-high::before {
+  background-color: var(--warning-amber);
+}
+
+.gs-disruption-resolved::before {
+  background-color: var(--success-green);
+}
+
+.gs-disruption-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.gs-disruption-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gs-severity-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gs-severity-extreme {
+  background-color: var(--error-fill);
+  color: var(--error-red);
+}
+
+.gs-severity-high {
+  background-color: var(--warning-fill);
+  color: #B45309;
+}
+
+.gs-severity-resolved {
+  background-color: var(--success-fill);
+  color: var(--success-green);
+}
+
+.gs-disruption-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--navy-admin);
+  margin: 0;
+}
+
+.gs-disruption-icon {
+  flex-shrink: 0;
+}
+
+.gs-icon-extreme {
+  color: var(--error-red);
+}
+
+.gs-icon-high {
+  color: var(--warning-amber);
+}
+
+.gs-icon-resolved {
+  color: var(--success-green);
+}
+
+.gs-status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.gs-status-extreme {
+  background-color: var(--error-red);
+  color: #FFFFFF;
+}
+
+.gs-status-high {
+  background-color: var(--warning-amber);
+  color: #FFFFFF;
+}
+
+.gs-status-resolved {
+  background-color: var(--success-green);
+  color: #FFFFFF;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.gs-updated-time {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.gs-disruption-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gs-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.gs-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gs-detail-full {
+  grid-column: 1 / -1;
+}
+
+.gs-detail-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.gs-detail-value {
+  font-size: 14px;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.gs-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gs-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gs-progress-label {
+  font-size: 13px;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.gs-progress-percent {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.gs-progress-bar {
+  height: 8px;
+  background-color: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.gs-progress-fill {
+  height: 100%;
+  background-color: var(--primary-blue);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.gs-progress-amber .gs-progress-fill {
+  background-color: var(--warning-amber);
+}
+
+.gs-api-sources {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gs-api-badge {
+  padding: 4px 12px;
+  background-color: var(--success-fill);
+  color: var(--success-green);
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.gs-disruption-actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.gs-btn-danger {
+  background-color: var(--error-red);
+  color: #FFFFFF;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.gs-btn-danger:hover {
+  background-color: #B91C1C;
+}
+
+.gs-btn-amber-outline {
+  background: #FFFFFF;
+  border: 1px solid var(--warning-amber);
+  color: var(--warning-amber);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gs-btn-amber-outline:hover {
+  background: var(--warning-fill);
+}
+
+.gs-resolved-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--success-fill);
+  color: var(--success-green);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mt-6 {
+  margin-top: 24px;
+}

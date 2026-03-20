@@ -6,6 +6,24 @@ import './Policy.css';
 
 export const PolicyScreen: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState('Standard');
+  
+  // Get user data from localStorage
+  const getUserData = () => {
+    const userData = localStorage.getItem('gigshield_user_data');
+    if (userData) {
+      try {
+        return JSON.parse(userData);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  };
+
+  const user = getUserData();
+  const userPlatform = user?.platform || 'Zomato';
+  const userZone = user?.primaryZone || 'Koramangala';
+  const coveragePercent = user?.coveragePercent || '70%';
 
   return (
     <div className="gs-policy-page animate-fade-in">
@@ -31,15 +49,15 @@ export const PolicyScreen: React.FC = () => {
           <div className="gs-grid-2x3">
             <div className="gs-detail-item">
               <span className="gs-detail-label">Platform</span>
-              <span className="gs-detail-value">Zomato</span>
+              <span className="gs-detail-value">{userPlatform}</span>
             </div>
             <div className="gs-detail-item">
               <span className="gs-detail-label">Zone</span>
-              <span className="gs-detail-value">Koramangala</span>
+              <span className="gs-detail-value">{userZone}</span>
             </div>
             <div className="gs-detail-item">
               <span className="gs-detail-label">Coverage %</span>
-              <span className="gs-detail-value">70%</span>
+              <span className="gs-detail-value">{coveragePercent}</span>
             </div>
             <div className="gs-detail-item">
               <span className="gs-detail-label">Start Date</span>

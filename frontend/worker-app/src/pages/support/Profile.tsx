@@ -8,14 +8,36 @@ import './Profile.css';
 
 export const ProfileScreen: React.FC = () => {
   const navigate = useNavigate();
+  
+  // Get user data from localStorage
+  const getUserData = () => {
+    const userData = localStorage.getItem('gigshield_user_data');
+    if (userData) {
+      try {
+        return JSON.parse(userData);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  };
+
+  const user = getUserData();
+  const userName = user?.fullName || 'User';
+  const userInitials = userName.split(' ').map((n: string) => n[0]).join('').toUpperCase().substring(0, 2);
+  const userEmail = user?.email || 'user@example.com';
+  const userPhone = user?.phone || '9988776655';
+  const userUpiId = user?.upiId || 'user@okicici';
+  const userPlatform = user?.platform || 'Zomato';
+  const userZone = user?.primaryZone || 'Koramangala Zone';
 
   return (
     <div className="gs-profile-page animate-fade-in">
       
       <div className="gs-header-blue" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div className="gs-profile-avatar mb-3">RK</div>
-        <h1 className="gs-header-title">Ramesh Kumar</h1>
-        <p className="gs-header-subtitle">Zomato • Koramangala Zone</p>
+        <div className="gs-profile-avatar mb-3">{userInitials}</div>
+        <h1 className="gs-header-title">{userName}</h1>
+        <p className="gs-header-subtitle">{userPlatform} • {userZone}</p>
         
         <div className="mt-4">
           <Badge variant="blue">GigScore: 78</Badge>
@@ -29,15 +51,15 @@ export const ProfileScreen: React.FC = () => {
           <div className="gs-profile-details">
             <div className="gs-prof-row">
               <span className="gs-prof-label">Mobile</span>
-              <span className="gs-prof-value">+91 9988776655</span>
+              <span className="gs-prof-value">+91 {userPhone}</span>
             </div>
             <div className="gs-prof-row">
               <span className="gs-prof-label">Email</span>
-              <span className="gs-prof-value">ramesh@example.com</span>
+              <span className="gs-prof-value">{userEmail}</span>
             </div>
             <div className="gs-prof-row">
               <span className="gs-prof-label">UPI ID</span>
-              <span className="gs-prof-value">ramesh@okicici</span>
+              <span className="gs-prof-value">{userUpiId}</span>
             </div>
             <div className="gs-prof-row">
               <span className="gs-prof-label">Aadhaar Status</span>

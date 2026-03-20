@@ -1,0 +1,211 @@
+.gs-autopay-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.gs-autopay-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gs-autopay-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.gs-autopay-value {
+  font-size: 18px;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.gs-retry-link {
+  font-size: 13px;
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.gs-retry-link:hover {
+  text-decoration: underline;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.gs-progress-green .gs-progress-fill {
+  background-color: var(--success-green);
+}
+
+.gs-upi-id {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.gs-payout-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.gs-payout-success {
+  background-color: var(--success-fill);
+  color: var(--success-green);
+}
+
+.gs-payout-failed {
+  background-color: var(--error-fill);
+  color: var(--error-red);
+}
+
+.gs-payout-processing {
+  background-color: var(--warning-fill);
+  color: #B45309;
+}
+
+.mr-1 {
+  margin-right: 4px;
+}
+
+.gs-retry-btn {
+  background-color: var(--warning-amber);
+  color: #FFFFFF;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.gs-retry-btn:hover {
+  background-color: #D97706;
+}
+
+.gs-reconciliation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+.gs-reconciliation-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gs-reconciliation-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy-admin);
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.gs-reconciliation-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gs-reconciliation-label {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.gs-reconciliation-value {
+  font-size: 15px;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.gs-pool-healthy {
+  background-color: var(--success-fill);
+  color: var(--success-green);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.gs-reconciliation-footer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+}
+
+.gs-failed-transfers {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gs-failed-transfer-card {
+  background-color: var(--error-fill);
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.gs-failed-transfer-info {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.gs-failed-transfer-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gs-failed-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.gs-failed-value {
+  font-size: 14px;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.gs-failed-transfer-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.gs-btn-amber {
+  background-color: var(--warning-amber);
+  color: #FFFFFF;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.gs-btn-amber:hover {
+  background-color: #D97706;
+}

@@ -2,6 +2,9 @@ import React from 'react';
 import { Bell, Search } from 'lucide-react';
 import './Header.css';
 
+// ─── MOCK DATA — replace with API call later ───
+const MOCK_ACTIVE_DISRUPTIONS = 4;
+
 export const Header: React.FC = () => {
   return (
     <header className="gs-admin-header">
@@ -13,7 +16,7 @@ export const Header: React.FC = () => {
       <div className="gs-header-actions">
         <button className="gs-icon-button relative">
           <Bell size={20} />
-          <span className="gs-notification-badge">3</span>
+          <span className="gs-notification-badge">{MOCK_ACTIVE_DISRUPTIONS}</span>
         </button>
         <div className="gs-admin-profile">
           <div className="gs-admin-avatar">A</div>

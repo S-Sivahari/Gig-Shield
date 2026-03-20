@@ -132,3 +132,121 @@
   color: var(--primary-blue);
   border-color: var(--primary-blue);
 }
+
+
+/* Fraud Actions */
+.gs-fraud-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.gs-fraud-approve-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #FFFFFF;
+  border: 1px solid var(--success-green);
+  color: var(--success-green);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gs-fraud-approve-btn:hover {
+  background-color: var(--success-fill);
+}
+
+.gs-fraud-reject-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #FFFFFF;
+  border: 1px solid var(--error-red);
+  color: var(--error-red);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gs-fraud-reject-btn:hover {
+  background-color: var(--error-fill);
+}
+
+/* ML Confidence */
+.gs-ml-confidence {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.gs-ml-high {
+  background-color: var(--error-fill);
+  color: var(--error-red);
+}
+
+.gs-ml-medium {
+  background-color: var(--warning-fill);
+  color: #B45309;
+}
+
+.gs-ml-low {
+  background-color: var(--success-fill);
+  color: var(--success-green);
+}
+
+.gs-ml-muted {
+  background-color: var(--bg-secondary);
+  color: var(--text-muted);
+}
+
+/* Row States */
+.gs-row-approved {
+  background-color: rgba(220, 252, 231, 0.3);
+}
+
+.gs-row-rejected {
+  background-color: rgba(254, 226, 226, 0.3);
+}
+
+.gs-flag-badge-approved {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--success-fill);
+  color: var(--success-green);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #BBF7D0;
+}
+
+.gs-flag-badge-rejected {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--error-fill);
+  color: var(--error-red);
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #FECACA;
+}
+
+/* Fraud Trend Chart */
+.gs-fraud-trend-container {
+  height: 300px;
+  margin-left: -16px;
+}
+
+.mt-6 {
+  margin-top: 24px;
+}
