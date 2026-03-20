@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldAlert, CloudRain, Wind, Thermometer, TrendingUp, AlertTriangle, FileText, Zap, Wallet, Map } from 'lucide-react';
+import { ShieldAlert, CloudRain, Wind, Thermometer, TrendingUp, FileText, Zap, Wallet, Map } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
@@ -158,7 +158,7 @@ export const AdminDashboard: React.FC = () => {
                 <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} dx={-10} tickFormatter={(val) => `₹${val/1000}k`} />
                 <Tooltip 
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                  formatter={(value: any) => [`₹${value}`, "Payouts"]}
+                  formatter={(value: number) => [`₹${value}`, "Payouts"]}
                 />
                 <Line type="monotone" dataKey="payouts" stroke="#2563EB" strokeWidth={3} dot={{ r: 4, fill: '#2563EB', strokeWidth: 2, stroke: '#FFFFFF' }} activeDot={{ r: 6 }} />
               </LineChart>

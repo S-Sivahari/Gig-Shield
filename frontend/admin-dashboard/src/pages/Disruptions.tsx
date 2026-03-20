@@ -168,7 +168,7 @@ export const Disruptions: React.FC = () => {
                     </div>
                     <div className="gs-detail-item">
                       <span className="gs-detail-label">Claims Auto-Triggered</span>
-                      <span className="gs-detail-value">{disruption.claimsTriggered.toLocaleString('en-IN')}</span>
+                      <span className="gs-detail-value">{disruption.claimsTriggered?.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="gs-detail-item">
                       <span className="gs-detail-label">Payout Per Rider</span>
@@ -230,7 +230,7 @@ export const Disruptions: React.FC = () => {
                     </div>
                   </div>
                   <div className="gs-api-sources">
-                    {disruption.apiSources.map((source, idx) => (
+                    {disruption.apiSources?.map((source, idx) => (
                       <span key={idx} className="gs-api-badge">{source}</span>
                     ))}
                   </div>
@@ -257,7 +257,7 @@ export const Disruptions: React.FC = () => {
                     </div>
                     <div className="gs-detail-item">
                       <span className="gs-detail-label">Riders Affected</span>
-                      <span className="gs-detail-value">{disruption.ridersAffected.toLocaleString('en-IN')}</span>
+                      <span className="gs-detail-value">{disruption.ridersAffected?.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="gs-detail-item gs-detail-full">
                       <span className="gs-detail-label">Status</span>
@@ -265,7 +265,7 @@ export const Disruptions: React.FC = () => {
                     </div>
                   </div>
                   <div className="gs-api-sources">
-                    {disruption.apiSources.map((source, idx) => (
+                    {disruption.apiSources?.map((source, idx) => (
                       <span key={idx} className="gs-api-badge">{source}</span>
                     ))}
                   </div>
@@ -285,11 +285,11 @@ export const Disruptions: React.FC = () => {
                     </div>
                     <div className="gs-detail-item">
                       <span className="gs-detail-label">Total Claims Paid</span>
-                      <span className="gs-detail-value">{disruption.totalClaimsPaid.toLocaleString('en-IN')}</span>
+                      <span className="gs-detail-value">{disruption.totalClaimsPaid?.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="gs-detail-item">
                       <span className="gs-detail-label">Total Payout</span>
-                      <span className="gs-detail-value">₹{disruption.totalPayout.toLocaleString('en-IN')}</span>
+                      <span className="gs-detail-value">₹{disruption.totalPayout?.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="gs-detail-item">
                       <span className="gs-detail-label">Avg Payout Time</span>

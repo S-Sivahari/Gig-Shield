@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, X, RefreshCw } from 'lucide-react';
+import { CheckCircle, X } from 'lucide-react';
 import './Payouts.css';
 
 // ─── MOCK DATA — replace with API call later ───

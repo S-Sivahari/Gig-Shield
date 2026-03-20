@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, AlertTriangle, Send, Zap } from 'lucide-react';
+import { X, Send, Zap } from 'lucide-react';
 import './ZoneMap.css';
 
 // ─── MOCK DATA — replace with API call later ───
@@ -30,8 +30,6 @@ const MOCK_ZONES = [
   { id: 19, name: 'Dwarka', city: 'Delhi', risk: 'safe', aqi: 312, rainfall: 0, temp: 36, riders: 567, atRisk: 0 },
   { id: 20, name: 'Gachibowli', city: 'Hyderabad', risk: 'safe', aqi: 176, rainfall: 5, temp: 29, riders: 489, atRisk: 0 }
 ];
-
-type RiskLevel = 'trigger' | 'high' | 'watch' | 'safe' | 'all';
 
 export const ZoneMap: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState<string>('all');

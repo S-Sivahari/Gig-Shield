@@ -1,5 +1,5 @@
 import React from 'react';
-import { PiggyBank, Shield, Settings, CheckCircle, AlertTriangle } from 'lucide-react';
+import { PiggyBank, Shield, Settings, CheckCircle } from 'lucide-react';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import './PoolHealth.css';
 
@@ -43,9 +43,6 @@ const MOCK_PREMIUM_VS_CLAIMS = [
 ];
 
 export const PoolHealth: React.FC = () => {
-  const claimsReservePercent = (MOCK_CLAIMS_RESERVE / MOCK_POOL_TOTAL) * 100;
-  const reinsurancePercent = (MOCK_REINSURANCE_BUFFER / MOCK_POOL_TOTAL) * 100;
-  const operationsPercent = (MOCK_OPERATIONS_FUND / MOCK_POOL_TOTAL) * 100;
 
   return (
     <div className="gs-admin-page animate-fade-in">
