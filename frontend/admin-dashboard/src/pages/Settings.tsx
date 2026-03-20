@@ -122,7 +122,7 @@ export const Settings: React.FC = () => {
             </div>
           </div>
 
-          <button className="gs-btn-primary gs-full-width mt-4">Save All Thresholds</button>
+          <button className="gs-btn-success gs-full-width mt-4">Save All</button>
         </div>
       </div>
 
@@ -297,7 +297,7 @@ export const Settings: React.FC = () => {
           </div>
         </div>
 
-        <button className="gs-btn-primary gs-full-width mt-4">Save Plan Config</button>
+        <button className="gs-btn-success gs-full-width mt-4">Save Plans</button>
       </div>
 
       {/* Section 3 — System Toggles */}
@@ -417,7 +417,7 @@ export const Settings: React.FC = () => {
               <span className="gs-admin-info-value">Today, 21:15</span>
             </div>
           </div>
-          <button className="gs-btn-outline mt-4">Change Password</button>
+          <button className="gs-btn-outline-compact mt-4">Change Password</button>
         </div>
       </div>
 

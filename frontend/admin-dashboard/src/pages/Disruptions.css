@@ -243,6 +243,22 @@
   background-color: #B91C1C;
 }
 
+.gs-btn-danger-outline {
+  background: #FFFFFF;
+  border: 1px solid var(--error-red);
+  color: var(--error-red);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gs-btn-danger-outline:hover {
+  background: var(--error-fill);
+}
+
 .gs-btn-amber-outline {
   background: #FFFFFF;
   border: 1px solid var(--warning-amber);

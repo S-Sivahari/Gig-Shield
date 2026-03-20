@@ -84,8 +84,8 @@
 }
 
 .gs-threshold-save-btn {
-  padding: 6px 16px;
-  background-color: #2563EB;
+  padding: 6px 12px;
+  background-color: #10B981;
   color: white;
   border: none;
   border-radius: 6px;
@@ -93,10 +93,27 @@
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
+  min-width: 60px;
 }
 
 .gs-threshold-save-btn:hover {
-  background-color: #1D4ED8;
+  background-color: #059669;
+}
+
+.gs-btn-success {
+  padding: 12px 24px;
+  background-color: #10B981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.gs-btn-success:hover {
+  background-color: #059669;
 }
 
 /* Toggle Switch */
@@ -306,4 +323,23 @@
 
 .mt-4 {
   margin-top: 16px;
+}
+
+.gs-btn-outline-compact {
+  padding: 8px 16px;
+  background-color: transparent;
+  color: var(--navy-admin);
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-block;
+  width: auto;
+}
+
+.gs-btn-outline-compact:hover {
+  background-color: #F9FAFB;
+  border-color: var(--navy-admin);
 }

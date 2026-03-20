@@ -195,7 +195,7 @@ export const Disruptions: React.FC = () => {
                   </div>
                   <div className="gs-disruption-actions">
                     <button className="gs-btn-outline">View Claims</button>
-                    <button className="gs-btn-danger">Resolve Event</button>
+                    <button className="gs-btn-danger-outline">Resolve Event</button>
                   </div>
                 </>
               )}
