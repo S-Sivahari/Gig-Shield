@@ -290,7 +290,11 @@ export const PoolHealth: React.FC = () => {
               />
               <Tooltip 
                 contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                formatter={(value: any, name: string) => [`₹${value}L`, name === 'premium' ? 'Premium Collected' : 'Claims Paid']}
+                formatter={(value, name) => {
+                  const n = name ?? '';
+                  const v = value !== undefined ? `₹${Number(value).toLocaleString('en-IN')}` : '';
+                  return [v, n];
+                }}
               />
               <Legend 
                 wrapperStyle={{ paddingTop: '20px' }}
