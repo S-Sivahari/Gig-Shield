@@ -6,8 +6,9 @@
   border: none;
   cursor: pointer;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
   outline: none;
+  min-height: 44px; /* Minimum touch target size */
 }
 
 .gs-button:active {
@@ -30,7 +31,8 @@
   color: #FFFFFF;
   height: 48px;
   border-radius: var(--radius-button);
-  font-size: 14px;
+  font-size: 15px;
+  padding: 12px 24px;
 }
 
 .gs-button--primary:hover:not(:disabled) {
@@ -44,7 +46,8 @@
   border: 1px solid var(--primary-blue);
   height: 48px;
   border-radius: var(--radius-button);
-  font-size: 14px;
+  font-size: 15px;
+  padding: 12px 24px;
 }
 
 .gs-button--outline:hover:not(:disabled) {
@@ -70,4 +73,19 @@
   border-color: var(--primary-blue);
   color: var(--primary-blue);
   font-weight: 600;
+}
+
+/* Desktop responsive enhancements */
+@media (min-width: 769px) {
+  .gs-button--primary,
+  .gs-button--outline {
+    font-size: 16px;
+    padding: 14px 28px;
+  }
+  
+  .gs-button--primary:hover:not(:disabled),
+  .gs-button--outline:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
 }

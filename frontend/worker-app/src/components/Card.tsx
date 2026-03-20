@@ -10,16 +10,17 @@ interface CardProps {
   style?: React.CSSProperties;
 }
 
-export const Card: React.FC<CardProps> = ({ 
+export const Card = React.forwardRef<HTMLDivElement, CardProps>(({ 
   children, 
   variant = 'white', 
   className = '',
   noPadding = false,
   onClick,
   style
-}) => {
+}, ref) => {
   return (
     <div 
+      ref={ref}
       className={`gs-card gs-card--${variant} ${noPadding ? 'gs-card--no-padding' : ''} ${className}`}
       onClick={onClick}
       style={style}
@@ -27,4 +28,4 @@ export const Card: React.FC<CardProps> = ({
       {children}
     </div>
   );
-};
+});

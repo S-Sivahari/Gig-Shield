@@ -4,7 +4,7 @@
   flex-direction: column;
   position: relative;
   background-color: var(--bg-secondary);
-  padding-bottom: 64px; /* Space for Bottom Nav */
+  padding-bottom: 80px; /* Space for Bottom Nav on all screen sizes */
 }
 
 .gs-main-content {

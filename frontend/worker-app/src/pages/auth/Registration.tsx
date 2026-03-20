@@ -51,35 +51,37 @@ export const Registration: React.FC = () => {
   };
 
   return (
-    <div className="gs-reg-page animate-fade-in">
-      {currentStep < 6 && (
-        <div className="gs-reg-header">
-          <button className="gs-back-button" onClick={prevStep}>
-            ←
-          </button>
-          <div className="gs-reg-title-block">
-            <h1 className="gs-reg-title">{getStepTitle()}</h1>
-            <p className="gs-reg-subtitle">Step {currentStep} of {TOTAL_STEPS}</p>
+    <div className="gs-auth-page">
+      <div className="gs-reg-page-wrapper animate-stagger">
+        {currentStep < 6 && (
+          <div className="gs-reg-header animate-stagger-item" style={{ animationDelay: '0ms' }}>
+            <button className="gs-back-button" onClick={prevStep}>
+              ←
+            </button>
+            <div className="gs-reg-title-block">
+              <h1 className="gs-reg-title">{getStepTitle()}</h1>
+              <p className="gs-reg-subtitle">Step {currentStep} of {TOTAL_STEPS}</p>
+            </div>
+            
+            <div className="gs-reg-progress">
+              {Array.from({ length: TOTAL_STEPS - 1 }).map((_, idx) => (
+                <div 
+                  key={idx} 
+                  className={`gs-reg-progress-segment ${idx < currentStep ? 'gs-reg-progress-segment--done' : ''}`}
+                />
+              ))}
+            </div>
           </div>
-          
-          <div className="gs-reg-progress">
-            {Array.from({ length: TOTAL_STEPS - 1 }).map((_, idx) => (
-              <div 
-                key={idx} 
-                className={`gs-reg-progress-segment ${idx < currentStep ? 'gs-reg-progress-segment--done' : ''}`}
-              />
-            ))}
-          </div>
-        </div>
-      )}
+        )}
 
-      <div className="gs-reg-content animate-slide-up" key={currentStep}>
-        {currentStep === 1 && <Step1Personal data={formData} updateData={updateFormData} onNext={nextStep} />}
-        {currentStep === 2 && <Step2Identity data={formData} updateData={updateFormData} onNext={nextStep} />}
-        {currentStep === 3 && <Step3WorkProfile data={formData} updateData={updateFormData} onNext={nextStep} />}
-        {currentStep === 4 && <Step4Income data={formData} updateData={updateFormData} onNext={nextStep} />}
-        {currentStep === 5 && <Step5Payment data={formData} updateData={updateFormData} onNext={nextStep} />}
-        {currentStep === 6 && <Step6Success />}
+        <div className="gs-reg-content animate-stagger-item" style={{ animationDelay: '100ms' }} key={currentStep}>
+          {currentStep === 1 && <Step1Personal data={formData} updateData={updateFormData} onNext={nextStep} />}
+          {currentStep === 2 && <Step2Identity data={formData} updateData={updateFormData} onNext={nextStep} />}
+          {currentStep === 3 && <Step3WorkProfile data={formData} updateData={updateFormData} onNext={nextStep} />}
+          {currentStep === 4 && <Step4Income data={formData} updateData={updateFormData} onNext={nextStep} />}
+          {currentStep === 5 && <Step5Payment data={formData} updateData={updateFormData} onNext={nextStep} />}
+          {currentStep === 6 && <Step6Success />}
+        </div>
       </div>
     </div>
   );

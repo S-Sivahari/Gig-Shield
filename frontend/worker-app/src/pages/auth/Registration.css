@@ -1,3 +1,52 @@
+/* Auth Page Container - Full viewport centering */
+.gs-auth-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  overflow-y: auto;
+  background-color: var(--bg-primary);
+}
+
+.gs-auth-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--bg-primary);
+}
+
+/* Staggered Animation */
+@keyframes staggerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-stagger-item {
+  animation: staggerFadeIn 500ms ease-out forwards;
+  opacity: 0;
+}
+
+/* Registration Page Wrapper */
+.gs-reg-page-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Legacy Registration Page Styles */
 .gs-reg-page {
   min-height: 100vh;
   display: flex;
@@ -6,10 +55,11 @@
 }
 
 .gs-reg-header {
-  background-color: var(--primary-blue);
+  background-color: rgba(37, 99, 235, 0.95);
   color: #FFFFFF;
   padding: 24px 20px 20px;
   position: relative;
+  border-radius: 12px 12px 0 0;
 }
 
 .gs-back-button {
@@ -61,6 +111,8 @@
   padding: 24px 20px;
   display: flex;
   flex-direction: column;
+  background-color: var(--bg-primary);
+  border-radius: 0 0 12px 12px;
 }
 
 .gs-step-form {

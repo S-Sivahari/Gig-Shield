@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from '../../components/Badge';
 import { Card } from '../../components/Card';
@@ -7,6 +7,53 @@ import './Dashboard.css';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
+  const metricRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    // Check if Intersection Observer is supported
+    if (!('IntersectionObserver' in window)) {
+      // Show all elements immediately without animation
+      metricRefs.current.forEach((ref) => {
+        if (ref) ref.classList.add('animate-fade-in-up');
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-in-up');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    metricRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleProfileClick = () => {
+    try {
+      // Check if auth state exists (in a real app, this would check localStorage/sessionStorage)
+      // For now, we'll just navigate directly
+      navigate('/profile');
+    } catch (error) {
+      console.error('Navigation error:', error);
+      // Stay on current page if error occurs
+    }
+  };
+
+  const handleProfileKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleProfileClick();
+    }
+  };
 
   return (
     <div className="gs-dashboard-page animate-fade-in">
@@ -18,7 +65,16 @@ export const Dashboard: React.FC = () => {
             <h1 className="gs-dash-greeting">Good morning,</h1>
             <p className="gs-dash-name">Ramesh Kumar</p>
           </div>
-          <div className="gs-avatar">RK</div>
+          <div 
+            className="gs-avatar gs-avatar--clickable" 
+            onClick={handleProfileClick}
+            onKeyDown={handleProfileKeyDown}
+            role="button"
+            tabIndex={0}
+            aria-label="Go to profile"
+          >
+            RK
+          </div>
         </div>
 
         {/* Protection Card */}
@@ -54,21 +110,34 @@ export const Dashboard: React.FC = () => {
 
         {/* 2x2 Metric Grid */}
         <div className="gs-metric-grid mt-4">
-          <Card className="gs-metric-card">
+          <Card 
+            className="gs-metric-card"
+            ref={(el) => { metricRefs.current[0] = el; }}
+          >
             <span className="gs-metric-label">Total paid out</span>
             <span className="gs-metric-value gs-text-green">₹12,450</span>
           </Card>
-          <Card className="gs-metric-card">
+          <Card 
+            className="gs-metric-card"
+            ref={(el) => { metricRefs.current[1] = el; }}
+          >
             <span className="gs-metric-label">Claims this month</span>
             <span className="gs-metric-value">4</span>
           </Card>
-          <Card className="gs-metric-card" onClick={() => navigate('/gigscore')}>
+          <Card 
+            className="gs-metric-card" 
+            onClick={() => navigate('/gigscore')}
+            ref={(el) => { metricRefs.current[2] = el; }}
+          >
             <span className="gs-metric-label">GigScore</span>
             <span className="gs-metric-value gs-text-blue" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               78 <ChevronRight size={16} />
             </span>
           </Card>
-          <Card className="gs-metric-card">
+          <Card 
+            className="gs-metric-card"
+            ref={(el) => { metricRefs.current[3] = el; }}
+          >
             <span className="gs-metric-label">Next renewal</span>
             <span className="gs-metric-value" style={{ fontSize: '16px' }}>Oct 12</span>
           </Card>

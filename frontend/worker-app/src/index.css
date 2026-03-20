@@ -31,8 +31,53 @@
   --radius-input: 10px;
   --radius-badge: 20px;
   
-  /* Layout Constraints */
+  /* Layout Constraints - Mobile defaults */
   --mobile-max-width: 390px;
+  
+  /* Responsive Spacing - Mobile defaults */
+  --spacing-page: 16px;
+  --spacing-card: 16px;
+  
+  /* Responsive Typography - Mobile defaults */
+  --font-size-base: 15px;
+  --font-size-h1: 24px;
+  --font-size-h2: 20px;
+  --font-size-h3: 16px;
+  
+  /* Shadow System */
+  --shadow-low: 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-medium: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-high: 0 4px 12px rgba(0, 0, 0, 0.1);
+  
+  /* Transition Timing */
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+  
+  /* Responsive Icon Sizing - Mobile defaults */
+  --icon-size-nav: 24px;
+  --icon-size-inline: 16px;
+  --icon-size-large: 32px;
+}
+
+/* Desktop Responsive Breakpoint */
+@media (min-width: 769px) {
+  :root {
+    --mobile-max-width: 1024px;
+    --spacing-page: 20px;
+    --spacing-card: 20px;
+    --font-size-base: 16px;
+    --font-size-h1: 27px;
+    --font-size-h2: 22px;
+    --font-size-h3: 18px;
+    --icon-size-nav: 28px;
+    --icon-size-inline: 20px;
+    --icon-size-large: 40px;
+  }
+  
+  #root {
+    max-width: 1024px;
+  }
 }
 
 * {
@@ -79,6 +124,15 @@ body {
 
 .animate-fade-in {
   animation: fadeIn 0.3s ease forwards;
+}
+
+/* Gradient Utilities */
+.gradient-blue-white {
+  background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%);
+}
+
+.gradient-auth-bg {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
 }
 
 /* Scrollbar styling */

@@ -20,7 +20,7 @@
 
 .gs-dash-greeting {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   color: rgba(255, 255, 255, 0.8);
 }
 
@@ -43,11 +43,42 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+.gs-avatar--clickable {
+  cursor: pointer;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.gs-avatar--clickable:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+}
+
+.gs-avatar--clickable:active {
+  transform: scale(0.95);
+}
+
+.gs-avatar--clickable:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+}
+
 .gs-protection-card {
-  background-color: var(--dark-blue);
+  background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%);
+  border: 1px solid var(--light-blue-border);
   border-radius: var(--radius-card);
   padding: 20px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-medium);
+  transition: box-shadow var(--transition-normal);
+}
+
+@media (min-width: 769px) {
+  .gs-protection-card {
+    padding: 24px;
+  }
+  
+  .gs-protection-card:hover {
+    box-shadow: var(--shadow-high);
+  }
 }
 
 .gs-prot-header {
@@ -59,33 +90,35 @@
 
 .gs-prot-label {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+  color: var(--text-muted);
 }
 
 .gs-prot-amount {
   font-size: 32px;
   font-weight: 600;
   margin-bottom: 20px;
+  color: var(--text-main);
 }
 
 .gs-prot-amount span {
   font-size: 16px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-muted);
 }
 
 .gs-prot-progress-header {
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-muted);
   margin-bottom: 6px;
 }
 
 .gs-prot-progress-track {
   width: 100%;
   height: 6px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--border-color);
   border-radius: 8px;
 }
 
@@ -135,20 +168,43 @@
   gap: 12px;
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 500ms ease-out forwards;
+}
+
 .gs-metric-card {
   display: flex;
   flex-direction: column;
   gap: 8px;
   cursor: pointer;
   transition: transform 0.2s ease;
+  opacity: 0;
 }
 
 .gs-metric-card:active {
   transform: scale(0.98);
 }
 
+@media (min-width: 769px) {
+  .gs-metric-card:hover {
+    transform: scale(1.02);
+  }
+}
+
 .gs-metric-label {
   font-size: 13px;
+  font-weight: 400;
   color: var(--text-muted);
 }
 
@@ -223,6 +279,7 @@
 
 .gs-activity-date {
   font-size: 12px;
+  font-weight: 400;
   color: var(--text-muted);
 }
 

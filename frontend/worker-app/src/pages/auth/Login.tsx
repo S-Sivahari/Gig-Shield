@@ -19,9 +19,9 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="gs-login-page animate-fade-in">
-      <div className="gs-login-content">
-        <div className="gs-login-header animate-slide-up">
+    <div className="gs-auth-page">
+      <div className="gs-auth-content animate-stagger">
+        <div className="gs-login-header animate-stagger-item" style={{ animationDelay: '0ms' }}>
           <div className="gs-logo-container">
             <Shield className="gs-logo-icon" size={32} />
             <h1 className="gs-logo-text">GigShield</h1>
@@ -29,7 +29,7 @@ export const Login: React.FC = () => {
           <p className="gs-tagline">Income protection for delivery partners</p>
         </div>
 
-        <form onSubmit={handleSendOTP} className="gs-login-form animate-slide-up" style={{ animationDelay: '0.1s' }}>
+        <form onSubmit={handleSendOTP} className="gs-login-form animate-stagger-item" style={{ animationDelay: '100ms' }}>
           
           <div className="gs-phone-input-group">
             <div className="gs-phone-prefix">+91</div>

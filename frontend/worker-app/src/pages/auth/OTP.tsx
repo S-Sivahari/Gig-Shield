@@ -59,19 +59,19 @@ export const OTPVerification: React.FC = () => {
   };
 
   return (
-    <div className="gs-otp-page animate-fade-in">
-      <div className="gs-otp-content">
+    <div className="gs-auth-page">
+      <div className="gs-auth-content animate-stagger">
         
-        <div className="gs-otp-header animate-slide-up">
+        <div className="gs-otp-header animate-stagger-item" style={{ animationDelay: '0ms' }}>
           <h1 className="gs-otp-title">OTP verification</h1>
           <p className="gs-otp-subtitle">Enter the 6-digit code sent to<br /><b>+91 99****8291</b></p>
         </div>
 
-        <div className="gs-auto-read-banner animate-slide-up" style={{ animationDelay: '0.1s' }}>
+        <div className="gs-auto-read-banner animate-stagger-item" style={{ animationDelay: '100ms' }}>
           Auto-reading OTP from SMS...
         </div>
 
-        <form onSubmit={handleVerify} className="gs-otp-form animate-slide-up" style={{ animationDelay: '0.2s' }}>
+        <form onSubmit={handleVerify} className="gs-otp-form animate-stagger-item" style={{ animationDelay: '200ms' }}>
           
           <div className="gs-otp-inputs">
             {otp.map((digit, index) => (
