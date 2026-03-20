@@ -160,7 +160,7 @@ export const Disruptions: React.FC = () => {
                     </div>
                     <div className="gs-detail-item">
                       <span className="gs-detail-label">Riders Affected</span>
-                      <span className="gs-detail-value">{disruption.ridersAffected.toLocaleString('en-IN')}</span>
+                      <span className="gs-detail-value">{disruption.ridersAffected?.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="gs-detail-item">
                       <span className="gs-detail-label">Rainfall</span>
@@ -176,7 +176,7 @@ export const Disruptions: React.FC = () => {
                     </div>
                     <div className="gs-detail-item">
                       <span className="gs-detail-label">Total Payout</span>
-                      <span className="gs-detail-value">₹{disruption.totalPayout.toLocaleString('en-IN')}</span>
+                      <span className="gs-detail-value">₹{disruption.totalPayout?.toLocaleString('en-IN')}</span>
                     </div>
                   </div>
                   <div className="gs-progress-section">
@@ -189,7 +189,7 @@ export const Disruptions: React.FC = () => {
                     </div>
                   </div>
                   <div className="gs-api-sources">
-                    {disruption.apiSources.map((source, idx) => (
+                    {disruption.apiSources?.map((source, idx) => (
                       <span key={idx} className="gs-api-badge">{source}</span>
                     ))}
                   </div>
@@ -209,7 +209,7 @@ export const Disruptions: React.FC = () => {
                     </div>
                     <div className="gs-detail-item">
                       <span className="gs-detail-label">Riders Affected</span>
-                      <span className="gs-detail-value">{disruption.ridersAffected.toLocaleString('en-IN')}</span>
+                      <span className="gs-detail-value">{disruption.ridersAffected?.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="gs-detail-item">
                       <span className="gs-detail-label">AQI Level</span>

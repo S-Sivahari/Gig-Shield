@@ -240,7 +240,7 @@ export const AdminDashboard: React.FC = () => {
                   <LabelList 
                     dataKey="value" 
                     position="right" 
-                    formatter={(v: number) => v.toLocaleString('en-IN')}
+                    formatter={(v: any) => v.toLocaleString('en-IN')}
                     style={{ fontSize: 12, fill: '#6B7280' }}
                   />
                 </Bar>
