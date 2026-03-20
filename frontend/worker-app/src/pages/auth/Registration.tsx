@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Step1Personal } from './Step1Personal';
 import { Step2Identity } from './Step2Identity';
@@ -42,7 +42,7 @@ export const Registration: React.FC = () => {
   });
 
   const updateFormData = (newData: Partial<typeof formData>) => {
-    setFormData(prev => {
+    setFormData((prev: typeof formData) => {
       const updated = { ...prev, ...newData };
       // Save to localStorage whenever data updates
       localStorage.setItem('gigshield_user_data', JSON.stringify(updated));
