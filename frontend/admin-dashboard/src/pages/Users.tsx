@@ -14,8 +14,12 @@ const MOCK_WORKERS = [
     name: 'Ramesh Kumar',
     platform: 'Swiggy',
     zone: 'Andheri West',
-    plan: 'Standard',
-    premium: 89,
+    city: 'Mumbai',
+    vehicle: '2-Wheeler',
+    safetyGear: 'No',
+    riskMultiplier: '1.2x (Vehicle)',
+    plan: 'Shield+',
+    premium: 124,
     gigScore: 78,
     kyc: 'Verified',
     status: 'Active',
@@ -35,8 +39,12 @@ const MOCK_WORKERS = [
     name: 'Priya Sharma',
     platform: 'Zomato',
     zone: 'Koramangala',
-    plan: 'Pro',
-    premium: 129,
+    city: 'Bangalore',
+    vehicle: '4-Wheeler',
+    safetyGear: 'Yes',
+    riskMultiplier: '0.85x (Discounted)',
+    plan: 'Elite',
+    premium: 165,
     gigScore: 85,
     kyc: 'Verified',
     status: 'Active',
@@ -56,8 +64,12 @@ const MOCK_WORKERS = [
     name: 'Abdul Rahman',
     platform: 'Blinkit',
     zone: 'Indiranagar',
+    city: 'Bangalore',
+    vehicle: '2-Wheeler',
+    safetyGear: 'No',
+    riskMultiplier: '1.5x (Weather)',
     plan: 'Basic',
-    premium: 59,
+    premium: 78,
     gigScore: 62,
     kyc: 'Pending',
     status: 'Active',
@@ -77,8 +89,12 @@ const MOCK_WORKERS = [
     name: 'Kavitha Lakshmi',
     platform: 'Amazon',
     zone: 'T Nagar',
-    plan: 'Standard',
-    premium: 89,
+    city: 'Chennai',
+    vehicle: '2-Wheeler',
+    safetyGear: 'Yes',
+    riskMultiplier: '1.14x (Gear Discount)',
+    plan: 'Shield+',
+    premium: 110,
     gigScore: 72,
     kyc: 'Verified',
     status: 'Active',
@@ -98,8 +114,12 @@ const MOCK_WORKERS = [
     name: 'Mohammed Ansari',
     platform: 'Swiggy',
     zone: 'Banjara Hills',
-    plan: 'Standard',
-    premium: 89,
+    city: 'Hyderabad',
+    vehicle: '4-Wheeler',
+    safetyGear: 'No',
+    riskMultiplier: '0.9x (Vehicle)',
+    plan: 'Elite',
+    premium: 135,
     gigScore: 68,
     kyc: 'Verified',
     status: 'Active',
@@ -119,8 +139,12 @@ const MOCK_WORKERS = [
     name: 'Deepak Singh',
     platform: 'Zepto',
     zone: 'Salt Lake',
-    plan: 'Pro',
-    premium: 129,
+    city: 'Kolkata',
+    vehicle: '2-Wheeler',
+    safetyGear: 'Yes',
+    riskMultiplier: '1.14x (Gear Discount)',
+    plan: 'Elite',
+    premium: 171,
     gigScore: 81,
     kyc: 'Verified',
     status: 'Active',
@@ -140,8 +164,12 @@ const MOCK_WORKERS = [
     name: 'Anjali Patel',
     platform: 'Blinkit',
     zone: 'Connaught Place',
+    city: 'Delhi',
+    vehicle: '2-Wheeler',
+    safetyGear: 'No',
+    riskMultiplier: '1.3x (Heatwave)',
     plan: 'Basic',
-    premium: 59,
+    premium: 72,
     gigScore: 58,
     kyc: 'Pending',
     status: 'Active',
@@ -161,8 +189,12 @@ const MOCK_WORKERS = [
     name: 'Rajesh Verma',
     platform: 'Zomato',
     zone: 'Powai',
-    plan: 'Standard',
-    premium: 89,
+    city: 'Mumbai',
+    vehicle: '4-Wheeler',
+    safetyGear: 'Yes',
+    riskMultiplier: '0.85x (Discounted)',
+    plan: 'Shield+',
+    premium: 106,
     gigScore: 75,
     kyc: 'Verified',
     status: 'Suspended',
@@ -182,8 +214,12 @@ const MOCK_WORKERS = [
     name: 'Sneha Reddy',
     platform: 'Swiggy',
     zone: 'Bandra',
-    plan: 'Pro',
-    premium: 129,
+    city: 'Mumbai',
+    vehicle: '2-Wheeler',
+    safetyGear: 'Yes',
+    riskMultiplier: '1.14x (Gear Discount)',
+    plan: 'Elite',
+    premium: 190,
     gigScore: 88,
     kyc: 'Verified',
     status: 'Active',
@@ -203,8 +239,12 @@ const MOCK_WORKERS = [
     name: 'Vijay Kumar',
     platform: 'Amazon',
     zone: 'Whitefield',
+    city: 'Bangalore',
+    vehicle: '2-Wheeler',
+    safetyGear: 'No',
+    riskMultiplier: '1.2x (Vehicle)',
     plan: 'Basic',
-    premium: 59,
+    premium: 72,
     gigScore: 64,
     kyc: 'Verified',
     status: 'Active',
@@ -283,8 +323,8 @@ export const Users: React.FC = () => {
         <select className="gs-filter-select">
           <option>All Plans</option>
           <option>Basic</option>
-          <option>Standard</option>
-          <option>Pro</option>
+          <option>Shield+</option>
+          <option>Elite</option>
         </select>
       </div>
 
@@ -420,20 +460,36 @@ export const Users: React.FC = () => {
                       <span className="gs-field-label">Aadhaar</span>
                       <span className="gs-field-value">{selectedWorker.aadhaar}</span>
                     </div>
+                    <div className="gs-worker-field">
+                      <span className="gs-field-label">Risk Multiplier</span>
+                      <span className="gs-field-value">{selectedWorker.riskMultiplier || 'Unknown'}</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Section 2: Policy Info */}
                 <div className="gs-worker-section">
-                  <h3 className="gs-section-subtitle">Policy Info</h3>
+                  <h3 className="gs-section-subtitle">Policy & Geography</h3>
                   <div className="gs-worker-fields">
                     <div className="gs-worker-field">
                       <span className="gs-field-label">Policy ID</span>
                       <span className="gs-field-value">{selectedWorker.policyId}</span>
                     </div>
                     <div className="gs-worker-field">
+                      <span className="gs-field-label">City</span>
+                      <span className="gs-field-value">{selectedWorker.city || 'Unknown'}</span>
+                    </div>
+                    <div className="gs-worker-field">
                       <span className="gs-field-label">Plan</span>
                       <span className="gs-field-value">{selectedWorker.plan}</span>
+                    </div>
+                    <div className="gs-worker-field">
+                      <span className="gs-field-label">Vehicle</span>
+                      <span className="gs-field-value">{selectedWorker.vehicle || 'Unknown'}</span>
+                    </div>
+                    <div className="gs-worker-field">
+                      <span className="gs-field-label">Safety Gear</span>
+                      <span className="gs-field-value">{selectedWorker.safetyGear || 'Unknown'}</span>
                     </div>
                     <div className="gs-worker-field">
                       <span className="gs-field-label">Weekly Premium</span>

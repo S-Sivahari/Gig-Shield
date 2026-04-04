@@ -29,6 +29,10 @@ CREATE TABLE policies (
   total_premiums_paid   NUMERIC(10,2) NOT NULL DEFAULT 0,
   total_payouts_issued  NUMERIC(10,2) NOT NULL DEFAULT 0,
 
+  -- Dynamic premium snapshot (Earn-Lock engine output at time of issuance)
+  weather_multiplier_at_issue NUMERIC(4,2),                -- weather risk at policy creation
+  premium_breakdown_json      JSONB,                        -- full calculation trace for "Why this price?"
+
   -- Coverage snapshot (denormalised from plan_configs at time of issue)
   covered_disruptions   disruption_type_enum[] NOT NULL,
   max_payout_per_event  NUMERIC(8,2) NOT NULL,

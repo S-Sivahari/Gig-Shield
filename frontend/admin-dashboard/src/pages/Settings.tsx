@@ -8,20 +8,20 @@ export const Settings: React.FC = () => {
   const [floodLevel, setFloodLevel] = useState('High');
   const [curfewTrigger, setCurfewTrigger] = useState(true);
 
-  const [basicPremium, setBasicPremium] = useState('59');
+  const [basicPremium, setBasicPremium] = useState('100');
   const [basicCoverage, setBasicCoverage] = useState('50');
   const [basicMaxPayout, setBasicMaxPayout] = useState('100');
   const [basicWeeklyCap, setBasicWeeklyCap] = useState('3');
 
-  const [standardPremium, setStandardPremium] = useState('89');
-  const [standardCoverage, setStandardCoverage] = useState('70');
-  const [standardMaxPayout, setStandardMaxPayout] = useState('150');
-  const [standardWeeklyCap, setStandardWeeklyCap] = useState('3');
+  const [shieldPremium, setShieldPremium] = useState('125');
+  const [shieldCoverage, setShieldCoverage] = useState('70');
+  const [shieldMaxPayout, setShieldMaxPayout] = useState('150');
+  const [shieldWeeklyCap, setShieldWeeklyCap] = useState('3');
 
-  const [proPremium, setProPremium] = useState('129');
-  const [proCoverage, setProCoverage] = useState('90');
-  const [proMaxPayout, setProMaxPayout] = useState('300');
-  const [proWeeklyCap, setProWeeklyCap] = useState('5');
+  const [elitePremium, setElitePremium] = useState('150');
+  const [eliteCoverage, setEliteCoverage] = useState('90');
+  const [eliteMaxPayout, setEliteMaxPayout] = useState('300');
+  const [eliteWeeklyCap, setEliteWeeklyCap] = useState('5');
 
   const [autoClaimTrigger, setAutoClaimTrigger] = useState(true);
   const [upiAutoPay, setUpiAutoPay] = useState(true);
@@ -129,6 +129,7 @@ export const Settings: React.FC = () => {
       {/* Section 2 — Plan Configuration */}
       <div className="gs-settings-section">
         <h2 className="gs-settings-section-title">Insurance Plan Settings</h2>
+        <p className="gs-settings-section-subtitle">Base premiums are dynamically adjusted per-worker by the Earn-Lock engine (weather × vehicle × gear)</p>
         
         <div className="gs-plan-config-grid">
           {/* Basic Plan */}
@@ -186,19 +187,19 @@ export const Settings: React.FC = () => {
             </div>
           </div>
 
-          {/* Standard Plan */}
+          {/* Shield+ Plan */}
           <div className="gs-plan-config-card">
-            <h3 className="gs-plan-config-title">Standard</h3>
+            <h3 className="gs-plan-config-title">Shield+</h3>
             <div className="gs-plan-config-fields">
               <div className="gs-plan-config-field">
-                <label className="gs-plan-config-label">Weekly Premium</label>
+                <label className="gs-plan-config-label">Base Weekly Premium</label>
                 <div className="gs-plan-config-input-wrapper">
                   <span className="gs-plan-config-prefix">₹</span>
                   <input 
                     type="number" 
                     className="gs-plan-config-input" 
-                    value={standardPremium}
-                    onChange={(e) => setStandardPremium(e.target.value)}
+                    value={shieldPremium}
+                    onChange={(e) => setShieldPremium(e.target.value)}
                   />
                 </div>
               </div>
@@ -208,8 +209,8 @@ export const Settings: React.FC = () => {
                   <input 
                     type="number" 
                     className="gs-plan-config-input" 
-                    value={standardCoverage}
-                    onChange={(e) => setStandardCoverage(e.target.value)}
+                    value={shieldCoverage}
+                    onChange={(e) => setShieldCoverage(e.target.value)}
                   />
                   <span className="gs-plan-config-suffix">%</span>
                 </div>
@@ -221,8 +222,8 @@ export const Settings: React.FC = () => {
                   <input 
                     type="number" 
                     className="gs-plan-config-input" 
-                    value={standardMaxPayout}
-                    onChange={(e) => setStandardMaxPayout(e.target.value)}
+                    value={shieldMaxPayout}
+                    onChange={(e) => setShieldMaxPayout(e.target.value)}
                   />
                 </div>
               </div>
@@ -232,8 +233,8 @@ export const Settings: React.FC = () => {
                   <input 
                     type="number" 
                     className="gs-plan-config-input" 
-                    value={standardWeeklyCap}
-                    onChange={(e) => setStandardWeeklyCap(e.target.value)}
+                    value={shieldWeeklyCap}
+                    onChange={(e) => setShieldWeeklyCap(e.target.value)}
                   />
                   <span className="gs-plan-config-suffix">days</span>
                 </div>
@@ -241,19 +242,19 @@ export const Settings: React.FC = () => {
             </div>
           </div>
 
-          {/* Pro Plan */}
+          {/* Elite Plan */}
           <div className="gs-plan-config-card">
-            <h3 className="gs-plan-config-title">Pro</h3>
+            <h3 className="gs-plan-config-title">Elite</h3>
             <div className="gs-plan-config-fields">
               <div className="gs-plan-config-field">
-                <label className="gs-plan-config-label">Weekly Premium</label>
+                <label className="gs-plan-config-label">Base Weekly Premium</label>
                 <div className="gs-plan-config-input-wrapper">
                   <span className="gs-plan-config-prefix">₹</span>
                   <input 
                     type="number" 
                     className="gs-plan-config-input" 
-                    value={proPremium}
-                    onChange={(e) => setProPremium(e.target.value)}
+                    value={elitePremium}
+                    onChange={(e) => setElitePremium(e.target.value)}
                   />
                 </div>
               </div>
@@ -263,8 +264,8 @@ export const Settings: React.FC = () => {
                   <input 
                     type="number" 
                     className="gs-plan-config-input" 
-                    value={proCoverage}
-                    onChange={(e) => setProCoverage(e.target.value)}
+                    value={eliteCoverage}
+                    onChange={(e) => setEliteCoverage(e.target.value)}
                   />
                   <span className="gs-plan-config-suffix">%</span>
                 </div>
@@ -276,8 +277,8 @@ export const Settings: React.FC = () => {
                   <input 
                     type="number" 
                     className="gs-plan-config-input" 
-                    value={proMaxPayout}
-                    onChange={(e) => setProMaxPayout(e.target.value)}
+                    value={eliteMaxPayout}
+                    onChange={(e) => setEliteMaxPayout(e.target.value)}
                   />
                 </div>
               </div>
@@ -287,8 +288,8 @@ export const Settings: React.FC = () => {
                   <input 
                     type="number" 
                     className="gs-plan-config-input" 
-                    value={proWeeklyCap}
-                    onChange={(e) => setProWeeklyCap(e.target.value)}
+                    value={eliteWeeklyCap}
+                    onChange={(e) => setEliteWeeklyCap(e.target.value)}
                   />
                   <span className="gs-plan-config-suffix">days</span>
                 </div>

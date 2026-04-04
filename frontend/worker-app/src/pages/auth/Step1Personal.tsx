@@ -54,7 +54,7 @@ export const Step1Personal: React.FC<StepProps> = ({ data, updateData, onNext })
 
         <Input 
           label="Mobile number"
-          value="+91 99****8291"
+          value={data.phone ? `+91 ${data.phone}` : '+91 99****8291'}
           readOnly
           style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-muted)' }}
         />

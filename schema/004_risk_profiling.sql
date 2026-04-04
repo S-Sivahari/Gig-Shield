@@ -28,6 +28,9 @@ CREATE TABLE risk_profiles (
   -- Premium recommendation
   recommended_plan      plan_enum NOT NULL,
   recommended_premium   NUMERIC(8,2) NOT NULL,
+  weather_multiplier    NUMERIC(4,2) NOT NULL DEFAULT 1.00,  -- 1.0 / 1.3 / 1.5 from live weather
+  vehicle_multiplier    NUMERIC(4,2) NOT NULL DEFAULT 1.00,  -- 0.9 (4W) / 1.2 (2W)
+  gear_discount_pct     NUMERIC(4,2) NOT NULL DEFAULT 0.00,  -- 0 or 5 (safety gear %)
 
   -- Model metadata
   model_version         VARCHAR(20) NOT NULL DEFAULT 'v1.0',

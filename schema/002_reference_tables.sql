@@ -47,6 +47,9 @@ CREATE TABLE plan_configs (
   plan                    plan_enum UNIQUE NOT NULL,
   display_name            VARCHAR(40) NOT NULL,
   weekly_premium_inr      NUMERIC(8,2) NOT NULL,
+  base_premium_pct        NUMERIC(5,4) NOT NULL DEFAULT 0.0200,   -- 2% of weekly income
+  plan_multiplier         NUMERIC(4,2) NOT NULL DEFAULT 1.00,     -- Basic=1.0, Shield+=1.25, Elite=1.5
+  income_replacement      NUMERIC(4,2) NOT NULL DEFAULT 1.00,     -- 1x / 1.5x / 2x payout multiplier
   payout_per_day_low      NUMERIC(8,2) NOT NULL,       -- severity=low
   payout_per_day_moderate NUMERIC(8,2) NOT NULL,
   payout_per_day_high     NUMERIC(8,2) NOT NULL,
@@ -73,7 +76,7 @@ CREATE TRIGGER trg_plan_configs_updated_at
 -- Seed canonical plan data
 INSERT INTO plan_configs (
   plan, display_name,
-  weekly_premium_inr,
+  weekly_premium_inr, base_premium_pct, plan_multiplier, income_replacement,
   payout_per_day_low, payout_per_day_moderate,
   payout_per_day_high, payout_per_day_extreme,
   max_payout_per_event, max_payout_per_week, max_payout_per_month,
@@ -82,7 +85,8 @@ INSERT INTO plan_configs (
 ) VALUES
 (
   'basic', 'Basic',
-  29.00, 100.00, 100.00, 100.00, 100.00,
+  100.00, 0.0200, 1.00, 1.0,
+  100.00, 100.00, 100.00, 100.00,
   100.00, 300.00, 900.00,
   3, 3, 24,
   ARRAY['heavy_rain','flood','cyclone','hailstorm']::disruption_type_enum[],
@@ -90,8 +94,9 @@ INSERT INTO plan_configs (
   ARRAY['sms']
 ),
 (
-  'standard', 'Standard',
-  49.00, 120.00, 150.00, 150.00, 150.00,
+  'shield_plus', 'Shield+',
+  125.00, 0.0200, 1.25, 1.5,
+  120.00, 150.00, 150.00, 150.00,
   150.00, 450.00, 1350.00,
   5, 3, 4,
   ARRAY['heavy_rain','flood','cyclone','hailstorm','extreme_heat',
@@ -100,8 +105,9 @@ INSERT INTO plan_configs (
   ARRAY['sms','whatsapp']
 ),
 (
-  'pro', 'Pro',
-  79.00, 200.00, 250.00, 300.00, 300.00,
+  'elite', 'Elite',
+  150.00, 0.0200, 1.50, 2.0,
+  200.00, 250.00, 300.00, 300.00,
   300.00, 750.00, 2250.00,
   999, 3, 2,
   ARRAY['heavy_rain','flood','cyclone','hailstorm','extreme_heat',

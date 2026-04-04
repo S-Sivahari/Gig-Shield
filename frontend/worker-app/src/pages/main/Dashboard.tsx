@@ -26,6 +26,14 @@ export const Dashboard: React.FC = () => {
   const userName = user?.fullName || 'User';
   const userInitials = userName.split(' ').map((n: string) => n[0]).join('').toUpperCase().substring(0, 2);
 
+  // Dynamic premium values from registration
+  const weeklyIncome = Number(user?.weeklyIncome) || 0;
+  const coveragePct = Number((user?.coveragePercent || '70%').replace('%', '')) / 100;
+  const weeklyPremium = user?.finalPremium || (weeklyIncome > 0 ? Math.round(weeklyIncome * 0.02) : 89);
+  const estimatedCoverage = weeklyIncome > 0 ? Math.floor(weeklyIncome * coveragePct) : 3360;
+  const planName = user?.planName || 'Shield+';
+  const userCity = user?.city || 'Your city';
+
   useEffect(() => {
     // Check if Intersection Observer is supported
     if (!('IntersectionObserver' in window)) {
@@ -97,15 +105,15 @@ export const Dashboard: React.FC = () => {
         {/* Protection Card */}
         <div className="gs-protection-card">
           <div className="gs-prot-header">
-            <span className="gs-prot-label">This week's coverage</span>
+            <span className="gs-prot-label">This week's coverage · {planName}</span>
             <Badge variant="success">Active</Badge>
           </div>
-          <h2 className="gs-prot-amount">₹3,360 <span>protected</span></h2>
+          <h2 className="gs-prot-amount">₹{estimatedCoverage.toLocaleString()} <span>protected</span></h2>
           
           <div className="gs-prot-progress">
             <div className="gs-prot-progress-header">
-              <span>Weekly premium</span>
-              <span>₹89 / ₹89</span>
+              <span>Weekly premium · {userCity}</span>
+              <span>₹{weeklyPremium} / ₹{weeklyPremium}</span>
             </div>
             <div className="gs-prot-progress-track">
               <div className="gs-prot-progress-fill" style={{ width: '100%' }} />
@@ -120,7 +128,7 @@ export const Dashboard: React.FC = () => {
         <div className="gs-zone-banner" onClick={() => navigate('/zone')}>
           <div className="gs-zone-indicator" />
           <div className="gs-zone-text">
-            <b>Koramangala</b> • AQI 168 · Rain forecast in 2 hrs. Monitoring.
+            <b>{userCity !== 'Your city' ? userCity : 'Koramangala'}</b> • Monitoring weather risk in real-time
           </div>
           <ChevronRight size={16} />
         </div>

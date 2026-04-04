@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card } from '../../components/Card';
 import { Badge } from '../../components/Badge';
 import { Shield } from 'lucide-react';
+import { useWeatherRisk } from '../../hooks/useWeatherRisk';
+import { usePremiumEngine } from '../../hooks/usePremiumEngine';
 import './Policy.css';
 
 export const PolicyScreen: React.FC = () => {
-  const [selectedPlan, setSelectedPlan] = useState('Standard');
-  
   // Get user data from localStorage
   const getUserData = () => {
     const userData = localStorage.getItem('gigshield_user_data');
@@ -24,6 +24,26 @@ export const PolicyScreen: React.FC = () => {
   const userPlatform = user?.platform || 'Zomato';
   const userZone = user?.primaryZone || 'Koramangala';
   const coveragePercent = user?.coveragePercent || '70%';
+  const userCity = user?.city || 'Mumbai';
+  const weeklyIncome = Number(user?.weeklyIncome) || 5000;
+  const vehicleType = user?.vehicleType || '2-wheeler';
+  const hasSafetyGear = user?.hasSafetyGear === true;
+  const activePlanId = user?.selectedPlan || 'shield_plus';
+  const activePlanName = user?.planName || 'Shield+';
+  const finalPremium = user?.finalPremium || 100;
+
+  // Live weather + engine hooks for dynamic breakdown
+  const { risk } = useWeatherRisk(userCity);
+  const { plans, breakdown } = usePremiumEngine({
+    weeklyIncome,
+    vehicleType,
+    hasSafetyGear,
+    weatherMultiplier: risk?.multiplier ?? 1.0,
+    weatherReason: risk?.reason ?? '',
+    city: userCity,
+  });
+
+  const activePlan = plans.find(p => p.id === activePlanId) ?? plans[1];
 
   return (
     <div className="gs-policy-page animate-fade-in">
@@ -60,79 +80,56 @@ export const PolicyScreen: React.FC = () => {
               <span className="gs-detail-value">{coveragePercent}</span>
             </div>
             <div className="gs-detail-item">
-              <span className="gs-detail-label">Start Date</span>
-              <span className="gs-detail-value">Oct 1, 2024</span>
+              <span className="gs-detail-label">City</span>
+              <span className="gs-detail-value">{userCity}</span>
             </div>
             <div className="gs-detail-item">
               <span className="gs-detail-label">Weekly Premium</span>
-              <span className="gs-detail-value gs-text-blue">₹89</span>
+              <span className="gs-detail-value gs-text-blue">₹{finalPremium}</span>
             </div>
             <div className="gs-detail-item">
-              <span className="gs-detail-label">Next Renewal</span>
-              <span className="gs-detail-value">Oct 12, 2024</span>
+              <span className="gs-detail-label">Vehicle</span>
+              <span className="gs-detail-value">{vehicleType === '4-wheeler' ? '🚗 4-Wheeler' : '🏍️ 2-Wheeler'}</span>
             </div>
           </div>
         </Card>
 
         {/* Premium Breakdown Card (AI Transparency) */}
         <Card variant="blue" className="mb-4">
-          <h3 className="gs-card-title gs-title-blue mb-4">Premium breakdown</h3>
+          <h3 className="gs-card-title gs-title-blue mb-4">Premium breakdown — Why ₹{finalPremium}?</h3>
           <div className="gs-breakdown-rows">
-            <div className="gs-breakdown-row">
-              <span>Base rate</span>
-              <span>₹49</span>
-            </div>
-            <div className="gs-breakdown-row">
-              <span>Zone risk modifier</span>
-              <span className="gs-text-red">+ ₹35</span>
-            </div>
-            <div className="gs-breakdown-row">
-              <span>Weather risk factor</span>
-              <span className="gs-text-red">+ ₹15</span>
-            </div>
-            <div className="gs-breakdown-row">
-              <span>Loyalty discount</span>
-              <span className="gs-text-green">− ₹10</span>
-            </div>
+            {breakdown.reasons.map((item, idx) => {
+              if (item.type === 'total') return null;
+              const prefix = item.type === 'add' ? '+ ' : item.type === 'sub' ? '− ' : '';
+              const colorClass = item.type === 'add' ? 'gs-text-red' : item.type === 'sub' ? 'gs-text-green' : '';
+              return (
+                <div className="gs-breakdown-row" key={idx}>
+                  <span>{item.label}</span>
+                  <span className={colorClass}>{prefix}₹{item.value}</span>
+                </div>
+              );
+            })}
             <div className="gs-divider my-2" />
             <div className="gs-breakdown-row gs-total-row">
               <span>Total weekly premium</span>
-              <span className="gs-text-blue text-lg">₹89</span>
+              <span className="gs-text-blue text-lg">₹{finalPremium}</span>
             </div>
           </div>
         </Card>
 
-        {/* Plan Selector */}
-        <h3 className="gs-section-title mb-3">Upgrade your plan</h3>
+        {/* Dynamic Plan Selector */}
+        <h3 className="gs-section-title mb-3">Your plan · {activePlanName}</h3>
         <div className="gs-plan-selector pb-4">
-          
-          <div 
-            className={`gs-plan-card ${selectedPlan === 'Basic' ? 'gs-plan-card--selected' : ''}`}
-            onClick={() => setSelectedPlan('Basic')}
-          >
-            <h4 className="gs-plan-name">Basic</h4>
-            <div className="gs-plan-price">₹59<span>/wk</span></div>
-            <p className="gs-plan-desc">50% cover</p>
-          </div>
-
-          <div 
-            className={`gs-plan-card ${selectedPlan === 'Standard' ? 'gs-plan-card--selected' : ''}`}
-            onClick={() => setSelectedPlan('Standard')}
-          >
-            <h4 className="gs-plan-name">Standard</h4>
-            <div className="gs-plan-price">₹89<span>/wk</span></div>
-            <p className="gs-plan-desc">70% cover</p>
-          </div>
-
-          <div 
-            className={`gs-plan-card ${selectedPlan === 'Pro' ? 'gs-plan-card--selected' : ''}`}
-            onClick={() => setSelectedPlan('Pro')}
-          >
-            <h4 className="gs-plan-name">Pro</h4>
-            <div className="gs-plan-price">₹129<span>/wk</span></div>
-            <p className="gs-plan-desc">90% cover</p>
-          </div>
-
+          {plans.map(plan => (
+            <div 
+              key={plan.id}
+              className={`gs-plan-card ${plan.id === activePlanId ? 'gs-plan-card--selected' : ''}`}
+            >
+              <h4 className="gs-plan-name">{plan.name}</h4>
+              <div className="gs-plan-price">₹{plan.premium}<span>/wk</span></div>
+              <p className="gs-plan-desc">{plan.tagline}</p>
+            </div>
+          ))}
         </div>
 
       </div>

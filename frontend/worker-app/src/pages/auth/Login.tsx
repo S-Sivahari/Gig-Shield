@@ -21,13 +21,20 @@ export const Login: React.FC = () => {
       // User has registered, go directly to dashboard
       navigate('/dashboard');
     } else {
-      // New user, go to OTP verification
+        // New user, go to OTP verification
       if (phone.length === 10) {
         // Save phone number for demo purposes
         const demoUserData = {
           phone: phone,
           fullName: 'Demo User',
-          loginMethod: 'phone'
+          loginMethod: 'phone',
+          city: 'Mumbai',
+          weeklyIncome: '5000',
+          vehicleType: '2-wheeler',
+          hasSafetyGear: false,
+          finalPremium: 100,
+          planName: 'Shield+',
+          coveragePercent: '70%',
         };
         localStorage.setItem('gigshield_user_data', JSON.stringify(demoUserData));
         navigate('/otp');
@@ -36,7 +43,14 @@ export const Login: React.FC = () => {
         const demoUserData = {
           loginId: loginId,
           fullName: loginId.charAt(0).toUpperCase() + loginId.slice(1),
-          loginMethod: 'credentials'
+          loginMethod: 'credentials',
+          city: 'Mumbai',
+          weeklyIncome: '5000',
+          vehicleType: '2-wheeler',
+          hasSafetyGear: false,
+          finalPremium: 100,
+          planName: 'Shield+',
+          coveragePercent: '70%',
         };
         localStorage.setItem('gigshield_user_data', JSON.stringify(demoUserData));
         navigate('/dashboard');

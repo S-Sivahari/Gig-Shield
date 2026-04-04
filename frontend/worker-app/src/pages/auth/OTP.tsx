@@ -64,7 +64,13 @@ export const OTPVerification: React.FC = () => {
         
         <div className="gs-otp-header animate-stagger-item" style={{ animationDelay: '0ms' }}>
           <h1 className="gs-otp-title">OTP verification</h1>
-          <p className="gs-otp-subtitle">Enter the 6-digit code sent to<br /><b>+91 99****8291</b></p>
+          <p className="gs-otp-subtitle">
+            Enter the 6-digit code sent to<br />
+            <b>+91 {(() => {
+              const u = localStorage.getItem('gigshield_user_data');
+              return u ? JSON.parse(u).phone || '99****8291' : '99****8291';
+            })()}</b>
+          </p>
         </div>
 
         <div className="gs-auto-read-banner animate-stagger-item" style={{ animationDelay: '100ms' }}>

@@ -70,6 +70,9 @@ CREATE TABLE workers (
   aadhaar_hash          CHAR(64),                       -- SHA-256 of full number
   driving_license_no    TEXT,                           -- pgcrypto encrypted
   vehicle_reg_no        VARCHAR(20),
+  vehicle_type          VARCHAR(20) CHECK (vehicle_type IN ('2-wheeler', '4-wheeler')),
+  has_safety_gear       BOOLEAN NOT NULL DEFAULT FALSE,           -- waterproof equipment
+  weekly_income_goal    NUMERIC(10,2),                            -- ₹ target per week (Earn-Lock input)
 
   -- Delivery platform
   primary_platform      platform_enum NOT NULL,

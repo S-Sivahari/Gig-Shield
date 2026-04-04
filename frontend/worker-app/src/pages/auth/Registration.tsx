@@ -5,10 +5,9 @@ import { Step2Identity } from './Step2Identity';
 import { Step3WorkProfile } from './Step3WorkProfile';
 import { Step4Income } from './Step4Income';
 import { Step5Payment } from './Step5Payment';
-import { Step6Success } from './Step6Success';
 import './Registration.css';
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 5;
 
 export const Registration: React.FC = () => {
   const navigate = useNavigate();
@@ -25,7 +24,9 @@ export const Registration: React.FC = () => {
           fullName: '', age: '', gender: '', email: '',
           aadhaarNumber: '', dlNumber: '', aadhaarFile: null, dlFile: null,
           platform: '', avgHours: '', primaryZone: '', experienceMonths: '',
+          city: '', vehicleType: '', hasSafetyGear: null, workProofName: '',
           weeklyIncome: '', workingDays: '6', coveragePercent: '70%',
+          selectedPlan: 'shield_plus', finalPremium: 0, planName: 'Shield+',
           upiId: '', accountNo: '', ifscCode: '',
           loginId: '', password: '', confirmPassword: ''
         };
@@ -35,7 +36,9 @@ export const Registration: React.FC = () => {
       fullName: '', age: '', gender: '', email: '',
       aadhaarNumber: '', dlNumber: '', aadhaarFile: null, dlFile: null,
       platform: '', avgHours: '', primaryZone: '', experienceMonths: '',
+      city: '', vehicleType: '', hasSafetyGear: null, workProofName: '',
       weeklyIncome: '', workingDays: '6', coveragePercent: '70%',
+      selectedPlan: 'shield_plus', finalPremium: 0, planName: 'Shield+',
       upiId: '', accountNo: '', ifscCode: '',
       loginId: '', password: '', confirmPassword: ''
     };
@@ -51,7 +54,12 @@ export const Registration: React.FC = () => {
   };
 
   const nextStep = () => {
-    if (currentStep < TOTAL_STEPS) setCurrentStep(prev => prev + 1);
+    if (currentStep < TOTAL_STEPS) {
+      setCurrentStep(prev => prev + 1);
+    } else {
+      // Final step completed — go to dashboard
+      navigate('/dashboard');
+    }
   };
 
   const prevStep = () => {
@@ -67,7 +75,6 @@ export const Registration: React.FC = () => {
       case 3: return 'Work profile';
       case 4: return 'Income declaration';
       case 5: return 'Payment & account setup';
-      case 6: return 'Registration successful!';
       default: return '';
     }
   };
@@ -75,7 +82,7 @@ export const Registration: React.FC = () => {
   return (
     <div className="gs-auth-page">
       <div className="gs-reg-page-wrapper animate-stagger">
-        {currentStep < 6 && (
+        {(
           <div className="gs-reg-header animate-stagger-item" style={{ animationDelay: '0ms' }}>
             <button className="gs-back-button" onClick={prevStep}>
               ←
@@ -102,7 +109,6 @@ export const Registration: React.FC = () => {
           {currentStep === 3 && <Step3WorkProfile data={formData} updateData={updateFormData} onNext={nextStep} />}
           {currentStep === 4 && <Step4Income data={formData} updateData={updateFormData} onNext={nextStep} />}
           {currentStep === 5 && <Step5Payment data={formData} updateData={updateFormData} onNext={nextStep} />}
-          {currentStep === 6 && <Step6Success />}
         </div>
       </div>
     </div>

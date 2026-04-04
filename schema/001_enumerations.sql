@@ -22,7 +22,10 @@ CREATE TYPE kyc_status_enum AS ENUM (
 );
 
 -- Insurance plan tiers
-CREATE TYPE plan_enum AS ENUM ('basic', 'standard', 'pro');
+CREATE TYPE plan_enum AS ENUM ('basic', 'shield_plus', 'elite');
+-- Migration for existing databases:
+--   ALTER TYPE plan_enum RENAME VALUE 'standard' TO 'shield_plus';
+--   ALTER TYPE plan_enum RENAME VALUE 'pro' TO 'elite';
 
 -- Policy lifecycle
 CREATE TYPE policy_status_enum AS ENUM (
