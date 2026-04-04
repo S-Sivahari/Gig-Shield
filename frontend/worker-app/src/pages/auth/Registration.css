@@ -47,7 +47,9 @@
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  min-height: min-content;
+  height: calc(100vh - 40px);
+  max-height: calc(100vh - 40px);
+  overflow: hidden;
   margin: auto;
 }
 
@@ -63,7 +65,9 @@
   background-color: rgba(37, 99, 235, 0.95);
   color: #FFFFFF;
   padding: 24px 20px 20px;
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 2;
   border-radius: 12px 12px 0 0;
   flex-shrink: 0;
 }
@@ -121,6 +125,8 @@
   border-radius: 0 0 12px 12px;
   min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .gs-step-form {
@@ -150,6 +156,11 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+  align-items: start;
+}
+
+.gs-row-2col .gs-input-container {
+  margin-bottom: 0;
 }
 
 .gs-form-label {
@@ -211,6 +222,11 @@
   .gs-auth-page {
     padding: 12px;
   }
+
+  .gs-reg-page-wrapper {
+    height: calc(100vh - 24px);
+    max-height: calc(100vh - 24px);
+  }
   
   .gs-reg-content {
     padding: 20px 16px 32px;
@@ -218,6 +234,12 @@
   
   .gs-step-fields {
     gap: 18px;
+  }
+}
+
+@media (max-width: 560px) {
+  .gs-row-2col {
+    grid-template-columns: 1fr;
   }
 }
 

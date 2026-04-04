@@ -3,11 +3,6 @@ import { X, Send, Zap } from 'lucide-react';
 import './ZoneMap.css';
 
 // ─── MOCK DATA — replace with API call later ───
-const MOCK_ZONES_MONITORED = 47;
-const MOCK_ZONES_SAFE = 38;
-const MOCK_ZONES_WATCH = 6;
-const MOCK_ZONES_TRIGGER = 3;
-
 const MOCK_ZONES = [
   { id: 1, name: 'Andheri West', city: 'Mumbai', risk: 'trigger', aqi: 412, rainfall: 127, temp: 32, riders: 1247, atRisk: 598560 },
   { id: 2, name: 'Bandra', city: 'Mumbai', risk: 'trigger', aqi: 398, rainfall: 98, temp: 31, riders: 893, atRisk: 428640 },
@@ -33,13 +28,20 @@ const MOCK_ZONES = [
 
 export const ZoneMap: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState<string>('all');
+  const [zones, setZones] = useState(MOCK_ZONES);
   const [selectedZone, setSelectedZone] = useState<typeof MOCK_ZONES[0] | null>(null);
+  const [panelNotice, setPanelNotice] = useState<string>('');
 
   const cities = ['all', 'Mumbai', 'Bangalore', 'Delhi', 'Chennai', 'Hyderabad', 'Kolkata'];
 
   const filteredZones = selectedCity === 'all' 
-    ? MOCK_ZONES 
-    : MOCK_ZONES.filter(zone => zone.city === selectedCity);
+    ? zones 
+    : zones.filter(zone => zone.city === selectedCity);
+
+  const zonesMonitored = zones.length;
+  const zonesSafe = zones.filter((zone) => zone.risk === 'safe').length;
+  const zonesWatch = zones.filter((zone) => zone.risk === 'watch' || zone.risk === 'high').length;
+  const zonesTrigger = zones.filter((zone) => zone.risk === 'trigger').length;
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
@@ -59,6 +61,28 @@ export const ZoneMap: React.FC = () => {
       case 'safe': return 'Safe';
       default: return 'Unknown';
     }
+  };
+
+  const handleSendAlert = () => {
+    if (!selectedZone) return;
+    setPanelNotice(`Alert sent to riders in ${selectedZone.name}.`);
+  };
+
+  const handleSimulateDisruption = () => {
+    if (!selectedZone) return;
+
+    const updatedZone = {
+      ...selectedZone,
+      risk: 'trigger',
+      rainfall: Math.max(selectedZone.rainfall, 65),
+      atRisk: Math.max(selectedZone.atRisk, selectedZone.riders * 520),
+    };
+
+    setZones((prev) => prev.map((zone) => (
+      zone.id === updatedZone.id ? updatedZone : zone
+    )));
+    setSelectedZone(updatedZone);
+    setPanelNotice(`Disruption simulated. ${updatedZone.name} marked as Flood Alert.`);
   };
 
   return (
@@ -144,19 +168,19 @@ export const ZoneMap: React.FC = () => {
       <div className="gs-zone-summary">
         <div className="gs-summary-item">
           <span className="gs-summary-label">Total Zones Monitored</span>
-          <span className="gs-summary-value">{MOCK_ZONES_MONITORED}</span>
+          <span className="gs-summary-value">{zonesMonitored}</span>
         </div>
         <div className="gs-summary-item">
           <span className="gs-summary-label">Currently Safe</span>
-          <span className="gs-summary-value gs-text-green">{MOCK_ZONES_SAFE}</span>
+          <span className="gs-summary-value gs-text-green">{zonesSafe}</span>
         </div>
         <div className="gs-summary-item">
           <span className="gs-summary-label">Under Watch</span>
-          <span className="gs-summary-value gs-text-amber">{MOCK_ZONES_WATCH}</span>
+          <span className="gs-summary-value gs-text-amber">{zonesWatch}</span>
         </div>
         <div className="gs-summary-item">
           <span className="gs-summary-label">Trigger Active</span>
-          <span className="gs-summary-value gs-text-red">{MOCK_ZONES_TRIGGER}</span>
+          <span className="gs-summary-value gs-text-red">{zonesTrigger}</span>
         </div>
       </div>
 
@@ -204,7 +228,9 @@ export const ZoneMap: React.FC = () => {
                   </div>
                   <div className="gs-zone-panel-metric">
                     <span className="gs-zone-panel-metric-label">Flood Alert</span>
-                    <span className="gs-zone-panel-metric-value">None</span>
+                    <span className="gs-zone-panel-metric-value">
+                      {selectedZone.risk === 'trigger' && selectedZone.rainfall >= 50 ? 'Active' : 'None'}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -268,12 +294,15 @@ export const ZoneMap: React.FC = () => {
               </div>
 
               <div className="gs-zone-panel-actions">
-                <button className="gs-btn-amber">
+                <button className="gs-btn-amber" type="button" onClick={handleSendAlert}>
                   <Send size={16} className="mr-2" /> Send Alert to Riders
                 </button>
-                <button className="gs-btn-danger-outline">
+                <button className="gs-btn-danger-outline" type="button" onClick={handleSimulateDisruption}>
                   <Zap size={16} className="mr-2" /> Simulate Disruption
                 </button>
+                {panelNotice && (
+                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>{panelNotice}</p>
+                )}
               </div>
             </div>
           </div>

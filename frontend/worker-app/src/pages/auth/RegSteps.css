@@ -13,6 +13,23 @@
   font-weight: 500;
 }
 
+.gs-step-form .gs-input,
+.gs-step-form select.gs-input {
+  color: #111827;
+}
+
+.gs-step-form .gs-input-label,
+.gs-step-form .gs-form-label {
+  color: #111827;
+  font-weight: 600;
+}
+
+.gs-hint-text {
+  font-size: 11px;
+  color: #374151;
+  margin-top: 4px;
+}
+
 @keyframes scaleIn {
   from { transform: scale(0.97); opacity: 0; }
   to   { transform: scale(1);    opacity: 1; }
@@ -84,6 +101,12 @@
   gap: 6px;
 }
 
+.gs-toggle-inline {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
 /* ── Vehicle Type Cards ─────────────────────────────── */
 .gs-vehicle-card {
   flex: 1;
@@ -94,12 +117,18 @@
   padding: 16px 12px;
   border: 2px solid var(--border-color);
   border-radius: var(--radius-card);
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
   cursor: pointer;
   transition: all var(--transition-fast);
   font-size: 13px;
   font-weight: 600;
   color: var(--text-main);
+}
+
+.gs-vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 .gs-vehicle-card:hover {
   border-color: var(--primary-blue);
@@ -110,6 +139,12 @@
   background: var(--light-blue-fill);
   color: var(--primary-blue);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+@media (max-width: 520px) {
+  .gs-vehicle-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── Weather Strip (inside Step4) ───────────────────── */
@@ -345,3 +380,132 @@
 .gs-preview-label   { font-size: 13px; color: var(--success-green); font-weight: 500; }
 .gs-preview-value   { font-size: 24px; font-weight: 700; color: #166534; }
 .gs-preview-subtext { font-size: 12px; color: #15803D; }
+
+.gs-policy-actions-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gs-policy-status-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gs-policy-chip {
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-primary);
+}
+
+.gs-policy-chip.is-ok {
+  border-color: #86efac;
+  background: #ecfdf5;
+  color: #166534;
+}
+
+.gs-policy-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: block;
+  z-index: 9999;
+}
+
+.gs-policy-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(720px, calc(100vw - 32px));
+  max-height: calc(100vh - 40px);
+  background: var(--bg-primary);
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 20px 40px rgba(2, 6, 23, 0.25);
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  animation: gsPolicyWindowIn 180ms ease-out;
+}
+
+@keyframes gsPolicyWindowIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.gs-policy-modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gs-policy-modal-head h4 {
+  font-size: 16px;
+  color: var(--text-main);
+}
+
+.gs-policy-close {
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.gs-policy-progress {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.gs-policy-modal-body {
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  max-height: min(55vh, 420px);
+  overflow-y: auto;
+  background: var(--bg-secondary);
+}
+
+.gs-policy-section + .gs-policy-section {
+  margin-top: 12px;
+}
+
+.gs-policy-section h5 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.gs-policy-section p {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.gs-policy-modal-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.gs-policy-accept-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-main);
+}

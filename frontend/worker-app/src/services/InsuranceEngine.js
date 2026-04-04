@@ -1,6 +1,6 @@
 const VEHICLE_FACTORS = {
-  '2-wheeler': 1.18,
-  '4-wheeler': 0.92,
+  '2-wheeler': 1.3,
+  '4-wheeler': 0.9,
   '': 1,
 };
 
@@ -20,8 +20,8 @@ const DISRUPTION_FACTORS = {
 
 const PLAN_MULTIPLIERS = {
   basic: 1,
-  shield_plus: 1.22,
-  elite: 1.45,
+  shield_plus: 1.25,
+  elite: 1.5,
 };
 
 const PLAN_COVERAGE = {
@@ -58,21 +58,21 @@ function normalizeZone(zone) {
 
 function resolveZoneFactor(zone) {
   const normalized = normalizeZone(zone);
-  if (!normalized) return 0.09;
+  if (!normalized) return 0.1;
 
   if (/flood|coastal|dock|market|river|basin|old city/.test(normalized)) {
-    return 0.18;
+    return 0.4;
   }
 
   if (/central|downtown|it park|tech|hub|station/.test(normalized)) {
-    return 0.14;
+    return 0.3;
   }
 
   if (/suburb|residential|extension|green|layout/.test(normalized)) {
-    return 0.1;
+    return 0.2;
   }
 
-  return 0.12;
+  return 0.25;
 }
 
 function getRiskBadge(multiplier, disruptionLevel) {
@@ -192,9 +192,10 @@ export function buildPlanTiers(anchorPremium) {
       premium: roundMoney(anchorPremium * PLAN_MULTIPLIERS.basic),
       tierMultiplier: PLAN_MULTIPLIERS.basic,
       coveragePercent: PLAN_COVERAGE.basic,
-      riskBadge: 'Starter protection',
-      tagline: 'For stable zones and shorter shifts',
-      features: ['Rain watch alerts', 'One-click policy view', 'Weekly protection'],
+      payoutMultiplier: 1,
+      riskBadge: 'Red-alert coverage',
+      tagline: 'Core trigger protection for severe disruption windows',
+      features: ['Red-alert disruption cover', 'Auto-trigger checks', 'Weekly protection'],
       color: '#2563EB',
       emoji: '🛡️',
     },
@@ -204,9 +205,10 @@ export function buildPlanTiers(anchorPremium) {
       premium: roundMoney(anchorPremium * PLAN_MULTIPLIERS.shield_plus),
       tierMultiplier: PLAN_MULTIPLIERS.shield_plus,
       coveragePercent: PLAN_COVERAGE.shield_plus,
+      payoutMultiplier: 1,
       riskBadge: 'Balanced protection',
-      tagline: 'Best fit for full-time city riders',
-      features: ['Zero-touch alerts', 'Priority auto-approval', 'Stronger payout cover'],
+      tagline: 'Adds moderate rain and heatwave protection',
+      features: ['Moderate rain cover', 'Heatwave protection', 'Priority auto-approval'],
       color: '#0EA5E9',
       emoji: '⚡',
       recommended: true,
@@ -217,9 +219,10 @@ export function buildPlanTiers(anchorPremium) {
       premium: roundMoney(anchorPremium * PLAN_MULTIPLIERS.elite),
       tierMultiplier: PLAN_MULTIPLIERS.elite,
       coveragePercent: PLAN_COVERAGE.elite,
+      payoutMultiplier: 2,
       riskBadge: 'Maximum protection',
-      tagline: 'For high-risk and long-route workers',
-      features: ['Severe event fast lane', 'High payout ceiling', 'Premium support lane'],
+      tagline: 'Adds riots or curfew cover with rollover and payout boost',
+      features: ['Riots and curfew support', '2x payout priority lane', 'Rollover safety net'],
       color: '#0F172A',
       emoji: '🏆',
     },

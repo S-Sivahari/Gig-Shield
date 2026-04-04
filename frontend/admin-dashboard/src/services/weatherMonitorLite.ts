@@ -13,9 +13,9 @@ export interface TriggerReport {
 }
 
 export const DEFAULT_TRIGGER_THRESHOLDS: TriggerThresholds = {
-  watch: 12,
-  alert: 20,
-  severe: 28,
+  watch: 10,
+  alert: 15,
+  severe: 24,
 };
 
 export function normalizeThresholds(thresholds: Partial<TriggerThresholds>): TriggerThresholds {

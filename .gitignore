@@ -52,6 +52,6 @@ services/*/app/ml/models/trained/*.onnx
 Thumbs.db
 
 # ── Runtime logs ─────────────────────────────────────────────────────────────
-*.log
+*.log o3 of 5) mos
 
 videos_clippings/

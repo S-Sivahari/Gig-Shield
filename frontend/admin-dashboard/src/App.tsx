@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AdminLayout } from './components/layout/AdminLayout';
 import { AdminDashboard } from './pages/AdminDashboard';
@@ -15,7 +15,13 @@ const ADMIN_AUTH_KEY = 'gigshield_admin_auth';
 const ADMIN_USER_KEY = 'gigshield_admin_user';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => localStorage.getItem(ADMIN_AUTH_KEY) === '1');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    // Always force a fresh login when opening the admin app.
+    localStorage.removeItem(ADMIN_AUTH_KEY);
+    setIsAuthenticated(false);
+  }, []);
 
   const handleLogin = (username: string) => {
     localStorage.setItem(ADMIN_AUTH_KEY, '1');

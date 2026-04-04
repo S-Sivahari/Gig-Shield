@@ -16,14 +16,14 @@ interface AdminPlanResult {
 }
 
 const ZONE_FACTOR: Record<string, number> = {
-  core: 0.18,
-  urban: 0.12,
-  suburban: 0.09,
+  core: 0.4,
+  urban: 0.3,
+  suburban: 0.2,
 };
 
 const VEHICLE_FACTOR: Record<'2-wheeler' | '4-wheeler', number> = {
-  '2-wheeler': 1.18,
-  '4-wheeler': 0.92,
+  '2-wheeler': 1.3,
+  '4-wheeler': 0.9,
 };
 
 const PERSONA_FACTOR: Record<'courier' | 'shopper' | 'rideshare', number> = {
@@ -74,8 +74,8 @@ export function calculateAdminPlans(params: {
     totalMultiplier,
     plans: [
       { id: 'basic', name: 'Basic', premium: anchorPremium, multiplier: 1, coveragePercent: 55 },
-      { id: 'shield_plus', name: 'Shield+', premium: roundMoney(anchorPremium * 1.22), multiplier: 1.22, coveragePercent: 70 },
-      { id: 'elite', name: 'Elite', premium: roundMoney(anchorPremium * 1.45), multiplier: 1.45, coveragePercent: 90 },
+      { id: 'shield_plus', name: 'Shield+', premium: roundMoney(anchorPremium * 1.25), multiplier: 1.25, coveragePercent: 70 },
+      { id: 'elite', name: 'Elite', premium: roundMoney(anchorPremium * 1.5), multiplier: 1.5, coveragePercent: 90 },
     ],
   };
 }

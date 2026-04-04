@@ -24,6 +24,15 @@ interface WorkerDisruptionSignal {
   updatedAt: string;
 }
 
+interface ThreatAreaMarker {
+  city: string;
+  area: string;
+  riskType: string;
+  rainfallMm: number;
+  source: 'admin' | 'worker';
+  updatedAt: string;
+}
+
 function readCookieValue(name: string): string | null {
   const prefix = `${name}=`;
   const chunks = document.cookie.split(';');
@@ -66,11 +75,19 @@ export const AdminDashboard: React.FC = () => {
   const [showSummary, setShowSummary] = useState(false);
   const [summaryLine, setSummaryLine] = useState('');
   const [workerSignal, setWorkerSignal] = useState<WorkerDisruptionSignal | null>(null);
+  const [threatAreas, setThreatAreas] = useState<ThreatAreaMarker[]>([]);
 
   const mockWeather = getCityWeather(selectedCity);
   const activeRainMm = simulatedRainMm ?? mockWeather.rainfallMm;
   const disruptionReport = checkDisruption(activeRainMm, thresholds);
   const workerSignalActive = Boolean(workerSignal && (Date.now() - new Date(workerSignal.updatedAt).getTime()) < 30 * 60 * 1000 && workerSignal.level !== 'none');
+
+  const upsertThreatArea = (marker: ThreatAreaMarker) => {
+    setThreatAreas((prev) => {
+      const filtered = prev.filter((item) => item.area !== marker.area);
+      return [marker, ...filtered].slice(0, 6);
+    });
+  };
 
   const planPreview = calculateAdminPlans({
     income: weeklyIncome,
@@ -106,9 +123,12 @@ export const AdminDashboard: React.FC = () => {
     });
   }, [expectedClaims, projectedPayoutPerClaim, weeklyIncome, disruptionReport.level]);
 
-  const poolReserve = 4200000;
+  const activePolicyCount = 24592;
+  const totalPremiumsCollected = activePolicyCount * planPreview.plans[1].premium;
   const queuedExposure = projectedPayoutPerClaim * expectedClaims;
-  const solvencyRatio = Math.max(0, Math.min(100, Math.round(((poolReserve - queuedExposure) / poolReserve) * 100)));
+  const totalProjectedLiability = Math.max(1, queuedExposure);
+  const rawCoverageRatio = totalPremiumsCollected / totalProjectedLiability;
+  const solvencyRatio = Math.max(0, Math.min(100, Math.round(rawCoverageRatio * 100)));
 
   const activeDisruptedWorkers = useMemo(() => {
     if (!disruptionReport.triggered) return [];
@@ -139,6 +159,18 @@ export const AdminDashboard: React.FC = () => {
     return () => window.clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (!workerSignalActive || !workerSignal) return;
+    upsertThreatArea({
+      city: workerSignal.city,
+      area: `${workerSignal.zone}, ${workerSignal.city}`,
+      riskType: 'Flood Alert',
+      rainfallMm: workerSignal.rainfallMm,
+      source: 'worker',
+      updatedAt: workerSignal.updatedAt,
+    });
+  }, [workerSignalActive, workerSignal]);
+
   const payoutTrend = [
     { name: 'Mon', payouts: 4000 },
     { name: 'Tue', payouts: 3000 },
@@ -159,7 +191,24 @@ export const AdminDashboard: React.FC = () => {
   ];
 
   const handleFireTrigger = () => {
-    setThresholds((prev) => normalizeThresholds(prev));
+    const safeThresholds = normalizeThresholds(thresholds);
+    const forcedRain = Math.max(activeRainMm, safeThresholds.alert + 2);
+    const forcedReport = checkDisruption(forcedRain, safeThresholds);
+
+    setThresholds(safeThresholds);
+    setSimulatedRainMm(forcedRain);
+
+    if (forcedReport.triggered) {
+      upsertThreatArea({
+        city: selectedCity,
+        area: `${selectedCity} (${zoneType})`,
+        riskType: 'Flood Alert',
+        rainfallMm: forcedRain,
+        source: 'admin',
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
     setIsSimulating(true);
     setSimulationStep(1);
     setClaimsFeed([]);
@@ -173,6 +222,7 @@ export const AdminDashboard: React.FC = () => {
     setClaimsFeed([]);
     setShowSummary(false);
     setSummaryLine('');
+    setSimulatedRainMm(null);
   };
 
   useEffect(() => {
@@ -241,7 +291,7 @@ export const AdminDashboard: React.FC = () => {
           </div>
           <div className="gs-stat-info">
             <p className="gs-stat-label">Active Policies</p>
-            <h3 className="gs-stat-value">24,592</h3>
+            <h3 className="gs-stat-value">{activePolicyCount.toLocaleString('en-IN')}</h3>
             <p className="gs-stat-trend gs-text-green">
               <TrendingUp size={14} /> +12% this week
             </p>
@@ -266,13 +316,13 @@ export const AdminDashboard: React.FC = () => {
             <Wallet size={24} style={{ color: '#92400E' }} />
           </div>
           <div className="gs-stat-info">
-            <p className="gs-stat-label">Pool Solvency Gauge</p>
+            <p className="gs-stat-label">Solvency Gauge (Premiums vs Liability)</p>
             <h3 className="gs-stat-value">{solvencyRatio}%</h3>
             <div className="gs-solvency-track">
               <div className="gs-solvency-fill" style={{ width: `${solvencyRatio}%` }} />
             </div>
             <p className="gs-stat-trend" style={{ marginTop: '6px' }}>
-              Reserve Rs {(poolReserve / 100000).toFixed(1)}L · Exposure Rs {queuedExposure.toLocaleString('en-IN')}
+              Premiums Rs {totalPremiumsCollected.toLocaleString('en-IN')} · Liability Rs {totalProjectedLiability.toLocaleString('en-IN')} · Coverage {rawCoverageRatio.toFixed(2)}x
             </p>
           </div>
         </div>
@@ -315,6 +365,19 @@ export const AdminDashboard: React.FC = () => {
           )}
 
           <div className="gs-risk-list mt-2">
+            {threatAreas.map((area) => (
+              <div key={area.area} className="gs-risk-item gs-risk-item--threat">
+                <div className="gs-risk-header flex-between mb-1">
+                  <span className="gs-risk-zone font-medium">{area.area}</span>
+                  <span className="gs-risk-prob gs-risk-threat-text font-semibold">{area.riskType}</span>
+                </div>
+                <div className="gs-risk-trigger text-sm text-gray-500 flex items-center">
+                  <CloudRain size={16} className="gs-text-red mr-2" />
+                  <span>{area.rainfallMm}mm · Source: {area.source === 'worker' ? 'Worker app' : 'Admin simulator'}</span>
+                </div>
+              </div>
+            ))}
+
             {workerSignalActive && workerSignal && (
               <div className="gs-risk-item gs-risk-item--threat">
                 <div className="gs-risk-header flex-between mb-1">
@@ -328,7 +391,17 @@ export const AdminDashboard: React.FC = () => {
               </div>
             )}
 
-            <div className="gs-risk-item">
+            <div
+              className="gs-risk-item gs-risk-item--clickable"
+              onClick={() => upsertThreatArea({
+                city: selectedCity,
+                area: `${selectedCity} (${zoneType})`,
+                riskType: activeRainMm >= thresholds.alert ? 'Flood Alert' : 'Rain Watch',
+                rainfallMm: activeRainMm,
+                source: 'admin',
+                updatedAt: new Date().toISOString(),
+              })}
+            >
               <div className="gs-risk-header flex-between mb-1">
                 <span className="gs-risk-zone font-medium">{selectedCity}</span>
                 <span className="gs-risk-prob gs-text-red font-semibold">{planPreview.riskLabel}</span>
@@ -339,7 +412,17 @@ export const AdminDashboard: React.FC = () => {
               </div>
             </div>
 
-            <div className="gs-risk-item">
+            <div
+              className="gs-risk-item gs-risk-item--clickable"
+              onClick={() => upsertThreatArea({
+                city: 'Bangalore',
+                area: 'Koramangala, Bangalore',
+                riskType: 'Local Flood Watch',
+                rainfallMm: Math.max(activeRainMm, 18),
+                source: 'admin',
+                updatedAt: new Date().toISOString(),
+              })}
+            >
               <div className="gs-risk-header flex-between mb-1">
                 <span className="gs-risk-zone font-medium">Koramangala</span>
                 <span className="gs-risk-prob gs-text-amber font-semibold">60% Prob</span>
@@ -350,7 +433,17 @@ export const AdminDashboard: React.FC = () => {
               </div>
             </div>
 
-            <div className="gs-risk-item gs-no-border">
+            <div
+              className="gs-risk-item gs-no-border gs-risk-item--clickable"
+              onClick={() => upsertThreatArea({
+                city: 'Bangalore',
+                area: 'Whitefield, Bangalore',
+                riskType: 'Rain Threat',
+                rainfallMm: Math.max(activeRainMm, 12),
+                source: 'admin',
+                updatedAt: new Date().toISOString(),
+              })}
+            >
               <div className="gs-risk-header flex-between mb-1">
                 <span className="gs-risk-zone font-medium">Whitefield</span>
                 <span className="gs-risk-prob gs-text-green font-semibold">Low Risk</span>

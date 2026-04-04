@@ -12,20 +12,11 @@ const TOTAL_STEPS = 5;
 
 export const Registration: React.FC = () => {
   const navigate = useNavigate();
-  const { registrationData, updateRegistrationData, updateWorkerProfile } = useInsurance();
+  const { registrationData, updateRegistrationData } = useInsurance();
   const [currentStep, setCurrentStep] = useState(1);
 
   const updateFormData = (newData: any) => {
     updateRegistrationData(newData);
-
-    updateWorkerProfile({
-      income: Number(newData.weeklyIncome ?? registrationData.weeklyIncome) || 0,
-      city: String(newData.city ?? registrationData.city),
-      zone: String(newData.primaryZone ?? registrationData.primaryZone ?? newData.city ?? registrationData.city),
-      vehicle: (newData.vehicleType ?? registrationData.vehicleType) as '2-wheeler' | '4-wheeler' | '',
-      persona: String(newData.persona ?? registrationData.persona ?? 'courier'),
-      safetyGearBool: Boolean(newData.safetyGearBool ?? registrationData.safetyGearBool ?? false),
-    });
   };
 
   const nextStep = () => {

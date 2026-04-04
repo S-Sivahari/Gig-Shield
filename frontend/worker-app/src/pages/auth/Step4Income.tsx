@@ -60,7 +60,6 @@ export const Step4Income: React.FC<StepProps> = ({ data, updateData, onNext }) =
     disruptionReport,
     selectedPlanId,
     selectPlan,
-    updateWorkerProfile,
     simulateHeavyRain,
     resetWeather,
   } = useInsurance();
@@ -96,10 +95,7 @@ export const Step4Income: React.FC<StepProps> = ({ data, updateData, onNext }) =
           type="number"
           placeholder="e.g. 4800"
           value={data.weeklyIncome || ''}
-          onChange={(e) => {
-            updateData({ weeklyIncome: e.target.value });
-            updateWorkerProfile({ income: Number(e.target.value) || 0 });
-          }}
+          onChange={(e) => updateData({ weeklyIncome: e.target.value })}
           required
         />
 

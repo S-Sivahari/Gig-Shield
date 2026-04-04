@@ -31,6 +31,7 @@ export interface InsurancePlan {
   premium: number;
   tierMultiplier: number;
   coveragePercent: number;
+  payoutMultiplier: number;
   riskBadge: string;
   tagline: string;
   features: string[];

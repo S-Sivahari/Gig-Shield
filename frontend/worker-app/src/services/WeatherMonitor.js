@@ -1,7 +1,7 @@
 export const DEFAULT_WEATHER_THRESHOLDS = {
-  watch: 12,
-  alert: 20,
-  severe: 28,
+  watch: 10,
+  alert: 15,
+  severe: 24,
 };
 
 /**

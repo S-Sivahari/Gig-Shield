@@ -35,7 +35,7 @@ export const Step1Personal: React.FC<StepProps> = ({ data, updateData, onNext })
             required
           />
           <div className="gs-input-container">
-            <label className="gs-input-label">Gender</label>
+            <label className="gs-form-label">Gender</label>
             <div className="gs-input-wrapper">
               <select 
                 className="gs-input"
@@ -56,7 +56,7 @@ export const Step1Personal: React.FC<StepProps> = ({ data, updateData, onNext })
           label="Mobile number"
           value={data.phone ? `+91 ${data.phone}` : '+91 99****8291'}
           readOnly
-          style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-muted)' }}
+          style={{ backgroundColor: 'var(--bg-secondary)', color: 'var(--text-main)' }}
         />
 
         <Input 

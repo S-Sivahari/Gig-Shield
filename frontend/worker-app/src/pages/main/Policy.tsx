@@ -128,6 +128,17 @@ export const PolicyScreen: React.FC = () => {
           ))}
         </div>
 
+        <Card className="mb-4">
+          <h3 className="gs-card-title">Policy exclusions</h3>
+          <ul style={{ margin: 0, paddingLeft: '18px', color: 'var(--text-muted)', fontSize: '13px', lineHeight: 1.6 }}>
+            <li>War, armed conflict, invasion, rebellion, and civil war events are excluded.</li>
+            <li>Pandemic or epidemic-related disruption losses are excluded.</li>
+          </ul>
+          <p style={{ marginTop: '10px', fontSize: '12px', color: 'var(--text-muted)' }}>
+            Full terms are shown during registration policy consent popup.
+          </p>
+        </Card>
+
       </div>
     </div>
   );

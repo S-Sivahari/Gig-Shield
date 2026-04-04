@@ -12,13 +12,16 @@ export const Dashboard: React.FC = () => {
   const metricRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const {
-    workerProfile,
     plans,
     selectedPlanId,
     isDisrupted,
     disruptionReport,
     pricingQuote,
     shieldWallet,
+    weeklyWalletContribution,
+    weeklyCommunityContribution,
+    communityPoolBalance,
+    totalPremiumsCollected,
     payoutEstimate,
     weatherData,
     protectionState,
@@ -31,12 +34,23 @@ export const Dashboard: React.FC = () => {
   const userName = registrationData.fullName || 'User';
   const userInitials = userName.split(' ').map((n: string) => n[0]).join('').toUpperCase().substring(0, 2);
 
-  const weeklyIncome = Number(registrationData.weeklyIncome) || workerProfile.income || 0;
+  const weeklyIncome = Number(registrationData.weeklyIncome) || 0;
   const coveragePct = Number((registrationData.coveragePercent || '70%').replace('%', '')) / 100;
-  const weeklyPremium = selectedPlan?.premium || (weeklyIncome > 0 ? Math.round(weeklyIncome * 0.02) : 89);
+  const weeklyPremium = registrationData.finalPremium || selectedPlan?.premium || (weeklyIncome > 0 ? Math.round(weeklyIncome * 0.02) : 89);
   const estimatedCoverage = weeklyIncome > 0 ? Math.floor(weeklyIncome * coveragePct) : 3360;
-  const planName = selectedPlan?.name || registrationData.planName || 'Shield+';
-  const userCity = workerProfile.city || registrationData.city || 'Your city';
+  const planName = registrationData.planName || selectedPlan?.name || 'Shield+';
+  const userCity = registrationData.city || 'Your city';
+  const userZone = registrationData.primaryZone || 'Zone not set';
+  const protectionVariant = protectionState === 'Disrupted'
+    ? 'error'
+    : protectionState === 'At Risk'
+      ? 'warning'
+      : 'success';
+  const zeroTouchSubtext = protectionState === 'Disrupted'
+    ? `Rain detected. Estimated Payout: Rs ${payoutEstimate.toLocaleString()}`
+    : protectionState === 'At Risk'
+      ? 'Watch thresholds crossed. Auto-trigger is armed.'
+      : 'No trigger detected. Protection remains active.';
 
   useEffect(() => {
     // Check if Intersection Observer is supported
@@ -110,7 +124,7 @@ export const Dashboard: React.FC = () => {
         <div className="gs-protection-card">
           <div className="gs-prot-header">
             <span className="gs-prot-label">This week's coverage · {planName}</span>
-            <Badge variant={protectionState === 'Claim Processing' ? 'warning' : 'success'}>{protectionState}</Badge>
+            <Badge variant={protectionVariant}>{protectionState}</Badge>
           </div>
           <h2 className="gs-prot-amount">₹{estimatedCoverage.toLocaleString()} <span>protected</span></h2>
           
@@ -138,7 +152,7 @@ export const Dashboard: React.FC = () => {
         <div className={`gs-zone-banner ${isDisrupted ? 'gs-zone-banner--danger' : ''}`} onClick={() => navigate('/zone')}>
           <div className={`gs-zone-indicator ${isDisrupted ? 'gs-zone-indicator--danger' : ''}`} />
           <div className="gs-zone-text">
-            <b>{userCity !== 'Your city' ? userCity : 'Koramangala'}</b>
+            <b>{userZone}</b>
             {' '}
             •
             {' '}
@@ -163,18 +177,18 @@ export const Dashboard: React.FC = () => {
               <span>Shield Wallet</span>
             </div>
             <p className="gs-active-protection-value">Rs {shieldWallet.toLocaleString()}</p>
-            <p className="gs-active-protection-sub">Potential payout estimate: Rs {payoutEstimate.toLocaleString()}</p>
+            <p className="gs-active-protection-sub">Safety Net balance · growing with rollover</p>
+            <p className="gs-active-protection-sub">Weekly split: Rs {weeklyWalletContribution.toLocaleString()} wallet + Rs {weeklyCommunityContribution.toLocaleString()} community pool</p>
+            <p className="gs-active-protection-sub">Total premiums tracked: Rs {totalPremiumsCollected.toLocaleString()} · Pool reserve: Rs {communityPoolBalance.toLocaleString()}</p>
           </Card>
 
           <Card className="gs-active-protection-card">
             <div className="gs-active-protection-head">
               <ShieldAlert size={16} />
-              <span>Zero-touch alert</span>
+              <span>Live Protection</span>
             </div>
-            <p className="gs-active-protection-value">{isDisrupted ? 'Auto-triggered' : 'Armed'}</p>
-            <p className="gs-active-protection-sub">
-              {isDisrupted ? 'Claim pipeline is auto-evaluating your policy.' : 'No disruption signal at this time.'}
-            </p>
+            <p className="gs-active-protection-value">{protectionState}</p>
+            <p className="gs-active-protection-sub">{zeroTouchSubtext}</p>
           </Card>
         </div>
 

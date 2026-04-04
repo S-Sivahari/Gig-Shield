@@ -14,7 +14,10 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const finalUsername = username.trim() || 'admin';
+    const finalUsername = username.trim();
+    if (!finalUsername || !password.trim()) {
+      return;
+    }
     onLogin(finalUsername);
     navigate('/dashboard', { replace: true });
   };
@@ -33,7 +36,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
           className="gs-admin-login-input"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter any username"
+          placeholder="Enter username"
           required
         />
 
@@ -43,7 +46,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
           className="gs-admin-login-input"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter any password"
+          placeholder="Enter password"
           required
         />
 

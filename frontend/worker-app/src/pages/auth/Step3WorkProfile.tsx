@@ -18,8 +18,22 @@ const INDIAN_CITIES = [
   'Patna', 'Vadodara', 'Coimbatore', 'Vizag', 'Thiruvananthapuram',
 ];
 
+const DEFAULT_AREAS = ['Central', 'North Zone', 'South Zone', 'East Zone', 'West Zone'];
+
+const CITY_AREAS: Record<string, string[]> = {
+  Mumbai: ['Andheri', 'Bandra', 'Powai', 'Borivali', 'Dadar', 'Kurla'],
+  Delhi: ['Dwarka', 'Rohini', 'Saket', 'Karol Bagh', 'Lajpat Nagar', 'Mayur Vihar'],
+  Bangalore: ['Koramangala', 'Indiranagar', 'Whitefield', 'HSR Layout', 'BTM Layout', 'Jayanagar'],
+  Hyderabad: ['Gachibowli', 'Madhapur', 'Kukatpally', 'Banjara Hills', 'Kondapur', 'Secunderabad'],
+  Chennai: ['T. Nagar', 'Velachery', 'Anna Nagar', 'Adyar', 'Tambaram', 'OMR'],
+  Kolkata: ['Salt Lake', 'New Town', 'Howrah', 'Park Street', 'Dum Dum', 'Garia'],
+  Pune: ['Hinjewadi', 'Kothrud', 'Baner', 'Viman Nagar', 'Hadapsar', 'Wakad'],
+  Ahmedabad: ['Navrangpura', 'Satellite', 'Maninagar', 'Bopal', 'Vastrapur', 'Naranpura'],
+};
+
 export const Step3WorkProfile: React.FC<StepProps> = ({ data, updateData, onNext }) => {
   const fileInputRefWork = useRef<HTMLInputElement>(null);
+  const areaOptions = CITY_AREAS[data.city || ''] || DEFAULT_AREAS;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +82,12 @@ export const Step3WorkProfile: React.FC<StepProps> = ({ data, updateData, onNext
             <select
               className="gs-input"
               value={data.city || ''}
-              onChange={(e) => updateData({ city: e.target.value })}
+              onChange={(e) => {
+                const nextCity = e.target.value;
+                const nextAreas = CITY_AREAS[nextCity] || DEFAULT_AREAS;
+                const shouldResetArea = data.primaryZone && !nextAreas.includes(data.primaryZone);
+                updateData({ city: nextCity, primaryZone: shouldResetArea ? '' : data.primaryZone });
+              }}
               required
             >
               <option value="" disabled>Select your city</option>
@@ -77,15 +96,15 @@ export const Step3WorkProfile: React.FC<StepProps> = ({ data, updateData, onNext
               ))}
             </select>
           </div>
-          <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-            🌤️ Used with mock rainfall feed for city risk pricing
+          <p className="gs-hint-text">
+            Area options below are linked to this city.
           </p>
         </div>
 
         {/* ── Vehicle Type ── */}
         <div className="gs-input-container">
           <label className="gs-form-label">Vehicle type</label>
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="gs-vehicle-grid">
             <button
               type="button"
               className={`gs-vehicle-card ${data.vehicleType === '2-wheeler' ? 'gs-vehicle-card--active' : ''}`}
@@ -93,9 +112,6 @@ export const Step3WorkProfile: React.FC<StepProps> = ({ data, updateData, onNext
             >
               <Bike size={28} />
               <span>2-Wheeler</span>
-              <span style={{ fontSize: '11px', color: data.vehicleType === '2-wheeler' ? 'var(--primary-blue)' : 'var(--text-muted)' }}>
-                +20% risk factor
-              </span>
             </button>
             <button
               type="button"
@@ -104,11 +120,31 @@ export const Step3WorkProfile: React.FC<StepProps> = ({ data, updateData, onNext
             >
               <Car size={28} />
               <span>4-Wheeler</span>
-              <span style={{ fontSize: '11px', color: data.vehicleType === '4-wheeler' ? 'var(--primary-blue)' : 'var(--text-muted)' }}>
-                −10% risk factor
-              </span>
             </button>
           </div>
+        </div>
+
+        <div className="gs-input-container">
+          <label className="gs-form-label">Safety gear</label>
+          <div className="gs-toggle-inline">
+            <Button
+              type="button"
+              variant="pill"
+              selected={Boolean(data.safetyGearBool)}
+              onClick={() => updateData({ safetyGearBool: true })}
+            >
+              Yes, equipped
+            </Button>
+            <Button
+              type="button"
+              variant="pill"
+              selected={!Boolean(data.safetyGearBool)}
+              onClick={() => updateData({ safetyGearBool: false })}
+            >
+              No gear
+            </Button>
+          </div>
+          <p className="gs-hint-text">Raincoat and waterproof bag unlock a 5% premium discount.</p>
         </div>
 
         <div className="gs-input-container">
@@ -124,7 +160,7 @@ export const Step3WorkProfile: React.FC<StepProps> = ({ data, updateData, onNext
               ))}
             </select>
           </div>
-          <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+          <p className="gs-hint-text">
             Helps tune premium behavior to your delivery pattern.
           </p>
         </div>
@@ -176,19 +212,29 @@ export const Step3WorkProfile: React.FC<StepProps> = ({ data, updateData, onNext
               onChange={(e) => updateData({ avgHours: e.target.value })}
             />
           </div>
-          <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+          <p className="gs-hint-text">
             Use slider or type exact hours.
           </p>
         </div>
 
-        {/* ── Zone ── */}
-        <Input
-          label="Operational zone (neighbourhood)"
-          placeholder="e.g. Koramangala, Bangalore"
-          value={data.primaryZone || ''}
-          onChange={(e) => updateData({ primaryZone: e.target.value })}
-          required
-        />
+        <div className="gs-input-container">
+          <label className="gs-form-label">Operational zone (neighbourhood)</label>
+          <div className="gs-input-wrapper">
+            <select
+              className="gs-input"
+              value={data.primaryZone || ''}
+              onChange={(e) => updateData({ primaryZone: e.target.value })}
+              required
+            >
+              <option value="" disabled>
+                {data.city ? `Select area in ${data.city}` : 'Select your city first'}
+              </option>
+              {areaOptions.map((area) => (
+                <option key={area} value={area}>{area}</option>
+              ))}
+            </select>
+          </div>
+        </div>
 
         <Input
           label="Experience on platform (months)"

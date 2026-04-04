@@ -141,6 +141,14 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.gs-risk-item--clickable {
+  cursor: pointer;
+}
+
+.gs-risk-item--clickable:hover {
+  background: #f8fafc;
+}
+
 .gs-risk-item--threat {
   background: #fef2f2;
   border: 1px solid #fecaca;
