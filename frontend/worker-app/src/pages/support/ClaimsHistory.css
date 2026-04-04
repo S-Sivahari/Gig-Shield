@@ -1,0 +1,39 @@
+.gs-claims-history-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.gs-claims-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gs-claim-row {
+  padding: 14px;
+}
+
+.gs-claim-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.gs-claim-subtitle {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.gs-claim-payout {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--primary-blue);
+  font-weight: 600;
+}
+
+.gs-claim-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+}

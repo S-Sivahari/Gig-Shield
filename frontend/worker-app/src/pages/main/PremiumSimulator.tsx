@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card } from '../../components/Card';
-import { CloudRain, Sun, Flame, Zap, Info, RefreshCw, Bike, Car, Shield } from 'lucide-react';
+import { CloudRain, Sun, Flame, Info, RefreshCw, Bike, Car } from 'lucide-react';
 import { useWeatherRisk } from '../../hooks/useWeatherRisk';
 import { usePremiumEngine } from '../../hooks/usePremiumEngine';
 import './Simulator.css';
@@ -19,7 +19,6 @@ export const PremiumSimulator: React.FC = () => {
   const [weeklyIncome, setWeeklyIncome] = useState<number>(Number(saved.weeklyIncome) || 5000);
   const [city, setCity] = useState<string>(saved.city || 'Mumbai');
   const [vehicleType, setVehicleType] = useState<'2-wheeler' | '4-wheeler' | ''>(saved.vehicleType || '2-wheeler');
-  const [hasSafetyGear, setHasSafetyGear] = useState<boolean>(saved.hasSafetyGear ?? false);
   const [selectedPlan, setSelectedPlan] = useState<string>(saved.selectedPlan || 'shield_plus');
   const [showTooltip, setShowTooltip] = useState<string | null>(null);
 
@@ -40,7 +39,6 @@ export const PremiumSimulator: React.FC = () => {
   const { breakdown, plans } = usePremiumEngine({
     weeklyIncome,
     vehicleType,
-    hasSafetyGear,
     weatherMultiplier: risk?.multiplier ?? 1.0,
     weatherReason: risk?.reason ?? '',
     city,
@@ -61,7 +59,7 @@ export const PremiumSimulator: React.FC = () => {
       {/* ── Header ── */}
       <div className="gs-header-blue" style={{ paddingBottom: '60px' }}>
         <h1 className="gs-header-title">Premium simulator</h1>
-        <p className="gs-header-subtitle">Live pricing powered by real weather data</p>
+        <p className="gs-header-subtitle">Dynamic pricing powered by city mock rainfall data</p>
       </div>
 
       <div className="gs-content-padded" style={{ marginTop: '-40px' }}>
@@ -90,7 +88,7 @@ export const PremiumSimulator: React.FC = () => {
             ) : weatherData ? (
               <>
                 <span style={{ fontSize: '13px', opacity: 0.85 }}>
-                  {weatherData.source === 'simulated' ? '⚡ Simulated' : '🌐 Live'} — {weatherData.city} {weatherData.temp}°C, {weatherData.description}
+                  {weatherData.source === 'simulated' ? '⚡ Simulated' : '🧪 Mock feed'} — {weatherData.city} {weatherData.temp}°C, {weatherData.description}
                 </span>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                   {(useSimulation || !hasApiKey) && (
@@ -169,25 +167,6 @@ export const PremiumSimulator: React.FC = () => {
             </div>
           </div>
 
-          {/* Safety Gear Toggle */}
-          <div className="gs-sim-control">
-            <label className="gs-form-label">
-              <Shield size={13} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
-              Waterproof safety gear
-            </label>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              {[true, false].map(val => (
-                <button
-                  key={String(val)}
-                  type="button"
-                  className={`gs-vehicle-chip ${hasSafetyGear === val ? 'gs-vehicle-chip--active' : ''}`}
-                  onClick={() => setHasSafetyGear(val)}
-                >
-                  {val ? '✅ Yes (−5%)' : '❌ No'}
-                </button>
-              ))}
-            </div>
-          </div>
         </Card>
 
         {/* ── Breakdown Card ── */}
@@ -294,7 +273,7 @@ export const PremiumSimulator: React.FC = () => {
             ))}
           </div>
 
-          {/* Vehicle & Gear Guide */}
+          {/* Vehicle Guide */}
           <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border-light)' }}>
             <h4 style={{ fontSize: '13px', fontWeight: 700, marginBottom: '8px', color: 'var(--text-main)' }}>
               🚗 Other Factors
@@ -307,10 +286,6 @@ export const PremiumSimulator: React.FC = () => {
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
                 <span><Car size={12} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />4-Wheeler stability</span>
                 <span style={{ color: '#10B981', fontWeight: 600 }}>−10%</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
-                <span><Zap size={12} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />Waterproof gear discount</span>
-                <span style={{ color: '#10B981', fontWeight: 600 }}>−5%</span>
               </div>
             </div>
           </div>

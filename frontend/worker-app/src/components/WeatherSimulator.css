@@ -1,0 +1,72 @@
+.gs-weather-simulator {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.gs-weather-simulator__title {
+  border: none;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.gs-weather-simulator__subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.gs-weather-simulator__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gs-weather-btn {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.gs-weather-btn--rain {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.gs-weather-btn--clear {
+  background: #e0f2fe;
+  color: #075985;
+  border-color: #bae6fd;
+}
+
+.gs-weather-simulator__hint {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.gs-weather-threshold-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.gs-weather-threshold-grid label {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: grid;
+  gap: 6px;
+}

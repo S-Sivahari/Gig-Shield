@@ -6,6 +6,8 @@ import './Header.css';
 const MOCK_ACTIVE_DISRUPTIONS = 4;
 
 export const Header: React.FC = () => {
+  const adminUser = localStorage.getItem('gigshield_admin_user') || 'Admin User';
+
   return (
     <header className="gs-admin-header">
       <div className="gs-header-search">
@@ -21,7 +23,7 @@ export const Header: React.FC = () => {
         <div className="gs-admin-profile">
           <div className="gs-admin-avatar">A</div>
           <div className="gs-admin-info">
-            <span className="gs-admin-name">Admin User</span>
+            <span className="gs-admin-name">{adminUser}</span>
             <span className="gs-admin-role">System Ops</span>
           </div>
         </div>

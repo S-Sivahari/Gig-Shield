@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { getCityWeather } from '../mocks/cityWeatherMock.js';
 
 export type WeatherCondition = 'sunny' | 'cloudy' | 'rain' | 'heatwave' | 'storm';
 
@@ -7,11 +8,13 @@ export interface WeatherData {
   description: string;
   temp: number;
   clouds: number;
+  rainMm: number;
+  riskScore: number;
   city: string;
   icon: string;
   isLoading: boolean;
   isError: boolean;
-  source: 'live' | 'simulated';
+  source: 'mock' | 'simulated';
 }
 
 export interface RiskResult {
@@ -21,15 +24,14 @@ export interface RiskResult {
   weatherData: WeatherData | null;
 }
 
-// OpenWeatherMap free API key – pulled from env (injected at build time via Vite)
-const OWM_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY as string | undefined;
-
 const SIMULATED_SCENARIOS: Record<'sunny' | 'stormy', WeatherData> = {
   sunny: {
     condition: 'sunny',
     description: 'Clear sky',
     temp: 32,
     clouds: 10,
+    rainMm: 0,
+    riskScore: 46,
     city: 'Simulated',
     icon: '☀️',
     isLoading: false,
@@ -41,6 +43,8 @@ const SIMULATED_SCENARIOS: Record<'sunny' | 'stormy', WeatherData> = {
     description: 'Heavy rain',
     temp: 27,
     clouds: 92,
+    rainMm: 28,
+    riskScore: 96,
     city: 'Simulated',
     icon: '🌧️',
     isLoading: false,
@@ -48,15 +52,6 @@ const SIMULATED_SCENARIOS: Record<'sunny' | 'stormy', WeatherData> = {
     source: 'simulated',
   },
 };
-
-function deriveCondition(weatherMain: string, temp: number, clouds: number): WeatherCondition {
-  const main = weatherMain.toLowerCase();
-  if (main.includes('thunderstorm')) return 'storm';
-  if (main.includes('rain') || main.includes('drizzle') || clouds > 80) return 'rain';
-  if (temp > 40) return 'heatwave';
-  if (clouds > 50) return 'cloudy';
-  return 'sunny';
-}
 
 function getConditionIcon(condition: WeatherCondition): string {
   switch (condition) {
@@ -69,24 +64,13 @@ function getConditionIcon(condition: WeatherCondition): string {
 }
 
 export function getRiskFromWeather(weather: WeatherData): RiskResult {
-  const { condition, temp, clouds, city } = weather;
+  const { condition, rainMm, city } = weather;
 
-  if (condition === 'storm' || condition === 'rain') {
+  if (condition === 'storm' || condition === 'rain' || rainMm > 15) {
     return {
       multiplier: 1.5,
       label: 'High Risk',
-      reason: clouds > 80
-        ? `+50% for heavy cloud cover (${clouds}%) in ${city}`
-        : `+50% for rain/storm conditions in ${city}`,
-      weatherData: weather,
-    };
-  }
-
-  if (condition === 'heatwave' || temp > 40) {
-    return {
-      multiplier: 1.3,
-      label: 'Heatwave Risk',
-      reason: `+30% for extreme heat (${temp}°C) in ${city}`,
+      reason: `+50% rain surge for ${city} (${rainMm}mm)` ,
       weatherData: weather,
     };
   }
@@ -94,55 +78,50 @@ export function getRiskFromWeather(weather: WeatherData): RiskResult {
   return {
     multiplier: 1.0,
     label: 'Baseline',
-    reason: `No weather surcharge — clear conditions in ${city}`,
+    reason: `No rain surcharge for ${city}`,
     weatherData: weather,
   };
 }
 
-async function fetchWeatherForCity(city: string): Promise<WeatherData> {
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OWM_API_KEY}&units=metric`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`OWM error ${res.status}`);
-  const json = await res.json();
-
-  const temp: number = json.main.temp;
-  const clouds: number = json.clouds.all;
-  const weatherMain: string = json.weather?.[0]?.main ?? 'Clear';
-  const condition = deriveCondition(weatherMain, temp, clouds);
+function getMockWeatherForCity(city: string): WeatherData {
+  const row = getCityWeather(city);
+  const condition: WeatherCondition = row.rainfallMm > 18 ? 'storm' : row.rainfallMm > 0 ? 'rain' : row.condition === 'cloudy' ? 'cloudy' : 'sunny';
 
   return {
     condition,
-    description: json.weather?.[0]?.description ?? '',
-    temp,
-    clouds,
-    city: json.name ?? city,
+    description: row.rainfallMm > 0 ? 'rain bands in zone' : row.condition,
+    temp: row.rainfallMm > 0 ? 28 : 33,
+    clouds: row.rainfallMm > 0 ? 84 : 30,
+    rainMm: row.rainfallMm,
+    riskScore: row.riskScore,
+    city: row.city,
     icon: getConditionIcon(condition),
     isLoading: false,
     isError: false,
-    source: 'live',
+    source: 'mock',
   };
 }
 
 export function useWeatherRisk(city: string) {
-  const hasApiKey = Boolean(OWM_API_KEY && OWM_API_KEY !== 'your_openweather_key');
+  const hasApiKey = false;
   const [simMode, setSimMode] = useState<'sunny' | 'stormy'>('sunny');
-  const [useSimulation, setUseSimulation] = useState(!hasApiKey);
+  const [useSimulation, setUseSimulation] = useState(false);
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchLive = useCallback(async () => {
-    if (!city || !hasApiKey) return;
+    if (!city) return;
     setIsLoading(true);
     try {
-      const data = await fetchWeatherForCity(city);
+      const data = getMockWeatherForCity(city);
       setWeatherData(data);
     } catch {
       setWeatherData(null);
-      setUseSimulation(true); // fallback to sim if API fails
+      setUseSimulation(true);
     } finally {
       setIsLoading(false);
     }
-  }, [city, hasApiKey]);
+  }, [city]);
 
   useEffect(() => {
     if (useSimulation) {

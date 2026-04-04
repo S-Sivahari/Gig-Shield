@@ -60,7 +60,6 @@ echo.
 echo %YELLOW%Ensure these local infra services are already running:%RESET%
 echo   PostgreSQL  localhost:5432
 echo   Redis       localhost:6379
-echo   RabbitMQ    localhost:5672
 echo.
 pause
 exit /b 0
@@ -135,7 +134,6 @@ echo.
 echo %CYAN%  ── Infrastructure ───────────────────────────────%RESET%
 echo    PostgreSQL        localhost:5432
 echo    Redis             localhost:6379
-echo    RabbitMQ UI       http://localhost:15672
 echo.
 echo %YELLOW%  Press Ctrl+C in each service window to stop it.%RESET%
 echo.
@@ -144,7 +142,6 @@ REM Open browser tabs (comment these out if not wanted)
 timeout /t 5 /nobreak >nul
 start "" "http://localhost:3000"
 start "" "http://localhost:3001"
-start "" "http://localhost:15672"
 
 pause
 exit /b 0

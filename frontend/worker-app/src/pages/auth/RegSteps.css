@@ -21,6 +21,69 @@
   animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.gs-hours-slider-wrap {
+  display: grid;
+  grid-template-columns: 1fr 72px;
+  gap: 10px;
+  align-items: center;
+}
+
+.gs-hours-slider,
+.gs-days-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border-color);
+  outline: none;
+}
+
+.gs-hours-slider::-webkit-slider-thumb,
+.gs-days-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--primary-blue);
+}
+
+.gs-hours-input,
+.gs-days-input {
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.gs-income-inline-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: end;
+}
+
+.gs-inline-col {
+  min-width: 0;
+}
+
+.gs-days-inline-control {
+  display: grid;
+  grid-template-columns: 1fr 64px;
+  gap: 8px;
+  align-items: center;
+}
+
+.gs-coverage-inline {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
 /* ── Vehicle Type Cards ─────────────────────────────── */
 .gs-vehicle-card {
   flex: 1;
@@ -47,38 +110,6 @@
   background: var(--light-blue-fill);
   color: var(--primary-blue);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-}
-
-/* ── Safety Gear Toggle ─────────────────────────────── */
-.gs-safety-toggle-row {
-  display: flex;
-  gap: 10px;
-}
-.gs-safety-option {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 12px;
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-card);
-  cursor: pointer;
-  background: var(--bg-secondary);
-  transition: all var(--transition-fast);
-}
-.gs-safety-option:hover {
-  border-color: var(--text-muted);
-}
-.gs-safety-option--yes {
-  border-color: var(--success-green);
-  background: var(--success-fill);
-}
-.gs-safety-option--no {
-  border-color: var(--error-red);
-  background: var(--error-fill);
-}
-.gs-safety-emoji {
-  font-size: 22px;
 }
 
 /* ── Weather Strip (inside Step4) ───────────────────── */
@@ -141,7 +172,7 @@
 .gs-premium-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   margin-top: 4px;
 }
 
@@ -203,6 +234,45 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.gs-plan-grid--three {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.gs-plan-card--compact {
+  padding: 10px 8px;
+  min-height: 132px;
+}
+
+.gs-plan-card--compact .gs-plan-header {
+  margin-bottom: 4px;
+  gap: 6px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.gs-plan-card--compact .gs-plan-emoji {
+  font-size: 18px;
+}
+
+.gs-plan-card--compact .gs-plan-name {
+  font-size: 12px;
+}
+
+.gs-plan-card--compact .gs-plan-price {
+  font-size: 14px;
+}
+
+.gs-plan-card--compact .gs-plan-tagline {
+  font-size: 10px;
+  margin-top: 4px;
+}
+
+.gs-plan-card--compact .gs-plan-radio {
+  display: none;
 }
 .gs-plan-card {
   position: relative;

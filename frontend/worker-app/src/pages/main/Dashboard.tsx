@@ -2,37 +2,41 @@ import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from '../../components/Badge';
 import { Card } from '../../components/Card';
-import { ShieldAlert, ChevronRight, Activity } from 'lucide-react';
+import { ShieldAlert, ChevronRight, Activity, CloudRain, Wallet } from 'lucide-react';
+import { useInsurance } from '../../context/InsuranceContext';
+import { WeatherSimulator } from '../../components/WeatherSimulator';
 import './Dashboard.css';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const metricRefs = useRef<(HTMLDivElement | null)[]>([]);
-  
-  // Get user data from localStorage
-  const getUserData = () => {
-    const userData = localStorage.getItem('gigshield_user_data');
-    if (userData) {
-      try {
-        return JSON.parse(userData);
-      } catch (e) {
-        return null;
-      }
-    }
-    return null;
-  };
 
-  const user = getUserData();
-  const userName = user?.fullName || 'User';
+  const {
+    workerProfile,
+    plans,
+    selectedPlanId,
+    isDisrupted,
+    disruptionReport,
+    pricingQuote,
+    shieldWallet,
+    payoutEstimate,
+    weatherData,
+    protectionState,
+    autoClaimNotification,
+    claimsHistory,
+    registrationData,
+  } = useInsurance();
+
+  const selectedPlan = plans.find((plan) => plan.id === selectedPlanId) ?? plans[1];
+  const userName = registrationData.fullName || 'User';
   const userInitials = userName.split(' ').map((n: string) => n[0]).join('').toUpperCase().substring(0, 2);
 
-  // Dynamic premium values from registration
-  const weeklyIncome = Number(user?.weeklyIncome) || 0;
-  const coveragePct = Number((user?.coveragePercent || '70%').replace('%', '')) / 100;
-  const weeklyPremium = user?.finalPremium || (weeklyIncome > 0 ? Math.round(weeklyIncome * 0.02) : 89);
+  const weeklyIncome = Number(registrationData.weeklyIncome) || workerProfile.income || 0;
+  const coveragePct = Number((registrationData.coveragePercent || '70%').replace('%', '')) / 100;
+  const weeklyPremium = selectedPlan?.premium || (weeklyIncome > 0 ? Math.round(weeklyIncome * 0.02) : 89);
   const estimatedCoverage = weeklyIncome > 0 ? Math.floor(weeklyIncome * coveragePct) : 3360;
-  const planName = user?.planName || 'Shield+';
-  const userCity = user?.city || 'Your city';
+  const planName = selectedPlan?.name || registrationData.planName || 'Shield+';
+  const userCity = workerProfile.city || registrationData.city || 'Your city';
 
   useEffect(() => {
     // Check if Intersection Observer is supported
@@ -106,7 +110,7 @@ export const Dashboard: React.FC = () => {
         <div className="gs-protection-card">
           <div className="gs-prot-header">
             <span className="gs-prot-label">This week's coverage · {planName}</span>
-            <Badge variant="success">Active</Badge>
+            <Badge variant={protectionState === 'Claim Processing' ? 'warning' : 'success'}>{protectionState}</Badge>
           </div>
           <h2 className="gs-prot-amount">₹{estimatedCoverage.toLocaleString()} <span>protected</span></h2>
           
@@ -123,14 +127,71 @@ export const Dashboard: React.FC = () => {
       </div>
 
       <div className="gs-dash-content">
+
+        {autoClaimNotification && (
+          <div className="gs-auto-claim-notice">
+            <p>{autoClaimNotification}</p>
+          </div>
+        )}
         
         {/* Zone Alert Banner */}
-        <div className="gs-zone-banner" onClick={() => navigate('/zone')}>
-          <div className="gs-zone-indicator" />
+        <div className={`gs-zone-banner ${isDisrupted ? 'gs-zone-banner--danger' : ''}`} onClick={() => navigate('/zone')}>
+          <div className={`gs-zone-indicator ${isDisrupted ? 'gs-zone-indicator--danger' : ''}`} />
           <div className="gs-zone-text">
-            <b>{userCity !== 'Your city' ? userCity : 'Koramangala'}</b> • Monitoring weather risk in real-time
+            <b>{userCity !== 'Your city' ? userCity : 'Koramangala'}</b>
+            {' '}
+            •
+            {' '}
+            {isDisrupted ? disruptionReport.message : 'Monitoring weather risk in real-time'}
           </div>
           <ChevronRight size={16} />
+        </div>
+
+        <div className="gs-active-protection-grid mt-4">
+          <Card className="gs-active-protection-card">
+            <div className="gs-active-protection-head">
+              <CloudRain size={16} />
+              <span>Live weather</span>
+            </div>
+            <p className="gs-active-protection-value">{weatherData.rainMm}mm</p>
+            <p className="gs-active-protection-sub">{disruptionReport.statusLabel}</p>
+          </Card>
+
+          <Card className="gs-active-protection-card">
+            <div className="gs-active-protection-head">
+              <Wallet size={16} />
+              <span>Shield Wallet</span>
+            </div>
+            <p className="gs-active-protection-value">Rs {shieldWallet.toLocaleString()}</p>
+            <p className="gs-active-protection-sub">Potential payout estimate: Rs {payoutEstimate.toLocaleString()}</p>
+          </Card>
+
+          <Card className="gs-active-protection-card">
+            <div className="gs-active-protection-head">
+              <ShieldAlert size={16} />
+              <span>Zero-touch alert</span>
+            </div>
+            <p className="gs-active-protection-value">{isDisrupted ? 'Auto-triggered' : 'Armed'}</p>
+            <p className="gs-active-protection-sub">
+              {isDisrupted ? 'Claim pipeline is auto-evaluating your policy.' : 'No disruption signal at this time.'}
+            </p>
+          </Card>
+        </div>
+
+        <div className="mt-4">
+          <WeatherSimulator />
+        </div>
+
+        <div className="gs-risk-cards mt-4">
+          {pricingQuote.riskCards.map((card) => (
+            <div key={card.id} className={`gs-risk-card gs-risk-card--${card.tone}`}>
+              <div className="gs-risk-card-head">
+                <span>{card.title}</span>
+                <strong>{card.value}</strong>
+              </div>
+              <p>{card.hint}</p>
+            </div>
+          ))}
         </div>
 
         {/* 2x2 Metric Grid */}
@@ -145,9 +206,10 @@ export const Dashboard: React.FC = () => {
           <Card 
             className="gs-metric-card"
             ref={(el) => { metricRefs.current[1] = el; }}
+            onClick={() => navigate('/claims-history')}
           >
             <span className="gs-metric-label">Claims this month</span>
-            <span className="gs-metric-value">4</span>
+            <span className="gs-metric-value">{claimsHistory.length}</span>
           </Card>
           <Card 
             className="gs-metric-card" 
@@ -172,7 +234,7 @@ export const Dashboard: React.FC = () => {
         <div className="gs-activity-section mt-6">
           <div className="gs-section-header">
             <h3 className="gs-section-title">Recent activity</h3>
-            <button className="gs-link-button" onClick={() => navigate('/payouts')}>View all</button>
+            <button className="gs-link-button" onClick={() => navigate('/claims-history')}>View all</button>
           </div>
 
           <div className="gs-activity-list">

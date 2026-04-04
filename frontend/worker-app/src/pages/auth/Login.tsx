@@ -3,56 +3,101 @@ import { useNavigate } from 'react-router-dom';
 import { Shield } from 'lucide-react';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
+import { useInsurance } from '../../context/InsuranceContext';
 import './Login.css';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { registrationData, updateRegistrationData, updateWorkerProfile } = useInsurance();
   const [phone, setPhone] = useState('');
   const [loginId, setLoginId] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleDemoLogin = () => {
+    const names = ['Ramesh Kumar', 'Priya Sharma', 'Arjun Das', 'Sneha Reddy', 'Karthik Nair', 'Aman Verma'];
+    const cities = ['Bangalore', 'Mumbai', 'Chennai', 'Delhi', 'Hyderabad', 'Pune'];
+    const zones = ['Koramangala', 'Andheri', 'Anna Nagar', 'Dwarka', 'Madhapur', 'Kothrud'];
+    const platforms = ['Swiggy', 'Zomato', 'Blinkit', 'Zepto', 'Amazon'];
+    const personas = ['courier', 'shopper', 'rideshare'] as const;
+    const vehicleOptions = ['2-wheeler', '4-wheeler'] as const;
+    const planOptions = ['basic', 'shield_plus', 'elite'] as const;
+
+    const random = <T,>(items: readonly T[]) => items[Math.floor(Math.random() * items.length)];
+    const fullName = random(names);
+    const city = random(cities);
+    const primaryZone = `${random(zones)}, ${city}`;
+    const vehicleType = random(vehicleOptions);
+    const selectedPlan = random(planOptions);
+    const weeklyIncome = String(3500 + Math.floor(Math.random() * 5500));
+    const persona = random(personas);
+    const safetyGearBool = Math.random() > 0.5;
+    const coveragePercent = selectedPlan === 'elite' ? '90%' : selectedPlan === 'basic' ? '50%' : '70%';
+    const planName = selectedPlan === 'elite' ? 'Elite' : selectedPlan === 'basic' ? 'Basic' : 'Shield+';
+    const demoPhone = `9${Math.floor(100000000 + Math.random() * 900000000)}`;
+
+    updateRegistrationData({
+      fullName,
+      phone: demoPhone,
+      email: `${fullName.toLowerCase().replace(/\s+/g, '.')}@demo.gigshield.local`,
+      city,
+      primaryZone,
+      platform: random(platforms),
+      vehicleType,
+      weeklyIncome,
+      selectedPlan,
+      planName,
+      coveragePercent,
+      persona,
+      safetyGearBool,
+      workingDays: String(5 + Math.floor(Math.random() * 2)),
+      loginMethod: 'demo',
+    });
+
+    updateWorkerProfile({
+      income: Number(weeklyIncome),
+      city,
+      zone: primaryZone,
+      vehicle: vehicleType,
+      persona,
+      safetyGearBool,
+    });
+
+    navigate('/dashboard');
+  };
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Check if user has registered data in localStorage
-    const userData = localStorage.getItem('gigshield_user_data');
-    
-    if (userData) {
-      // User has registered, go directly to dashboard
+
+    const hasExistingUser = Boolean(registrationData.fullName || registrationData.loginId);
+
+    if (hasExistingUser) {
       navigate('/dashboard');
     } else {
-        // New user, go to OTP verification
       if (phone.length === 10) {
-        // Save phone number for demo purposes
-        const demoUserData = {
+        updateRegistrationData({
           phone: phone,
           fullName: 'Demo User',
           loginMethod: 'phone',
           city: 'Mumbai',
           weeklyIncome: '5000',
           vehicleType: '2-wheeler',
-          hasSafetyGear: false,
-          finalPremium: 100,
+          selectedPlan: 'shield_plus',
           planName: 'Shield+',
           coveragePercent: '70%',
-        };
-        localStorage.setItem('gigshield_user_data', JSON.stringify(demoUserData));
+        });
         navigate('/otp');
       } else if (loginId && password) {
-        // Save login credentials for demo purposes
-        const demoUserData = {
+        updateRegistrationData({
           loginId: loginId,
           fullName: loginId.charAt(0).toUpperCase() + loginId.slice(1),
           loginMethod: 'credentials',
           city: 'Mumbai',
           weeklyIncome: '5000',
           vehicleType: '2-wheeler',
-          hasSafetyGear: false,
-          finalPremium: 100,
+          selectedPlan: 'shield_plus',
           planName: 'Shield+',
           coveragePercent: '70%',
-        };
-        localStorage.setItem('gigshield_user_data', JSON.stringify(demoUserData));
+        });
         navigate('/dashboard');
       }
     }
@@ -103,6 +148,10 @@ export const Login: React.FC = () => {
 
           <Button type="submit" variant="primary" style={{ marginTop: '8px' }}>
             Login
+          </Button>
+
+          <Button type="button" variant="outline" className="gs-demo-login-btn" onClick={handleDemoLogin}>
+            Demo Worker Login
           </Button>
 
           <div className="gs-register-link">

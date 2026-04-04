@@ -20,6 +20,7 @@ import { NotificationScreen } from './pages/support/Notification';
 import { CoverageCalendar } from './pages/support/CoverageCalendar';
 import { PaymentsScreen } from './pages/support/Payments';
 import { ProfileScreen } from './pages/support/Profile';
+import { ClaimsHistoryScreen } from './pages/support/ClaimsHistory';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/profile" element={<ProfileScreen />} />
           <Route path="/gigscore" element={<GigScoreScreen />} />
           <Route path="/payments" element={<PaymentsScreen />} />
+          <Route path="/claims-history" element={<ClaimsHistoryScreen />} />
         </Route>
 
         {/* Default redirect to login */}

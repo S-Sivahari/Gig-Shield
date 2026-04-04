@@ -80,7 +80,7 @@ export const TriggerLogScreen: React.FC = () => {
           <p className="gs-sources-title">Data sources verified via API</p>
           <div className="gs-badges-row">
             <span className="gs-source-badge">IMD Rainfall Data</span>
-            <span className="gs-source-badge">OpenWeather API</span>
+            <span className="gs-source-badge">Mock City Weather Feed</span>
             <span className="gs-source-badge">GPS Location</span>
             <span className="gs-source-badge">Platform Activity</span>
           </div>

@@ -4,6 +4,12 @@ import { LayoutDashboard, ShieldAlert, Users, Settings, LogOut, Zap, FileText, W
 import './Sidebar.css';
 
 export const Sidebar: React.FC = () => {
+  const handleLogout = () => {
+    localStorage.removeItem('gigshield_admin_auth');
+    localStorage.removeItem('gigshield_admin_user');
+    window.location.assign('/login');
+  };
+
   return (
     <aside className="gs-admin-sidebar">
       <div className="gs-admin-brand">
@@ -54,7 +60,7 @@ export const Sidebar: React.FC = () => {
       </nav>
 
       <div className="gs-admin-sidebar-footer">
-        <button className="gs-admin-nav-item gs-logout-btn">
+        <button className="gs-admin-nav-item gs-logout-btn" onClick={handleLogout}>
           <LogOut size={20} />
           <span>Log out</span>
         </button>

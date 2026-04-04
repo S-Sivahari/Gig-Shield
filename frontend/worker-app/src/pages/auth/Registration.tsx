@@ -5,51 +5,26 @@ import { Step2Identity } from './Step2Identity';
 import { Step3WorkProfile } from './Step3WorkProfile';
 import { Step4Income } from './Step4Income';
 import { Step5Payment } from './Step5Payment';
+import { useInsurance } from '../../context/InsuranceContext';
 import './Registration.css';
 
 const TOTAL_STEPS = 5;
 
 export const Registration: React.FC = () => {
   const navigate = useNavigate();
+  const { registrationData, updateRegistrationData, updateWorkerProfile } = useInsurance();
   const [currentStep, setCurrentStep] = useState(1);
 
-  // Registration Data State - Load from localStorage if exists
-  const [formData, setFormData] = useState(() => {
-    const saved = localStorage.getItem('gigshield_user_data');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        return {
-          fullName: '', age: '', gender: '', email: '',
-          aadhaarNumber: '', dlNumber: '', aadhaarFile: null, dlFile: null,
-          platform: '', avgHours: '', primaryZone: '', experienceMonths: '',
-          city: '', vehicleType: '', hasSafetyGear: null, workProofName: '',
-          weeklyIncome: '', workingDays: '6', coveragePercent: '70%',
-          selectedPlan: 'shield_plus', finalPremium: 0, planName: 'Shield+',
-          upiId: '', accountNo: '', ifscCode: '',
-          loginId: '', password: '', confirmPassword: ''
-        };
-      }
-    }
-    return {
-      fullName: '', age: '', gender: '', email: '',
-      aadhaarNumber: '', dlNumber: '', aadhaarFile: null, dlFile: null,
-      platform: '', avgHours: '', primaryZone: '', experienceMonths: '',
-      city: '', vehicleType: '', hasSafetyGear: null, workProofName: '',
-      weeklyIncome: '', workingDays: '6', coveragePercent: '70%',
-      selectedPlan: 'shield_plus', finalPremium: 0, planName: 'Shield+',
-      upiId: '', accountNo: '', ifscCode: '',
-      loginId: '', password: '', confirmPassword: ''
-    };
-  });
+  const updateFormData = (newData: any) => {
+    updateRegistrationData(newData);
 
-  const updateFormData = (newData: Partial<typeof formData>) => {
-    setFormData((prev: typeof formData) => {
-      const updated = { ...prev, ...newData };
-      // Save to localStorage whenever data updates
-      localStorage.setItem('gigshield_user_data', JSON.stringify(updated));
-      return updated;
+    updateWorkerProfile({
+      income: Number(newData.weeklyIncome ?? registrationData.weeklyIncome) || 0,
+      city: String(newData.city ?? registrationData.city),
+      zone: String(newData.primaryZone ?? registrationData.primaryZone ?? newData.city ?? registrationData.city),
+      vehicle: (newData.vehicleType ?? registrationData.vehicleType) as '2-wheeler' | '4-wheeler' | '',
+      persona: String(newData.persona ?? registrationData.persona ?? 'courier'),
+      safetyGearBool: Boolean(newData.safetyGearBool ?? registrationData.safetyGearBool ?? false),
     });
   };
 
@@ -104,11 +79,11 @@ export const Registration: React.FC = () => {
         )}
 
         <div className="gs-reg-content animate-stagger-item" style={{ animationDelay: '100ms' }} key={currentStep}>
-          {currentStep === 1 && <Step1Personal data={formData} updateData={updateFormData} onNext={nextStep} />}
-          {currentStep === 2 && <Step2Identity data={formData} updateData={updateFormData} onNext={nextStep} />}
-          {currentStep === 3 && <Step3WorkProfile data={formData} updateData={updateFormData} onNext={nextStep} />}
-          {currentStep === 4 && <Step4Income data={formData} updateData={updateFormData} onNext={nextStep} />}
-          {currentStep === 5 && <Step5Payment data={formData} updateData={updateFormData} onNext={nextStep} />}
+          {currentStep === 1 && <Step1Personal data={registrationData} updateData={updateFormData} onNext={nextStep} />}
+          {currentStep === 2 && <Step2Identity data={registrationData} updateData={updateFormData} onNext={nextStep} />}
+          {currentStep === 3 && <Step3WorkProfile data={registrationData} updateData={updateFormData} onNext={nextStep} />}
+          {currentStep === 4 && <Step4Income data={registrationData} updateData={updateFormData} onNext={nextStep} />}
+          {currentStep === 5 && <Step5Payment data={registrationData} updateData={updateFormData} onNext={nextStep} />}
         </div>
       </div>
     </div>

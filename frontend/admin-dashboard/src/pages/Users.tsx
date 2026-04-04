@@ -92,7 +92,7 @@ const MOCK_WORKERS = [
     city: 'Chennai',
     vehicle: '2-Wheeler',
     safetyGear: 'Yes',
-    riskMultiplier: '1.14x (Gear Discount)',
+    riskMultiplier: '1.14x (City + Vehicle)',
     plan: 'Shield+',
     premium: 110,
     gigScore: 72,
@@ -142,7 +142,7 @@ const MOCK_WORKERS = [
     city: 'Kolkata',
     vehicle: '2-Wheeler',
     safetyGear: 'Yes',
-    riskMultiplier: '1.14x (Gear Discount)',
+    riskMultiplier: '1.14x (City + Vehicle)',
     plan: 'Elite',
     premium: 171,
     gigScore: 81,
@@ -217,7 +217,7 @@ const MOCK_WORKERS = [
     city: 'Mumbai',
     vehicle: '2-Wheeler',
     safetyGear: 'Yes',
-    riskMultiplier: '1.14x (Gear Discount)',
+    riskMultiplier: '1.14x (City + Vehicle)',
     plan: 'Elite',
     premium: 190,
     gigScore: 88,
@@ -486,10 +486,6 @@ export const Users: React.FC = () => {
                     <div className="gs-worker-field">
                       <span className="gs-field-label">Vehicle</span>
                       <span className="gs-field-value">{selectedWorker.vehicle || 'Unknown'}</span>
-                    </div>
-                    <div className="gs-worker-field">
-                      <span className="gs-field-label">Safety Gear</span>
-                      <span className="gs-field-value">{selectedWorker.safetyGear || 'Unknown'}</span>
                     </div>
                     <div className="gs-worker-field">
                       <span className="gs-field-label">Weekly Premium</span>

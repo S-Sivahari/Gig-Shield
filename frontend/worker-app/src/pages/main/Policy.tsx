@@ -27,17 +27,15 @@ export const PolicyScreen: React.FC = () => {
   const userCity = user?.city || 'Mumbai';
   const weeklyIncome = Number(user?.weeklyIncome) || 5000;
   const vehicleType = user?.vehicleType || '2-wheeler';
-  const hasSafetyGear = user?.hasSafetyGear === true;
   const activePlanId = user?.selectedPlan || 'shield_plus';
   const activePlanName = user?.planName || 'Shield+';
   const finalPremium = user?.finalPremium || 100;
 
-  // Live weather + engine hooks for dynamic breakdown
+  // Mock weather + engine hooks for dynamic breakdown
   const { risk } = useWeatherRisk(userCity);
   const { plans, breakdown } = usePremiumEngine({
     weeklyIncome,
     vehicleType,
-    hasSafetyGear,
     weatherMultiplier: risk?.multiplier ?? 1.0,
     weatherReason: risk?.reason ?? '',
     city: userCity,

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
-import { Upload, Bike, Car, Shield } from 'lucide-react';
+import { Upload, Bike, Car } from 'lucide-react';
 import './UploadBox.css';
 import './RegSteps.css';
 
@@ -31,7 +31,13 @@ export const Step3WorkProfile: React.FC<StepProps> = ({ data, updateData, onNext
   };
 
   const platforms = ['Zomato', 'Swiggy', 'Zepto', 'Blinkit', 'Amazon', 'Flipkart', 'Dunzo'];
-  const hoursOptions = ['4–6 hrs', '6–8 hrs', '8–10 hrs', '10+ hrs'];
+  const personas = [
+    { value: 'courier', label: 'Courier' },
+    { value: 'shopper', label: 'Grocery runner' },
+    { value: 'rideshare', label: 'Ride-share support' },
+    { value: 'helper', label: 'Multi-task helper' },
+  ];
+  const avgHoursValue = Number(data.avgHours) || 8;
 
   return (
     <form className="gs-step-form" onSubmit={handleSubmit}>
@@ -72,7 +78,7 @@ export const Step3WorkProfile: React.FC<StepProps> = ({ data, updateData, onNext
             </select>
           </div>
           <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-            🌤️ Used to fetch live weather for real-time risk pricing
+            🌤️ Used with mock rainfall feed for city risk pricing
           </p>
         </div>
 
@@ -105,34 +111,22 @@ export const Step3WorkProfile: React.FC<StepProps> = ({ data, updateData, onNext
           </div>
         </div>
 
-        {/* ── Safety / Waterproof Gear ── */}
         <div className="gs-input-container">
-          <label className="gs-form-label">
-            <Shield size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
-            Waterproof safety equipment
-          </label>
-          <div className="gs-safety-toggle-row">
-            <div
-              className={`gs-safety-option ${data.hasSafetyGear === true ? 'gs-safety-option--yes' : ''}`}
-              onClick={() => updateData({ hasSafetyGear: true })}
+          <label className="gs-form-label">Work persona</label>
+          <div className="gs-input-wrapper">
+            <select
+              className="gs-input"
+              value={data.persona || 'courier'}
+              onChange={(e) => updateData({ persona: e.target.value })}
             >
-              <span className="gs-safety-emoji">🧥</span>
-              <div>
-                <p style={{ fontWeight: 600, fontSize: '14px' }}>Yes, I use it</p>
-                <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>−5% premium discount</p>
-              </div>
-            </div>
-            <div
-              className={`gs-safety-option ${data.hasSafetyGear === false ? 'gs-safety-option--no' : ''}`}
-              onClick={() => updateData({ hasSafetyGear: false })}
-            >
-              <span className="gs-safety-emoji">❌</span>
-              <div>
-                <p style={{ fontWeight: 600, fontSize: '14px' }}>No</p>
-                <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Standard pricing</p>
-              </div>
-            </div>
+              {personas.map((persona) => (
+                <option key={persona.value} value={persona.value}>{persona.label}</option>
+              ))}
+            </select>
           </div>
+          <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+            Helps tune premium behavior to your delivery pattern.
+          </p>
         </div>
 
         {/* ── Work Proof Upload ── */}
@@ -163,24 +157,33 @@ export const Step3WorkProfile: React.FC<StepProps> = ({ data, updateData, onNext
         {/* ── Working Hours ── */}
         <div className="gs-input-container">
           <label className="gs-form-label">Average working hours per day</label>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-            {hoursOptions.map(opt => (
-              <Button
-                key={opt}
-                type="button"
-                variant="pill"
-                selected={data.avgHours === opt}
-                onClick={() => updateData({ avgHours: opt })}
-              >
-                {opt}
-              </Button>
-            ))}
+          <div className="gs-hours-slider-wrap">
+            <input
+              type="range"
+              min="1"
+              max="16"
+              step="1"
+              value={avgHoursValue}
+              className="gs-hours-slider"
+              onChange={(e) => updateData({ avgHours: e.target.value })}
+            />
+            <input
+              type="number"
+              min="1"
+              max="16"
+              value={avgHoursValue}
+              className="gs-hours-input"
+              onChange={(e) => updateData({ avgHours: e.target.value })}
+            />
           </div>
+          <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+            Use slider or type exact hours.
+          </p>
         </div>
 
         {/* ── Zone ── */}
         <Input
-          label="Primary delivery zone (neighbourhood)"
+          label="Operational zone (neighbourhood)"
           placeholder="e.g. Koramangala, Bangalore"
           value={data.primaryZone || ''}
           onChange={(e) => updateData({ primaryZone: e.target.value })}

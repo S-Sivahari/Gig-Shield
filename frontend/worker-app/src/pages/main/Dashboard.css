@@ -146,6 +146,26 @@
   cursor: pointer;
 }
 
+.gs-auto-claim-notice {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+.gs-auto-claim-notice p {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #9a3412;
+  font-weight: 600;
+}
+
+.gs-zone-banner--danger {
+  background-color: #fee2e2;
+  border-color: #fecaca;
+}
+
 .gs-zone-indicator {
   width: 10px;
   height: 10px;
@@ -153,6 +173,11 @@
   background-color: var(--warning-amber);
   flex-shrink: 0;
   box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+}
+
+.gs-zone-indicator--danger {
+  background-color: #dc2626;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2);
 }
 
 .gs-zone-text {
@@ -166,6 +191,79 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+}
+
+.gs-active-protection-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.gs-active-protection-card {
+  padding: 14px;
+}
+
+.gs-active-protection-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.gs-active-protection-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.gs-active-protection-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.gs-risk-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.gs-risk-card {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.gs-risk-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.gs-risk-card p {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-main);
+}
+
+.gs-risk-card--high {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.gs-risk-card--medium {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+.gs-risk-card--low {
+  background: #ecfdf5;
+  border-color: #86efac;
 }
 
 @keyframes fadeInUp {
@@ -293,3 +391,10 @@
 .mt-6 { margin-top: 24px; }
 .gs-text-green { color: var(--success-green); }
 .gs-text-blue { color: var(--primary-blue); }
+
+@media (max-width: 768px) {
+  .gs-active-protection-grid,
+  .gs-risk-cards {
+    grid-template-columns: 1fr;
+  }
+}
