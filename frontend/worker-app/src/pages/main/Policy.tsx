@@ -43,11 +43,9 @@ export const PolicyScreen: React.FC = () => {
     city: userCity,
   });
 
-  const activePlan = plans.find(p => p.id === activePlanId) ?? plans[1];
-
   return (
     <div className="gs-policy-page animate-fade-in">
-      
+
       {/* Header Section */}
       <div className="gs-header-blue">
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
@@ -58,14 +56,14 @@ export const PolicyScreen: React.FC = () => {
       </div>
 
       <div className="gs-content-padded" style={{ marginTop: '-20px' }}>
-        
+
         {/* Policy Details Card */}
         <Card className="mb-4">
           <div className="flex-between mb-4 pb-3 border-b">
             <h3 className="gs-card-title no-border pb-0">Income Protection</h3>
             <Badge variant="success">Active</Badge>
           </div>
-          
+
           <div className="gs-grid-2x3">
             <div className="gs-detail-item">
               <span className="gs-detail-label">Platform</span>
@@ -121,7 +119,7 @@ export const PolicyScreen: React.FC = () => {
         <h3 className="gs-section-title mb-3">Your plan · {activePlanName}</h3>
         <div className="gs-plan-selector pb-4">
           {plans.map(plan => (
-            <div 
+            <div
               key={plan.id}
               className={`gs-plan-card ${plan.id === activePlanId ? 'gs-plan-card--selected' : ''}`}
             >
