@@ -63,8 +63,11 @@ CREATE TYPE kyc_status_enum AS ENUM (
   'suspended'
 );
 
--- Insurance plan tiers
-CREATE TYPE plan_enum AS ENUM ('basic', 'standard', 'pro');
+-- Insurance plan tiers (Dynamic Premium: Basic / Shield+ / Elite)
+CREATE TYPE plan_enum AS ENUM ('basic', 'shield_plus', 'elite');
+-- Migration for existing databases:
+--   ALTER TYPE plan_enum RENAME VALUE 'standard' TO 'shield_plus';
+--   ALTER TYPE plan_enum RENAME VALUE 'pro' TO 'elite';
 
 -- Policy lifecycle
 CREATE TYPE policy_status_enum AS ENUM (
@@ -236,6 +239,9 @@ CREATE TABLE plan_configs (
   plan                    plan_enum UNIQUE NOT NULL,
   display_name            VARCHAR(40) NOT NULL,
   weekly_premium_inr      NUMERIC(8,2) NOT NULL,
+  base_premium_pct        NUMERIC(5,4) NOT NULL DEFAULT 0.0200,   -- 2% of weekly income
+  plan_multiplier         NUMERIC(4,2) NOT NULL DEFAULT 1.00,     -- Basic=1.0, Shield+=1.25, Elite=1.5
+  income_replacement      NUMERIC(4,2) NOT NULL DEFAULT 1.00,     -- 1x / 1.5x / 2x payout multiplier
   payout_per_day_low      NUMERIC(8,2) NOT NULL,       -- severity=low
   payout_per_day_moderate NUMERIC(8,2) NOT NULL,
   payout_per_day_high     NUMERIC(8,2) NOT NULL,
@@ -262,7 +268,7 @@ CREATE TRIGGER trg_plan_configs_updated_at
 -- Seed canonical plan data
 INSERT INTO plan_configs (
   plan, display_name,
-  weekly_premium_inr,
+  weekly_premium_inr, base_premium_pct, plan_multiplier, income_replacement,
   payout_per_day_low, payout_per_day_moderate,
   payout_per_day_high, payout_per_day_extreme,
   max_payout_per_event, max_payout_per_week, max_payout_per_month,
@@ -271,7 +277,8 @@ INSERT INTO plan_configs (
 ) VALUES
 (
   'basic', 'Basic',
-  29.00, 100.00, 100.00, 100.00, 100.00,
+  100.00, 0.0200, 1.00, 1.0,
+  100.00, 100.00, 100.00, 100.00,
   100.00, 300.00, 900.00,
   3, 3, 24,
   ARRAY['heavy_rain','flood','cyclone','hailstorm']::disruption_type_enum[],
@@ -279,8 +286,9 @@ INSERT INTO plan_configs (
   ARRAY['sms']
 ),
 (
-  'standard', 'Standard',
-  49.00, 120.00, 150.00, 150.00, 150.00,
+  'shield_plus', 'Shield+',
+  125.00, 0.0200, 1.25, 1.5,
+  120.00, 150.00, 150.00, 150.00,
   150.00, 450.00, 1350.00,
   5, 3, 4,
   ARRAY['heavy_rain','flood','cyclone','hailstorm','extreme_heat',
@@ -289,8 +297,9 @@ INSERT INTO plan_configs (
   ARRAY['sms','whatsapp']
 ),
 (
-  'pro', 'Pro',
-  79.00, 200.00, 250.00, 300.00, 300.00,
+  'elite', 'Elite',
+  150.00, 0.0200, 1.50, 2.0,
+  200.00, 250.00, 300.00, 300.00,
   300.00, 750.00, 2250.00,
   999, 3, 2,
   ARRAY['heavy_rain','flood','cyclone','hailstorm','extreme_heat',
@@ -412,6 +421,9 @@ CREATE TABLE workers (
   aadhaar_hash          CHAR(64),                       -- SHA-256 of full number
   driving_license_no    TEXT,                           -- pgcrypto encrypted
   vehicle_reg_no        VARCHAR(20),
+  vehicle_type          VARCHAR(20) CHECK (vehicle_type IN ('2-wheeler', '4-wheeler')),
+  has_safety_gear       BOOLEAN NOT NULL DEFAULT FALSE,           -- waterproof equipment
+  weekly_income_goal    NUMERIC(10,2),                            -- ₹ target per week (Earn-Lock input)
 
   -- Delivery platform
   primary_platform      platform_enum NOT NULL,
@@ -547,6 +559,9 @@ CREATE TABLE risk_profiles (
   -- Premium recommendation
   recommended_plan      plan_enum NOT NULL,
   recommended_premium   NUMERIC(8,2) NOT NULL,
+  weather_multiplier    NUMERIC(4,2) NOT NULL DEFAULT 1.00,  -- 1.0 / 1.3 / 1.5 from live weather
+  vehicle_multiplier    NUMERIC(4,2) NOT NULL DEFAULT 1.00,  -- 0.9 (4W) / 1.2 (2W)
+  gear_discount_pct     NUMERIC(4,2) NOT NULL DEFAULT 0.00,  -- 0 or 5 (safety gear %)
 
   -- Model metadata
   model_version         VARCHAR(20) NOT NULL DEFAULT 'v1.0',
@@ -616,6 +631,10 @@ CREATE TABLE policies (
   weekly_premium        NUMERIC(8,2) NOT NULL,
   total_premiums_paid   NUMERIC(10,2) NOT NULL DEFAULT 0,
   total_payouts_issued  NUMERIC(10,2) NOT NULL DEFAULT 0,
+
+  -- Dynamic premium snapshot (Earn-Lock engine output at time of issuance)
+  weather_multiplier_at_issue NUMERIC(4,2),                -- weather risk at policy creation
+  premium_breakdown_json      JSONB,                        -- full calculation trace for "Why this price?"
 
   -- Coverage snapshot (denormalised from plan_configs at time of issue)
   covered_disruptions   disruption_type_enum[] NOT NULL,
