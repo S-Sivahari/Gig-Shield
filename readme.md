@@ -75,6 +75,13 @@ Payout credited to UPI/bank within 2 hours
 
 ## Key Features
 
+### 🔄 Latest Demo Updates (Phase 2 Refactor)
+- **One-click Worker Demo Login** — Use the worker login page demo button to auto-fill randomized profile details and jump straight into the dashboard.
+- **Zero-touch Claim Workflow** — Worker app auto-detects disruption triggers and moves policy state from Protected to Claim Processing without manual claim filing.
+- **Cross-App Threat Sync** — When a worker disruption is triggered, the worker app publishes the affected city and zone signal and the admin dashboard marks the same area as **THREAT**.
+- **Claims Visibility** — Worker app now includes a Claims History view with auto-triggered event status progression (Pending → Approved).
+- **Admin Liability Awareness** — Admin dashboard includes active disrupted workers and event-level estimated liability view.
+
 ### ✅ Must-Have (Fully Implemented)
 - **AI-Powered Risk Assessment** — Dynamic weekly premium based on location, delivery history, and environmental risk
 - **Parametric Automation** — Real-time disruption monitoring with zero-touch claim initiation

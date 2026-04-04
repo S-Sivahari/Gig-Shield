@@ -80,6 +80,20 @@
   font-weight: 500;
 }
 
+.gs-solvency-track {
+  margin-top: 8px;
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.gs-solvency-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #dc2626, #f59e0b, #16a34a);
+}
+
 .gs-admin-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -125,6 +139,29 @@
 .gs-risk-item {
   padding: 16px 0;
   border-bottom: 1px solid var(--border-color);
+}
+
+.gs-risk-item--threat {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.gs-risk-threat-text {
+  color: #b91c1c;
+}
+
+.gs-worker-threat-banner {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
 }
 
 .gs-no-border {
@@ -259,6 +296,10 @@
 .gs-simulator-select:disabled {
   background-color: var(--bg-secondary);
   cursor: not-allowed;
+}
+
+.gs-simulator-range {
+  width: 100%;
 }
 
 .gs-severity-pills {
@@ -417,6 +458,65 @@
   border-top-color: transparent;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+}
+
+.gs-admin-plan-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.gs-admin-plan-chip {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: #f9fafb;
+  font-size: 12px;
+}
+
+.gs-admin-plan-chip strong {
+  color: var(--navy-admin);
+  font-size: 13px;
+}
+
+.gs-threshold-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.gs-threshold-grid label {
+  display: grid;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.gs-admin-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.gs-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+
+.gs-admin-table th,
+.gs-admin-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+}
+
+.gs-admin-table th {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
 }
 
 @keyframes spin {

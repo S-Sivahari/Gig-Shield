@@ -1,23 +1,145 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { ShieldAlert, CloudRain, Wind, Thermometer, TrendingUp, FileText, Zap, Wallet, Map } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts';
 import { useNavigate } from 'react-router-dom';
+import { CITY_WEATHER_MOCK, getCityWeather } from '../mocks/cityWeatherMock';
+import { calculateAdminPlans } from '../services/insuranceEngineLite';
+import {
+  DEFAULT_TRIGGER_THRESHOLDS,
+  checkDisruption,
+  normalizeThresholds,
+  type TriggerThresholds,
+} from '../services/weatherMonitorLite';
 import './AdminDashboard.css';
+
+const CROSS_APP_DISRUPTION_COOKIE = 'gigshield_active_disruption';
+
+interface WorkerDisruptionSignal {
+  city: string;
+  zone: string;
+  rainfallMm: number;
+  level: 'none' | 'watch' | 'alert' | 'severe';
+  status: string;
+  estimatedPayout: number;
+  updatedAt: string;
+}
+
+function readCookieValue(name: string): string | null {
+  const prefix = `${name}=`;
+  const chunks = document.cookie.split(';');
+  for (const chunk of chunks) {
+    const value = chunk.trim();
+    if (value.startsWith(prefix)) {
+      return value.slice(prefix.length);
+    }
+  }
+  return null;
+}
+
+function readWorkerDisruptionSignal(): WorkerDisruptionSignal | null {
+  if (typeof document === 'undefined') return null;
+  try {
+    const raw = readCookieValue(CROSS_APP_DISRUPTION_COOKIE);
+    if (!raw) return null;
+    const parsed = JSON.parse(decodeURIComponent(raw)) as WorkerDisruptionSignal;
+    if (!parsed.city || !parsed.zone || !parsed.updatedAt) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
 
 export const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
-  
-  // Simulator state
-  const [selectedZone, setSelectedZone] = useState('Koramangala Bangalore');
-  const [disruptionType, setDisruptionType] = useState('Heavy Rain');
-  const [severity, setSeverity] = useState<'Moderate' | 'High' | 'Extreme'>('Moderate');
+
+  const [selectedCity, setSelectedCity] = useState('Bangalore');
+  const [vehicleType, setVehicleType] = useState<'2-wheeler' | '4-wheeler'>('2-wheeler');
+  const [zoneType, setZoneType] = useState<'core' | 'urban' | 'suburban'>('urban');
+  const [persona, setPersona] = useState<'courier' | 'shopper' | 'rideshare'>('courier');
+  const [weeklyIncome, setWeeklyIncome] = useState(5000);
+  const [simulatedRainMm, setSimulatedRainMm] = useState<number | null>(null);
+  const [thresholds, setThresholds] = useState<TriggerThresholds>(DEFAULT_TRIGGER_THRESHOLDS);
+
   const [isSimulating, setIsSimulating] = useState(false);
   const [simulationStep, setSimulationStep] = useState(0);
   const [claimsFeed, setClaimsFeed] = useState<string[]>([]);
   const [showSummary, setShowSummary] = useState(false);
+  const [summaryLine, setSummaryLine] = useState('');
+  const [workerSignal, setWorkerSignal] = useState<WorkerDisruptionSignal | null>(null);
 
-  // Mock data for weekly payout trend
-  const data = [
+  const mockWeather = getCityWeather(selectedCity);
+  const activeRainMm = simulatedRainMm ?? mockWeather.rainfallMm;
+  const disruptionReport = checkDisruption(activeRainMm, thresholds);
+  const workerSignalActive = Boolean(workerSignal && (Date.now() - new Date(workerSignal.updatedAt).getTime()) < 30 * 60 * 1000 && workerSignal.level !== 'none');
+
+  const planPreview = calculateAdminPlans({
+    income: weeklyIncome,
+    zone: zoneType,
+    vehicle: vehicleType,
+    persona,
+    disruptionLevel: disruptionReport.level,
+  });
+
+  const projectedPayoutPerClaim = Math.round(
+    weeklyIncome * (planPreview.plans[1].coveragePercent / 100) * (disruptionReport.payoutPercent / 100),
+  );
+
+  const expectedClaims = disruptionReport.level === 'severe'
+    ? 12
+    : disruptionReport.level === 'alert'
+      ? 8
+      : disruptionReport.level === 'watch'
+        ? 4
+        : 0;
+
+  const generatedClaims = useMemo(() => {
+    return Array.from({ length: expectedClaims }).map((_, index) => {
+      const claimId = 10200 + (index * 73);
+      const amount = Math.max(280, projectedPayoutPerClaim || Math.round(weeklyIncome * 0.35));
+      const reviewFlag = index % 6 === 0;
+
+      if (reviewFlag) {
+        return `GS-${claimId} · Manual review queue · Rs ${amount}`;
+      }
+
+      return `GS-${claimId} · Auto-approved · Rs ${amount} · ${disruptionReport.level.toUpperCase()}`;
+    });
+  }, [expectedClaims, projectedPayoutPerClaim, weeklyIncome, disruptionReport.level]);
+
+  const poolReserve = 4200000;
+  const queuedExposure = projectedPayoutPerClaim * expectedClaims;
+  const solvencyRatio = Math.max(0, Math.min(100, Math.round(((poolReserve - queuedExposure) / poolReserve) * 100)));
+
+  const activeDisruptedWorkers = useMemo(() => {
+    if (!disruptionReport.triggered) return [];
+
+    const workerNames = ['Ramesh K', 'Priya S', 'Abdul R', 'Sneha P', 'Kavitha L', 'Vijay M', 'Anita D', 'Arun V'];
+    return workerNames.map((name, index) => {
+      const payout = Math.round(projectedPayoutPerClaim * (0.78 + (index % 3) * 0.11));
+      return {
+        id: `GS-W-${3100 + index}`,
+        name,
+        zone: `${selectedCity} · ${zoneType}`,
+        rainfallMm: activeRainMm,
+        payout,
+        status: index % 5 === 0 ? 'Pending' : 'Approved',
+      };
+    });
+  }, [disruptionReport.triggered, projectedPayoutPerClaim, selectedCity, zoneType, activeRainMm]);
+
+  const currentEventLiability = activeDisruptedWorkers.reduce((sum, worker) => sum + worker.payout, 0);
+
+  useEffect(() => {
+    const updateSignal = () => {
+      setWorkerSignal(readWorkerDisruptionSignal());
+    };
+
+    updateSignal();
+    const interval = window.setInterval(updateSignal, 1500);
+    return () => window.clearInterval(interval);
+  }, []);
+
+  const payoutTrend = [
     { name: 'Mon', payouts: 4000 },
     { name: 'Tue', payouts: 3000 },
     { name: 'Wed', payouts: 2000 },
@@ -27,36 +149,22 @@ export const AdminDashboard: React.FC = () => {
     { name: 'Sun', payouts: 3490 },
   ];
 
-  // ─── MOCK DATA — replace with API call later ───
   const platformData = [
     { name: 'Swiggy', value: 8420 },
     { name: 'Zomato', value: 7891 },
     { name: 'Blinkit', value: 3204 },
     { name: 'Zepto', value: 2847 },
     { name: 'Amazon', value: 1632 },
-    { name: 'Others', value: 598 }
-  ];
-
-  const mockClaims = [
-    '🟢 GS-10293 · Ramesh K. · ₹480 · Auto-approved (0.3s)',
-    '🟢 GS-10847 · Priya S. · ₹480 · Auto-approved (0.3s)',
-    '🟢 GS-11203 · Abdul R. · ₹320 · Auto-approved (0.3s)',
-    '🟡 GS-10391 · Suresh M. · Flagged for review',
-    '🟢 GS-12048 · Kavitha L. · ₹480 · Auto-approved (0.3s)',
-    '🟢 GS-10773 · Mohammed A. · ₹640 · Auto-approved (0.2s)',
-    '🟢 GS-11892 · Deepak S. · ₹480 · Auto-approved (0.3s)',
-    '🟢 GS-10456 · Anjali P. · ₹320 · Auto-approved (0.3s)',
-    '🟢 GS-11567 · Rajesh V. · ₹480 · Auto-approved (0.3s)',
-    '🟢 GS-10234 · Sneha R. · ₹480 · Auto-approved (0.3s)',
-    '🟢 GS-11890 · Vijay K. · ₹320 · Auto-approved (0.2s)',
-    '🟢 GS-10678 · Meera I. · ₹480 · Auto-approved (0.3s)'
+    { name: 'Others', value: 598 },
   ];
 
   const handleFireTrigger = () => {
+    setThresholds((prev) => normalizeThresholds(prev));
     setIsSimulating(true);
     setSimulationStep(1);
     setClaimsFeed([]);
     setShowSummary(false);
+    setSummaryLine('');
   };
 
   const handleReset = () => {
@@ -64,57 +172,69 @@ export const AdminDashboard: React.FC = () => {
     setSimulationStep(0);
     setClaimsFeed([]);
     setShowSummary(false);
+    setSummaryLine('');
   };
 
   useEffect(() => {
     if (!isSimulating) return;
 
     if (simulationStep === 1) {
-      const timer = setTimeout(() => setSimulationStep(2), 1500);
+      const timer = setTimeout(() => setSimulationStep(2), 1400);
       return () => clearTimeout(timer);
     }
-    
+
     if (simulationStep === 2) {
-      const timer = setTimeout(() => setSimulationStep(3), 1500);
+      const timer = setTimeout(() => setSimulationStep(3), 1400);
       return () => clearTimeout(timer);
     }
-    
+
     if (simulationStep === 3) {
+      if (!disruptionReport.triggered) {
+        const timer = setTimeout(() => {
+          setSummaryLine('No payout triggered: rainfall did not cross alert threshold.');
+          setShowSummary(true);
+          setIsSimulating(false);
+        }, 900);
+        return () => clearTimeout(timer);
+      }
+
       const timer = setTimeout(() => setSimulationStep(4), 1000);
       return () => clearTimeout(timer);
     }
-    
+
     if (simulationStep === 4) {
       let currentIndex = 0;
       const interval = setInterval(() => {
-        if (currentIndex < mockClaims.length) {
-          setClaimsFeed(prev => [...prev, mockClaims[currentIndex]]);
-          currentIndex++;
+        if (currentIndex < generatedClaims.length) {
+          setClaimsFeed((prev) => [...prev, generatedClaims[currentIndex]]);
+          currentIndex += 1;
         } else {
           clearInterval(interval);
+          const flagged = generatedClaims.filter((line) => line.includes('Manual review')).length;
+          const autoApproved = generatedClaims.length - flagged;
+          const payoutQueue = autoApproved * projectedPayoutPerClaim;
+          setSummaryLine(`${autoApproved} auto-approved · ${flagged} flagged · Rs ${Math.max(0, payoutQueue).toLocaleString('en-IN')} queued`);
           setShowSummary(true);
         }
-      }, 400);
+      }, 350);
+
       return () => clearInterval(interval);
     }
-  }, [simulationStep, isSimulating]);
+
+    return undefined;
+  }, [simulationStep, isSimulating, generatedClaims, projectedPayoutPerClaim, disruptionReport.triggered]);
 
   return (
     <div className="gs-admin-page animate-fade-in">
-      
       <div className="flex-between mb-6">
         <div>
           <h1 className="gs-admin-page-title">Operations Dashboard</h1>
-          <p className="gs-admin-page-subtitle">Overview of system health and payouts</p>
+          <p className="gs-admin-page-subtitle">Trigger health, solvency, and claim automation controls</p>
         </div>
-        <div className="gs-admin-date-picker">
-          Oct 8 - Oct 14, 2024
-        </div>
+        <div className="gs-admin-date-picker">Oct 8 - Oct 14, 2024</div>
       </div>
 
-      {/* 2-Stat Row */}
       <div className="gs-admin-stats-row mb-6">
-        
         <div className="gs-admin-stat-card">
           <div className="gs-stat-icon gs-bg-blue-light">
             <ShieldAlert size={24} className="gs-text-blue" />
@@ -134,33 +254,46 @@ export const AdminDashboard: React.FC = () => {
           </div>
           <div className="gs-stat-info">
             <p className="gs-stat-label">Total Payouts (7d)</p>
-            <h3 className="gs-stat-value">₹3.4L</h3>
+            <h3 className="gs-stat-value">Rs 3.4L</h3>
             <p className="gs-stat-trend gs-text-red">
               <TrendingUp size={14} /> +45% this week
             </p>
           </div>
         </div>
 
+        <div className="gs-admin-stat-card">
+          <div className="gs-stat-icon" style={{ backgroundColor: '#FEF3C7' }}>
+            <Wallet size={24} style={{ color: '#92400E' }} />
+          </div>
+          <div className="gs-stat-info">
+            <p className="gs-stat-label">Pool Solvency Gauge</p>
+            <h3 className="gs-stat-value">{solvencyRatio}%</h3>
+            <div className="gs-solvency-track">
+              <div className="gs-solvency-fill" style={{ width: `${solvencyRatio}%` }} />
+            </div>
+            <p className="gs-stat-trend" style={{ marginTop: '6px' }}>
+              Reserve Rs {(poolReserve / 100000).toFixed(1)}L · Exposure Rs {queuedExposure.toLocaleString('en-IN')}
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="gs-admin-grid">
-        
-        {/* Weekly Payout Trend Chart */}
         <div className="gs-admin-card gs-span-2">
           <div className="gs-admin-card-header">
             <h3 className="gs-admin-card-title">Weekly Payout Trend</h3>
           </div>
           <div className="gs-admin-chart-container">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data}>
+              <LineChart data={payoutTrend}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} dx={-10} tickFormatter={(val) => `₹${val/1000}k`} />
-                <Tooltip 
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} dx={-10} tickFormatter={(val) => `Rs ${val / 1000}k`} />
+                <Tooltip
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
                   formatter={(value) => {
                     if (value === undefined || value === null) return ['', ''];
-                    return [`₹${Number(value).toLocaleString('en-IN')}`, ''];
+                    return [`Rs ${Number(value).toLocaleString('en-IN')}`, ''];
                   }}
                 />
                 <Line type="monotone" dataKey="payouts" stroke="#2563EB" strokeWidth={3} dot={{ r: 4, fill: '#2563EB', strokeWidth: 2, stroke: '#FFFFFF' }} activeDot={{ r: 6 }} />
@@ -169,23 +302,40 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Predictive Risk Widget */}
         <div className="gs-admin-card">
           <div className="gs-admin-card-header flex-between mb-4">
             <h3 className="gs-admin-card-title">Live Risk AI</h3>
-            <span className="gs-badge" style={{ backgroundColor: 'var(--warning-amber)', color: '#FFFFFF' }}>High Alert</span>
+            <span className="gs-badge" style={{ backgroundColor: 'var(--warning-amber)', color: '#FFFFFF' }}>{disruptionReport.level.toUpperCase()}</span>
           </div>
-          
+
+          {workerSignalActive && workerSignal && (
+            <div className="gs-worker-threat-banner">
+              ⚠️ Worker app flagged {workerSignal.zone}, {workerSignal.city} as THREAT · {workerSignal.rainfallMm}mm
+            </div>
+          )}
+
           <div className="gs-risk-list mt-2">
-            
+            {workerSignalActive && workerSignal && (
+              <div className="gs-risk-item gs-risk-item--threat">
+                <div className="gs-risk-header flex-between mb-1">
+                  <span className="gs-risk-zone font-medium">{workerSignal.city}</span>
+                  <span className="gs-risk-prob gs-risk-threat-text font-semibold">THREAT</span>
+                </div>
+                <div className="gs-risk-trigger text-sm text-gray-500 flex items-center">
+                  <CloudRain size={16} className="gs-text-red mr-2" />
+                  <span>{workerSignal.zone} · {workerSignal.rainfallMm}mm · Auto signal from worker app</span>
+                </div>
+              </div>
+            )}
+
             <div className="gs-risk-item">
               <div className="gs-risk-header flex-between mb-1">
-                <span className="gs-risk-zone font-medium">Indiranagar</span>
-                <span className="gs-risk-prob gs-text-red font-semibold">85% Prob</span>
+                <span className="gs-risk-zone font-medium">{selectedCity}</span>
+                <span className="gs-risk-prob gs-text-red font-semibold">{planPreview.riskLabel}</span>
               </div>
               <div className="gs-risk-trigger text-sm text-gray-500 flex items-center">
                 <CloudRain size={16} className="gs-text-red mr-2" />
-                <span>Heavy Rain Forecast (next 2h)</span>
+                <span>Rainfall {activeRainMm}mm · {disruptionReport.statusLabel}</span>
               </div>
             </div>
 
@@ -196,7 +346,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
               <div className="gs-risk-trigger text-sm text-gray-500 flex items-center">
                 <Wind size={16} className="gs-text-amber mr-2" />
-                <span>AQI Spiking (&gt;150)</span>
+                <span>AQI spiking (&gt;150)</span>
               </div>
             </div>
 
@@ -207,16 +357,13 @@ export const AdminDashboard: React.FC = () => {
               </div>
               <div className="gs-risk-trigger text-sm text-gray-500 flex items-center">
                 <Thermometer size={16} className="gs-text-green mr-2" />
-                <span>Normal Conditions</span>
+                <span>Normal conditions</span>
               </div>
             </div>
-
           </div>
         </div>
-
       </div>
 
-      {/* Platform Breakdown */}
       <div className="gs-admin-grid mt-6">
         <div className="gs-admin-card gs-span-2">
           <div className="gs-admin-card-header mb-4">
@@ -225,25 +372,18 @@ export const AdminDashboard: React.FC = () => {
           <div className="gs-platform-chart-container">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={platformData} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical={true} stroke="#E5E7EB" />
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} vertical stroke="#E5E7EB" />
                 <XAxis type="number" hide />
-                <YAxis 
-                  dataKey="name" 
-                  type="category" 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{ fontSize: 13, fill: '#6B7280' }} 
-                  width={70}
-                />
-                <Tooltip 
+                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 13, fill: '#6B7280' }} width={70} />
+                <Tooltip
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                  formatter={(value: any) => [value.toLocaleString('en-IN'), "Policies"]}
+                  formatter={(value) => [Number(value ?? 0).toLocaleString('en-IN'), 'Policies']}
                 />
                 <Bar dataKey="value" fill="#2563EB" radius={[0, 4, 4, 0]} barSize={24}>
-                  <LabelList 
-                    dataKey="value" 
-                    position="right" 
-                    formatter={(v: any) => v.toLocaleString('en-IN')}
+                  <LabelList
+                    dataKey="value"
+                    position="right"
+                    formatter={(v) => Number(v ?? 0).toLocaleString('en-IN')}
                     style={{ fontSize: 12, fill: '#6B7280' }}
                   />
                 </Bar>
@@ -252,7 +392,6 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Quick Actions */}
         <div className="gs-admin-card">
           <div className="gs-admin-card-header mb-4">
             <h3 className="gs-admin-card-title">Quick Actions</h3>
@@ -260,97 +399,228 @@ export const AdminDashboard: React.FC = () => {
           <div className="gs-quick-actions">
             <button className="gs-quick-action-btn" onClick={() => navigate('/claims')}>
               <FileText size={18} className="mr-2" />
-              <span>📋 View Pending Claims (118)</span>
+              <span>View Pending Claims (118)</span>
             </button>
             <button className="gs-quick-action-btn" onClick={() => navigate('/disruptions')}>
               <Zap size={18} className="mr-2" />
-              <span>🚨 View Active Disruptions (4)</span>
+              <span>View Active Disruptions (4)</span>
             </button>
             <button className="gs-quick-action-btn" onClick={() => navigate('/payouts')}>
               <Wallet size={18} className="mr-2" />
-              <span>💰 Payout Reconciliation</span>
+              <span>Payout Reconciliation</span>
             </button>
             <button className="gs-quick-action-btn" onClick={() => navigate('/zone-map')}>
               <Map size={18} className="mr-2" />
-              <span>🗺️ Open Zone Map</span>
+              <span>Open Zone Map</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Disruption Simulator */}
+      <div className="gs-admin-card mt-6">
+        <div className="gs-admin-card-header flex-between mb-4">
+          <h3 className="gs-admin-card-title">Active Disrupted Workers</h3>
+          <span className="gs-badge" style={{ backgroundColor: '#111827', color: '#FFFFFF' }}>
+            Liability: Rs {currentEventLiability.toLocaleString('en-IN')}
+          </span>
+        </div>
+
+        {!disruptionReport.triggered && (
+          <div className="gs-feed-empty" style={{ minHeight: '120px' }}>
+            No active disrupted workers for current weather conditions.
+          </div>
+        )}
+
+        {disruptionReport.triggered && (
+          <div className="gs-admin-table-wrap">
+            <table className="gs-admin-table">
+              <thead>
+                <tr>
+                  <th>Worker ID</th>
+                  <th>Name</th>
+                  <th>Zone</th>
+                  <th>Rainfall</th>
+                  <th>Estimated Payout</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {activeDisruptedWorkers.map((worker) => (
+                  <tr key={worker.id}>
+                    <td>{worker.id}</td>
+                    <td>{worker.name}</td>
+                    <td>{worker.zone}</td>
+                    <td>{worker.rainfallMm}mm</td>
+                    <td>Rs {worker.payout.toLocaleString('en-IN')}</td>
+                    <td>{worker.status}</td>
+                  </tr>
+                ))}
+                {workerSignalActive && workerSignal && (
+                  <tr>
+                    <td>GS-W-SIGNAL</td>
+                    <td>Worker Broadcast</td>
+                    <td>{workerSignal.zone}, {workerSignal.city}</td>
+                    <td>{workerSignal.rainfallMm}mm</td>
+                    <td>Rs {Math.max(workerSignal.estimatedPayout, 0).toLocaleString('en-IN')}</td>
+                    <td>Threat</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
       <div className="gs-simulator-section mt-6">
         <div className="gs-simulator-header mb-4">
           <h3 className="gs-simulator-title">Disruption Simulator</h3>
-          <p className="gs-simulator-subtitle">Trigger a parametric event to test the claim pipeline</p>
+          <p className="gs-simulator-subtitle">Trigger model with rainfall threshold sliders and claim auto-feed</p>
         </div>
 
         <div className="gs-simulator-card">
           <div className="gs-simulator-controls">
             <div className="gs-simulator-field">
-              <label className="gs-simulator-label">Select Zone</label>
-              <select 
+              <label className="gs-simulator-label">Select City</label>
+              <select
                 className="gs-simulator-select"
-                value={selectedZone}
-                onChange={(e) => setSelectedZone(e.target.value)}
+                value={selectedCity}
+                onChange={(e) => {
+                  setSelectedCity(e.target.value);
+                  setSimulatedRainMm(null);
+                }}
                 disabled={isSimulating}
               >
-                <option>Koramangala Bangalore</option>
-                <option>Andheri West Mumbai</option>
-                <option>Connaught Place Delhi</option>
-                <option>T Nagar Chennai</option>
-                <option>Banjara Hills Hyderabad</option>
-                <option>Salt Lake Kolkata</option>
+                {CITY_WEATHER_MOCK.map((row) => (
+                  <option key={row.city} value={row.city}>{row.city}</option>
+                ))}
               </select>
             </div>
 
             <div className="gs-simulator-field">
-              <label className="gs-simulator-label">Disruption Type</label>
-              <select 
+              <label className="gs-simulator-label">Weekly Income</label>
+              <input
                 className="gs-simulator-select"
-                value={disruptionType}
-                onChange={(e) => setDisruptionType(e.target.value)}
+                type="number"
+                value={weeklyIncome}
+                onChange={(e) => setWeeklyIncome(Number(e.target.value) || 0)}
+                disabled={isSimulating}
+              />
+            </div>
+
+            <div className="gs-simulator-field">
+              <label className="gs-simulator-label">Vehicle</label>
+              <select
+                className="gs-simulator-select"
+                value={vehicleType}
+                onChange={(e) => setVehicleType(e.target.value as '2-wheeler' | '4-wheeler')}
                 disabled={isSimulating}
               >
-                <option>Heavy Rain</option>
-                <option>AQI Spike</option>
-                <option>Flood Alert</option>
-                <option>Extreme Heat</option>
-                <option>Govt Curfew</option>
-                <option>Local Strike</option>
+                <option value="2-wheeler">2-Wheeler</option>
+                <option value="4-wheeler">4-Wheeler</option>
               </select>
             </div>
 
             <div className="gs-simulator-field">
-              <label className="gs-simulator-label">Severity</label>
-              <div className="gs-severity-pills">
-                <button 
-                  className={`gs-severity-pill ${severity === 'Moderate' ? 'gs-severity-moderate-active' : 'gs-severity-moderate'}`}
-                  onClick={() => setSeverity('Moderate')}
-                  disabled={isSimulating}
-                >
-                  Moderate
-                </button>
-                <button 
-                  className={`gs-severity-pill ${severity === 'High' ? 'gs-severity-high-active' : 'gs-severity-high'}`}
-                  onClick={() => setSeverity('High')}
-                  disabled={isSimulating}
-                >
-                  High
-                </button>
-                <button 
-                  className={`gs-severity-pill ${severity === 'Extreme' ? 'gs-severity-extreme-active' : 'gs-severity-extreme'}`}
-                  onClick={() => setSeverity('Extreme')}
-                  disabled={isSimulating}
-                >
-                  Extreme
-                </button>
+              <label className="gs-simulator-label">Zone Type</label>
+              <select
+                className="gs-simulator-select"
+                value={zoneType}
+                onChange={(e) => setZoneType(e.target.value as 'core' | 'urban' | 'suburban')}
+                disabled={isSimulating}
+              >
+                <option value="core">Core</option>
+                <option value="urban">Urban</option>
+                <option value="suburban">Suburban</option>
+              </select>
+            </div>
+
+            <div className="gs-simulator-field">
+              <label className="gs-simulator-label">Persona</label>
+              <select
+                className="gs-simulator-select"
+                value={persona}
+                onChange={(e) => setPersona(e.target.value as 'courier' | 'shopper' | 'rideshare')}
+                disabled={isSimulating}
+              >
+                <option value="courier">Courier</option>
+                <option value="shopper">Shopper</option>
+                <option value="rideshare">Ride-share</option>
+              </select>
+            </div>
+
+            <div className="gs-simulator-field">
+              <label className="gs-simulator-label">Rainfall Simulation ({activeRainMm}mm)</label>
+              <input
+                className="gs-simulator-range"
+                type="range"
+                min="0"
+                max="50"
+                value={activeRainMm}
+                onChange={(e) => setSimulatedRainMm(Number(e.target.value))}
+                disabled={isSimulating}
+              />
+              <p className="gs-admin-page-subtitle" style={{ fontSize: '12px' }}>
+                Baseline city rain: {mockWeather.rainfallMm}mm
+              </p>
+            </div>
+
+            <div className="gs-simulator-field">
+              <label className="gs-simulator-label">Global Trigger Thresholds (mm)</label>
+              <div className="gs-threshold-grid">
+                <label>
+                  Watch ({thresholds.watch})
+                  <input
+                    type="range"
+                    min="4"
+                    max="20"
+                    value={thresholds.watch}
+                    onChange={(e) => setThresholds((prev) => normalizeThresholds({ ...prev, watch: Number(e.target.value) }))}
+                    disabled={isSimulating}
+                  />
+                </label>
+                <label>
+                  Alert ({thresholds.alert})
+                  <input
+                    type="range"
+                    min="8"
+                    max="30"
+                    value={thresholds.alert}
+                    onChange={(e) => setThresholds((prev) => normalizeThresholds({ ...prev, alert: Number(e.target.value) }))}
+                    disabled={isSimulating}
+                  />
+                </label>
+                <label>
+                  Severe ({thresholds.severe})
+                  <input
+                    type="range"
+                    min="12"
+                    max="40"
+                    value={thresholds.severe}
+                    onChange={(e) => setThresholds((prev) => normalizeThresholds({ ...prev, severe: Number(e.target.value) }))}
+                    disabled={isSimulating}
+                  />
+                </label>
               </div>
+            </div>
+
+            <div className="gs-simulator-field">
+              <label className="gs-simulator-label">Plan Preview (Rs/week)</label>
+              <div className="gs-admin-plan-row">
+                {planPreview.plans.map((plan) => (
+                  <div key={plan.id} className="gs-admin-plan-chip">
+                    <span>{plan.name}</span>
+                    <strong>Rs {plan.premium}</strong>
+                  </div>
+                ))}
+              </div>
+              <p className="gs-admin-page-subtitle" style={{ fontSize: '12px', marginTop: '6px' }}>
+                {disruptionReport.statusLabel} · Triggered: {disruptionReport.triggered ? 'Yes' : 'No'}
+              </p>
             </div>
 
             {!isSimulating && (
               <button className="gs-fire-trigger-btn" onClick={handleFireTrigger}>
-                🔴 Fire Trigger
+                Fire Trigger
               </button>
             )}
 
@@ -365,48 +635,41 @@ export const AdminDashboard: React.FC = () => {
             <label className="gs-feed-label">LIVE CLAIM FEED</label>
             <div className="gs-feed-box">
               {!isSimulating && claimsFeed.length === 0 && (
-                <div className="gs-feed-empty">
-                  Fire a trigger to see claims auto-created in real time
-                </div>
+                <div className="gs-feed-empty">Fire a trigger to validate threshold logic and claim creation</div>
               )}
 
               {simulationStep >= 1 && (
                 <div className="gs-feed-step gs-feed-amber">
                   <div className="gs-feed-spinner"></div>
-                  <span>Verifying disruption via OpenWeather API...</span>
+                  <span>Verifying rainfall from city mock feed...</span>
                 </div>
               )}
 
               {simulationStep >= 2 && (
                 <div className="gs-feed-step gs-feed-amber">
                   <div className="gs-feed-spinner"></div>
-                  <span>Cross-checking with IMD rainfall data...</span>
+                  <span>Applying threshold model and solvency guardrails...</span>
                 </div>
               )}
 
               {simulationStep >= 3 && (
                 <div className="gs-feed-step gs-feed-green">
                   <span className="gs-feed-checkmark">✓</span>
-                  <span>Disruption confirmed. Notifying 847 active riders...</span>
+                  <span>{disruptionReport.triggered ? 'Disruption confirmed. Publishing claim intents...' : 'No trigger event. Monitoring continues.'}</span>
                 </div>
               )}
 
               {claimsFeed.map((claim, idx) => (
-                <div key={idx} className="gs-feed-claim">
-                  {claim}
-                </div>
+                <div key={idx} className="gs-feed-claim">{claim}</div>
               ))}
 
               {showSummary && (
-                <div className="gs-feed-summary">
-                  ✅ 11 claims auto-approved · 1 flagged · ₹5,280 queued for payout · Avg: 0.28s per claim
-                </div>
+                <div className="gs-feed-summary">{summaryLine}</div>
               )}
             </div>
           </div>
         </div>
       </div>
-
     </div>
   );
 };
