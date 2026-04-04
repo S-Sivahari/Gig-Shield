@@ -267,8 +267,10 @@ export const InsuranceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const selectedPlanId = registrationData.selectedPlan || 'shield_plus';
   const selectedPlan = underwritten.plans.find((plan) => plan.id === selectedPlanId) ?? underwritten.plans[1];
   const shieldWallet = Math.round((workerProfile.income || 0) * ((selectedPlan?.coveragePercent || 70) / 100));
+  const fullPayoutEstimate = Math.round(shieldWallet * (disruptionReport.payoutPercent / 100));
+  const cappedReliefPayout = Math.round(fullPayoutEstimate * 0.3);
   const payoutEstimate = disruptionReport.autoPayoutEligible
-    ? Math.round(shieldWallet * (disruptionReport.payoutPercent / 100))
+    ? Math.max(120, Math.min(650, cappedReliefPayout))
     : 0;
 
   useEffect(() => {
@@ -317,7 +319,7 @@ export const InsuranceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const isTriggered = disruptionReport.triggered;
 
     if (isTriggered && !wasTriggered) {
-      const effectivePayout = Math.max(0, payoutEstimate || Math.round(shieldWallet * 0.7));
+      const effectivePayout = Math.max(0, payoutEstimate || 180);
       const zoneName = workerProfile.zone || workerProfile.city || 'your zone';
       const event: AutoClaimEvent = {
         id: `CLM-${Date.now()}`,
